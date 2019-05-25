@@ -17,5 +17,6 @@ Route::get('/main', 'MainController@main')->name('main');
 
 Route::get('/person', 'MainController@entity')->name('entity');
 
-Route::get('/gallery', 'GalleryController@index')->name('gallery.index');
+Route::get('/gallery/cakes', 'GalleryController@cakes')->name('gallery.cakes');
 
+Route::get('/gallery/desserts', 'GalleryController@deserts')->name('gallery.deserts');

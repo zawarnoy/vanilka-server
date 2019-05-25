@@ -4,8 +4,13 @@ namespace App\Http\Controllers;
 
 class GalleryController extends Controller
 {
-    public function index()
+    public function cakes()
     {
-        return '';
+        return view('gallery.cakes');
+    }
+
+    public function deserts()
+    {
+        return view('gallery.desserts');
     }
 }

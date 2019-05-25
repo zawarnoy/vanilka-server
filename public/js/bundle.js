@@ -14,470 +14,473 @@
  * @param {*} params.generalInfo - Общая информация
  * @constructor
  */
-function Category(params){
-  var id          = params.categoryId || 0,
-    name          = params.categoryName || "не определено", //Название категории оно же и название фильтра
-    productsRange = params.products || null,                //Список товаров в данной категории
-    container     = params.categoryContainer,               //Родительскйк контейнер
-    gridSize      = params.gridSize || undefined,           //Размер сетки товаров
-    galleryPath   = params.galleryPath,                     //Ссылка на галлерею
-    settingFile   = params.settingFile,                     //Данные для настройки карты продукта
-    uniqTags      = new Tags(),                             //Список уникальных тегов
-    products      = [],
-    navbarConstructor,childContainer,body,navbar,
-    hidden        = false;
+function Category(params) {
+    var id = params.categoryId || 0,
+        name = params.categoryName || "не определено", //Название категории оно же и название фильтра
+        productsRange = params.products || null,                //Список товаров в данной категории
+        container = params.categoryContainer,               //Родительскйк контейнер
+        gridSize = params.gridSize || undefined,           //Размер сетки товаров
+        galleryPath = params.galleryPath,                     //Ссылка на галлерею
+        settingFile = params.settingFile,                     //Данные для настройки карты продукта
+        uniqTags = new Tags(),                             //Список уникальных тегов
+        products = [],
+        navbarConstructor, childContainer, body, navbar,
+        hidden = false;
     self = this;
 
 
-  /**
-   * Создать контейнер для категории
-   * @returns {boolean}
-   */
-  this.render = function(){
-    if(!container){
-      console.warn("Category::parentContainer is not defined");
-      return false;
-    }
+    /**
+     * Создать контейнер для категории
+     * @returns {boolean}
+     */
+    this.render = function () {
+        if (!container) {
+            console.warn("Category::parentContainer is not defined");
+            return false;
+        }
 
-    var size =  gridSize ? '-' + gridSize : '-6';
+        var size = gridSize ? '-' + gridSize : '-6';
 
-    if(productsRange.length <= 1) {
-      body = $('<div/>',{
-        class: 'col-sm'+size+' p-0 category__content single-item'
-      }).appendTo(container);
-      childContainer = $(body);
-    } else {
-      childContainer = $('<div/>',{
-        id: 'category__'+id,
-        class: 'row category__content',
-      });
+        if (productsRange.length <= 1) {
+            body = $('<div/>', {
+                class: 'col-sm' + size + ' p-0 category__content single-item'
+            }).appendTo(container);
+            childContainer = $(body);
+        } else {
+            childContainer = $('<div/>', {
+                id: 'category__' + id,
+                class: 'row category__content',
+            });
 
-      body = $('<div/>',{ class:'container-fluid vnl__category'})
-        .append(
-          $('<div/>',{class:'row category__tag'})
-            .append(
-              $('<h2/>')
+            body = $('<div/>', {class: 'container-fluid vnl__category'})
                 .append(
-                  $('<i/>',{class:'fab fa-slack-hash'})
-                    .append(
-                      $('<strong/>',{text: name})
-                    )
-                )
-            ),
-          childContainer
-        );
-      body.appendTo(container);
-    }
-  };
+                    $('<div/>', {class: 'row category__tag'})
+                        .append(
+                            $('<h2/>')
+                                .append(
+                                    $('<i/>', {class: 'fab fa-slack-hash'})
+                                        .append(
+                                            $('<strong/>', {text: name})
+                                        )
+                                )
+                        ),
+                    childContainer
+                );
+            body.appendTo(container);
+        }
+    };
 
 
-  this.hasTag = function (tagName) {
-    return tagName === name
-  };
+    this.hasTag = function (tagName) {
+        return tagName === name
+    };
 
-  this.removeLazyLoad = function(){
-    products.forEach(function(product,i){
-      product.removeLazyLoad();
-    })
-  };
-
-  this.isHidden = function(){
-    return hidden;
-  };
-
-  /**
-   * Добавить массив товаров
-   * @param list
-   */
-  this.addRange = function(list){
-    if(typeof list === "string")
-      list = JSON.parse(list);
-
-    list.forEach(function(src,i){
-      uniqTags.explore(src.tagList);
-      products.push(
-        new Product({
-            productContainer: childContainer,
-            gridSize: list.length < gridSize ? null : gridSize,
-            id: src.id,
-            href: src.href,
-            name: src.name,
-            description: src.description,
-            thumb: src.thumb,
-            tagList: src.tagList,
-            overviewImages: src.overview ? src.overview : [],
-            settingFile: settingFile
+    this.removeLazyLoad = function () {
+        products.forEach(function (product, i) {
+            product.removeLazyLoad();
         })
-      );
+    };
 
-    });
-    //console.log( uniqTags.getTagList() );
-    navbar = new NavbarBlock({
-      container: $('.navbar__secondary'),
-      source: uniqTags.getTagList(),
-      itemList: products
-    })
-  };
+    this.isHidden = function () {
+        return hidden;
+    };
+
+    /**
+     * Добавить массив товаров
+     * @param list
+     */
+    this.addRange = function (list) {
+        if (typeof list === "string")
+            list = JSON.parse(list);
+
+        list.forEach(function (src, i) {
+            uniqTags.explore(src.tagList);
+            products.push(
+                new Product({
+                    productContainer: childContainer,
+                    gridSize: list.length < gridSize ? null : gridSize,
+                    id: src.id,
+                    href: src.href,
+                    name: src.name,
+                    description: src.description,
+                    thumb: src.thumb,
+                    tagList: src.tagList,
+                    overviewImages: src.overview ? src.overview : [],
+                    settingFile: settingFile
+                })
+            );
+
+        });
+        //console.log( uniqTags.getTagList() );
+        navbar = new NavbarBlock({
+            container: $('.navbar__secondary'),
+            source: uniqTags.getTagList(),
+            itemList: products
+        })
+    };
 
 
-  /**
-   * Скрыть блок
-   */
-  this.hide = function(){
-    if(!body)return;
-    body.addClass("sort__hide");
-    hidden = true;
-  };
+    /**
+     * Скрыть блок
+     */
+    this.hide = function () {
+        if (!body) return;
+        body.addClass("sort__hide");
+        hidden = true;
+    };
 
-  /**
-   * Отобразить блок
-   */
-  this.show = function(){
-    if(!body)return;
-    body.removeClass('sort__hide')
-      .addClass("sort__show");
-    setTimeout(function(){
-      body.removeClass("sort__show")
-    },500);
-    hidden = false;
-  };
+    /**
+     * Отобразить блок
+     */
+    this.show = function () {
+        if (!body) return;
+        body.removeClass('sort__hide')
+            .addClass("sort__show");
+        setTimeout(function () {
+            body.removeClass("sort__show")
+        }, 500);
+        hidden = false;
+    };
 
-  (function(){
-    self.render();
-    self.addRange(productsRange);
-  })()
+    (function () {
+        self.render();
+        self.addRange(productsRange);
+    })()
 }
 
-;(function (){
-  //Указать цвета проекта
-  this.primaryColor = '#794A5E';
-  this.secondaryColor = '#949fa5';
-  this.dangerColor = '#834141';
+;(function () {
+    //Указать цвета проекта
+    this.primaryColor = '#794A5E';
+    this.secondaryColor = '#949fa5';
+    this.dangerColor = '#834141';
 
-  // Удаление элемента из массива.
-  // String value: значение, которое необходимо найти и удалить.
-  // return: массив без удаленного элемента; false в противном случае.
-  Array.prototype.remove = function(value) {
-    var idx = this.indexOf(value);
-    if (idx !== -1) {
-      // Второй параметр - число элементов, которые необходимо удалить
-      return this.splice(idx, 1);
-    }
-    return false;
-  };
-
-  this.getURLParams = function() {
-    var qs = document.location.search;
-    qs = qs.split('+').join(' ');
-
-    var params = {},
-      tokens,
-      re = /[?&]?([^=]+)=([^&]*)/g;
-
-    while (tokens = re.exec(qs)) {
-      params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
-    }
-
-    return params;
-  };
-
-  /**
-   * ОПределить необходимость сортировки URL параметр sortByTag
-   * @param params
-   * @return {boolean}
-   */
-  this.isSortActionRequired = function(params){
-    return ('sortByTag' in params)
-  };
-
-
-  /**
-   * Определить необходимость выбора конкретного элемента галереи URL параметр goto
-   * @param params
-   * @return {boolean}
-   */
-  this.isSelectTargetImageRequired = function(params){
-    return ( 'goto' in params )
-  };
-
-
-  /**
-   * Найти изображение его имени
-   * @param  {string} imageName - наименование изображения
-   * @return {string}
-   */
-  this.findGalleryItemByImageName = function(imageName){
-    var result = '';
-    $('img').each(function(i,img){
-      if( distinguishImageNameFromItem(img) === imageName )
-        result  =$(img).closest('.stock__product')
-    });
-    return result;
-  };
-
-
-  /**
-   * Выделить имя изображения из полного пути к файлу
-   * @param  {GalleryItem} item - компонент изображения
-   * @return {*}
-   */
-  function distinguishImageNameFromItem(item){
-    var a = $(item).attr('data-src').split('/');
-    return a[a.length-1].split('.')[0];
-  }
-
-
-  /**
-   * Сортировка по тегу
-   * @param tagName
-   * @return {boolean}
-   */
-  this.sortByTag = function(tagName){
-    if(!tagName) return false;
-    var tags = $('.nav-tags__item');
-    console.log(tags);
-    tags.each(function(i,tag){
-      if($(tag).attr('data-target').toUpperCase() === tagName.toUpperCase() )
-        $(tag).click();
-    })
-  };
-
-
-  /**
-   * Проверить указан ли дизайн изделия
-   */
-  this.isProductDesignSet = function(params){
-    return ( "productDesign" in params )
-  };
-
-
-  /**
-   * Сортировка по тегу
-   * @param link
-   * @return {boolean}
-   */
-  this.transitionTo = function(link){
-    if(!link) return false;
-    setTimeout(function(){
-      var cats = $('.category__content');
-      console.log(cats);
-      cats.each(function(i,cat){
-        if($(cat).find('h2').text().toUpperCase() === link.toUpperCase() ) {
-          $(cat).find('.stock__product').click();
-          return true;
+    // Удаление элемента из массива.
+    // String value: значение, которое необходимо найти и удалить.
+    // return: массив без удаленного элемента; false в противном случае.
+    Array.prototype.remove = function (value) {
+        var idx = this.indexOf(value);
+        if (idx !== -1) {
+            // Второй параметр - число элементов, которые необходимо удалить
+            return this.splice(idx, 1);
         }
-      })
-    },500);
-  };
+        return false;
+    };
+
+    this.getURLParams = function () {
+        var qs = document.location.search;
+        qs = qs.split('+').join(' ');
+
+        var params = {},
+            tokens,
+            re = /[?&]?([^=]+)=([^&]*)/g;
+
+        while (tokens = re.exec(qs)) {
+            params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+        }
+
+        return params;
+    };
+
+    /**
+     * ОПределить необходимость сортировки URL параметр sortByTag
+     * @param params
+     * @return {boolean}
+     */
+    this.isSortActionRequired = function (params) {
+        return ('sortByTag' in params)
+    };
 
 
-  /**
-   * Проверить указан ли прямой переход к
-   * @param params
-   * @return {boolean}
-   */
-  this.isDirectTransitionSet = function(params){
-    return ( "directTransitionTo" in params )
-  };
+    /**
+     * Определить необходимость выбора конкретного элемента галереи URL параметр goto
+     * @param params
+     * @return {boolean}
+     */
+    this.isSelectTargetImageRequired = function (params) {
+        return ('goto' in params)
+    };
 
 
+    /**
+     * Найти изображение его имени
+     * @param  {string} imageName - наименование изображения
+     * @return {string}
+     */
+    this.findGalleryItemByImageName = function (imageName) {
+        var result = '';
+        $('img').each(function (i, img) {
+            if (distinguishImageNameFromItem(img) === imageName)
+                result = $(img).closest('.stock__product')
+        });
+        return result;
+    };
 
 
+    /**
+     * Выделить имя изображения из полного пути к файлу
+     * @param  {GalleryItem} item - компонент изображения
+     * @return {*}
+     */
+    function distinguishImageNameFromItem(item) {
+        var a = $(item).attr('data-src').split('/');
+        return a[a.length - 1].split('.')[0];
+    }
 
-  this.openGuideModal = function(){
-    var $body = $('<div/>',{id:'vnl_modal__guide'})
-      .append(
-        $('<div/>',{
-          class: 'container-fluid py-5',
-          text:'Мы хотим максимально полно осуществить вашу мечту, поэтому предлагаем вам выбрать одну из представленных начинок'
+
+    /**
+     * Сортировка по тегу
+     * @param tagName
+     * @return {boolean}
+     */
+    this.sortByTag = function (tagName) {
+        if (!tagName) return false;
+        var tags = $('.nav-tags__item');
+        console.log(tags);
+        tags.each(function (i, tag) {
+            if ($(tag).attr('data-target').toUpperCase() === tagName.toUpperCase())
+                $(tag).click();
         })
-      )
-      .appendTo('body');
-
-    $body.iziModal({
-      headerColor: common.primaryColor,
-      title: "Шаг 1",
-      subtitle: "Выбор вкуса",
-      autoOpen: true,
-      closeButton: true
-    })
-  };
+    };
 
 
+    /**
+     * Проверить указан ли дизайн изделия
+     */
+    this.isProductDesignSet = function (params) {
+        return ("productDesign" in params)
+    };
 
-  /**
-   * Перетрясти массив в рандомном порядке
-   * @param {[]} arr - массив
-   * @return {boolean|[]} - массив с элементами в рандомном порядке
-   */
-  this.randomizeArray = function(arr){
-    if(!arr) return false;
-    return arr.sort(function(){return Math.random() - 0.5;});
-  };
 
-  return window.common = this;
+    /**
+     * Сортировка по тегу
+     * @param link
+     * @return {boolean}
+     */
+    this.transitionTo = function (link) {
+        if (!link) return false;
+        setTimeout(function () {
+            var cats = $('.category__content');
+            console.log(cats);
+            cats.each(function (i, cat) {
+                if ($(cat).find('h2').text().toUpperCase() === link.toUpperCase()) {
+                    $(cat).find('.stock__product').click();
+                    return true;
+                }
+            })
+        }, 500);
+    };
+
+
+    /**
+     * Проверить указан ли прямой переход к
+     * @param params
+     * @return {boolean}
+     */
+    this.isDirectTransitionSet = function (params) {
+        return ("directTransitionTo" in params)
+    };
+
+
+    this.openGuideModal = function () {
+        var $body = $('<div/>', {id: 'vnl_modal__guide'})
+            .append(
+                $('<div/>', {
+                    class: 'container-fluid py-5',
+                    text: 'Мы хотим максимально полно осуществить вашу мечту, поэтому предлагаем вам выбрать одну из представленных начинок'
+                })
+            )
+            .appendTo('body');
+
+        $body.iziModal({
+            headerColor: common.primaryColor,
+            title: "Шаг 1",
+            subtitle: "Выбор вкуса",
+            autoOpen: true,
+            closeButton: true
+        })
+    };
+
+
+    /**
+     * Перетрясти массив в рандомном порядке
+     * @param {[]} arr - массив
+     * @return {boolean|[]} - массив с элементами в рандомном порядке
+     */
+    this.randomizeArray = function (arr) {
+        if (!arr) return false;
+        return arr.sort(function () {
+            return Math.random() - 0.5;
+        });
+    };
+
+    return window.common = this;
 })();
 
-;function Gallery(params) {
-  var container      = params.galleryContainer,
-    gridSize         = 4,
-    self             = this,
-    uniqTags         = new Tags(),
-    productLink      = params.productLink || "showcase__stuffing.html",
-    productLinkTitle = params.productLinkTitle || "В начинки",
-    src              = params.src,
-    imageArray       = [],
-    navbar,
-    body,
-    items            = [];
+;
 
-  function collectSourceData(src){
-    var result = [];
-    src.forEach(function(category){
-      uniqTags.explore(category.tagList);
-      for(var i = 1; i < (category.length + 1); i++){
-        result.push({
-          index  : i,
-          imgSrc : category.folder + '/'+ category.prefix + i + '.jpg',
-          href   : ('directTransitionTo' in category ? category.directTransitionTo : null),
-          name   : category.tag,
-          tags   : category.tagList
+function Gallery(params) {
+    var container = params.galleryContainer,
+        gridSize = 4,
+        self = this,
+        uniqTags = new Tags(),
+        productLink = params.productLink || "showcase__stuffing.html",
+        productLinkTitle = params.productLinkTitle || "В начинки",
+        src = params.src,
+        assetsPath = params.assetsPath,
+        imageArray = [],
+        navbar,
+        body,
+        items = [];
+
+    function collectSourceData(src) {
+        var result = [];
+        src.forEach(function (category) {
+            uniqTags.explore(category.tagList);
+            for (var i = 1; i < (category.length + 1); i++) {
+                result.push({
+                    index: i,
+                    imgSrc: assetsPath + category.folder + '/' + category.prefix + i + '.jpg',
+                    href: ('directTransitionTo' in category ? category.directTransitionTo : null),
+                    name: category.tag,
+                    tags: category.tagList
+                })
+            }
+        });
+        return result;
+    }
+
+    function render() {
+        var collection = common.randomizeArray(collectSourceData(src));
+
+        collection.forEach(function (item) {
+            items.push(
+                new GalleryItem({
+                    container: container,
+                    thumb: item.imgSrc,
+                    gridSize: gridSize,
+                    productLink: productLink,
+                    directTransitionTo: item.href,
+                    productLinkTitle: productLinkTitle,
+                    id: item.index,
+                    name: item.name,
+                    tagList: item.tags
+                })
+            );
+        });
+
+        navbar = new NavbarBlock({
+            container: $('.navbar__primary'),
+            source: uniqTags.getTagList(),
+            itemList: items
         })
-      }
-    });
-    return result;
-  }
+    };
 
-  function render() {
-    var collection = common.randomizeArray( collectSourceData(src) );
-
-    collection.forEach(function (item) {
-        items.push(
-          new GalleryItem({
-            container         : container,
-            thumb             : item.imgSrc,
-            gridSize          : gridSize,
-            productLink       : productLink,
-            directTransitionTo: item.href,
-            productLinkTitle  : productLinkTitle,
-            id                : item.index,
-            name              : item.name,
-            tagList           : item.tags
-          })
-        );
-    });
-
-    navbar = new NavbarBlock({
-      container: $('.navbar__primary'),
-      source: uniqTags.getTagList(),
-      itemList: items
-    })
-  };
-
-  (function(){
-    render();
-  })()
+    (function () {
+        render();
+    })()
 };
+
 /**
  * Картинка в галлерее
  * @param {{}} params
  * @constructor
  */
-function GalleryItem(params){
-    var idProduct          = params.id,
-        thumb              = params.thumb || "...",
-        productLink        = params.productLink ||"showcase__stuffing.html",
-        productLinkTitle   = params.productLinkTitle || "В начинки",
+function GalleryItem(params) {
+    var idProduct = params.id,
+        thumb = params.thumb || "...",
+        productLink = params.productLink || "showcase__stuffing.html",
+        productLinkTitle = params.productLinkTitle || "В начинки",
         directTransitionTo = params.directTransitionTo || null,
-        container          = params.container,
-        tagList            = params.tagList || [],
-        gridSize           = params.gridSize || '',
-        name               = params.name || "Lorem ipsum",
-        hidden             = false,
+        container = params.container,
+        tagList = params.tagList || [],
+        gridSize = params.gridSize || '',
+        name = params.name || "Lorem ipsum",
+        hidden = false,
         body,
-        self               = this;
+        self = this;
 
     /**
      * Отрисовать продукт если указан родительский элемент
      */
-    this.render = function(){
-        if(!container){
+    this.render = function () {
+        if (!container) {
             console.warn("GalleryItem::container is not defined");
             return false;
         }
 
-      var dtt = directTransitionTo ? '&directTransitionTo='+directTransitionTo : '';
-      var footer = $('<div/>',{class:'modal-footer__content'})
-        .append(
-          $('<div/>',{
-            //text:'Вы можете скопировать ссылку на изображение и использовать при заказе торта: ' + document.domain + '/' + thumb.replace('../../', '')
-          }),
-          $('<div/>',{class:'d-flex justify-content-center w-100'})
+        var dtt = directTransitionTo ? '&directTransitionTo=' + directTransitionTo : '';
+        var footer = $('<div/>', {class: 'modal-footer__content'})
             .append(
-              $('<a/>',{
-                class:'btn btn-outline-primary py-2 px-5 mt-2',
-                href :productLink + "?productDesign=" +  thumb.replace('../../', '')+dtt,
-                text :productLinkTitle})
-            )
-        );
+                $('<div/>', {
+                    //text:'Вы можете скопировать ссылку на изображение и использовать при заказе торта: ' + document.domain + '/' + thumb.replace('../../', '')
+                }),
+                $('<div/>', {class: 'd-flex justify-content-center w-100'})
+                    .append(
+                        $('<a/>', {
+                            class: 'btn btn-outline-primary py-2 px-5 mt-2',
+                            href: productLink + "?productDesign=" + thumb.replace('../../', '') + dtt,
+                            text: productLinkTitle
+                        })
+                    )
+            );
         footer = footer.wrap().html();
 
-      gridSize = gridSize ? '-sm-'+gridSize : '-12';
+        gridSize = gridSize ? '-sm-' + gridSize : '-12';
 
         body = $('<a/>', {
-          class: "tetragon" + gridSize + " stock__product p-1",
-          href: thumb,
-          //'data-title': name,
-          'data-footer': footer,
-          'data-gallery': "gallery__item",
-          'data-toggle': "lightbox",
-          'data-width': "800",
-          'data-height': "800",
-          click: function (event) {
-              event.preventDefault();
-              $(this).ekkoLightbox({
-                //alwaysShowClose: true
-              });
+            class: "tetragon" + gridSize + " stock__product p-1",
+            href: thumb,
+            //'data-title': name,
+            'data-footer': footer,
+            'data-gallery': "gallery__item",
+            'data-toggle': "lightbox",
+            'data-width': "800",
+            'data-height': "800",
+            click: function (event) {
+                event.preventDefault();
+                $(this).ekkoLightbox({
+                    //alwaysShowClose: true
+                });
             }
-          })
-          .append(
-            $('<div/>',{class:'tetragon__wrapper'})
-              .append(
-                $('<div/>',{class:'tetragon__content'})
-                  .append(
-                    $('<img/>',{
-                      class:'product__thumb d-block w-100 h-100',
-                      src: 'img/pre-loader.gif',
-                      'data-src': thumb,
-                      alt: name,
-                      error: function(){
-                        this.classList.add('invalid-image-src')
-                      },
-                      ready: function(){
-                        $(this).lazyLoadXT()
-                      }
-                    })
-                  )
-              )
-          );
+        })
+            .append(
+                $('<div/>', {class: 'tetragon__wrapper'})
+                    .append(
+                        $('<div/>', {class: 'tetragon__content'})
+                            .append(
+                                $('<img/>', {
+                                    class: 'product__thumb d-block w-100 h-100',
+                                    src: 'img/pre-loader.gif',
+                                    'data-src': thumb,
+                                    alt: name,
+                                    error: function () {
+                                        this.classList.add('invalid-image-src')
+                                    },
+                                    ready: function () {
+                                        $(this).lazyLoadXT()
+                                    }
+                                })
+                            )
+                    )
+            );
         body.appendTo(container);
     };
 
 
-  /**
-   * Убрать ленивую загрузку изображений
-   */
-  this.removeLazyLoad = function () {
+    /**
+     * Убрать ленивую загрузку изображений
+     */
+    this.removeLazyLoad = function () {
         var $a = $(body).find('img');
         var b = $a.attr('data-src');
-        $a.attr('src',b);
+        $a.attr('src', b);
     };
 
     /**
      * Скрыть блок
      */
-    this.hide = function(){
-        if(!body)return;
+    this.hide = function () {
+        if (!body) return;
         hidden = true;
         body.addClass("sort__hide animated flipOutY");
     };
@@ -486,14 +489,14 @@ function GalleryItem(params){
     /**
      * Отобразить блок
      */
-    this.show = function(){
-        if(!body)return;
+    this.show = function () {
+        if (!body) return;
         hidden = false;
         body.removeClass('sort__hide animated flipOutY')
             .addClass("sort__show animated flipInY");
-        setTimeout(function(){
+        setTimeout(function () {
             body.removeClass("sort__show animated flipInY")
-        },500);
+        }, 500);
     };
 
 
@@ -511,17 +514,17 @@ function GalleryItem(params){
      * Проверить скрыт ли компонент
      * @return {boolean}
      */
-    this.isHidden = function(){
-      return hidden;
+    this.isHidden = function () {
+        return hidden;
     };
 
 
-    this.getImage = function(){
+    this.getImage = function () {
         return thumb
     };
 
 
-    this.getName = function(){
+    this.getName = function () {
         return name;
     };
 
@@ -530,7 +533,7 @@ function GalleryItem(params){
      * Возвратить указатель на элемент в дереве объектов
      * @returns {*}
      */
-    this.getBody = function(){
+    this.getBody = function () {
         return body;
     };
 
@@ -539,214 +542,216 @@ function GalleryItem(params){
      * Возвратить список тегов
      * @returns {*|Array}
      */
-    this.getTagList = function(){
+    this.getTagList = function () {
         return tagList
     };
 
 
-    (function(){
+    (function () {
         self.render()
     })()
 
 }
 
 
-function OrderConfirmationModal(params){
-  var title     = params.title || 'Спасибо за ваш заказ',
-    subtitle  = params.subtitle || 'мы скоро с вами свяжемся',
-    content   = params.content,
-    type      = params.type || 'success',
-    SUCCESS   = common.secondaryColor,
-    DANGER    = common.dangerColor,
-    $body;
+function OrderConfirmationModal(params) {
+    var title = params.title || 'Спасибо за ваш заказ',
+        subtitle = params.subtitle || 'мы скоро с вами свяжемся',
+        content = params.content,
+        type = params.type || 'success',
+        SUCCESS = common.secondaryColor,
+        DANGER = common.dangerColor,
+        $body;
 
-  function render(){
-    $body = $('<div/>',{id: 'order-confirmation'})
-      .append(
-        $('<div/>',{
-          class: 'container-fluid py-5',
-          html:  content
+    function render() {
+        $body = $('<div/>', {id: 'order-confirmation'})
+            .append(
+                $('<div/>', {
+                    class: 'container-fluid py-5',
+                    html: content
+                })
+            );
+        $body.appendTo('body');
+        $body.iziModal({
+            title: title,
+            subtitle: subtitle,
+            zindex: 20000,
+            headerColor: (type === 'success' ? SUCCESS : DANGER),
+            autoOpen: true,
+            onClosed: function () {
+                $(this).iziModal('destroy');
+                $body.remove();
+            }
         })
-      );
-    $body.appendTo('body');
-    $body.iziModal({
-      title: title,
-      subtitle: subtitle,
-      zindex: 20000,
-      headerColor: (type === 'success' ? SUCCESS : DANGER),
-      autoOpen:true,
-      onClosed: function(){
-        $(this).iziModal('destroy');
-        $body.remove();
-      }
-    })
-  }
+    }
 
-  (function(){
-    render();
-  })()
+    (function () {
+        render();
+    })()
 }
+
 /**
  * Одальное окно для ввода данных о пользователе
  * основано на компонненте iziModal
  * @param params
  * @constructor
  */
-function PersonCardModal(params){
-  var container = params.container,
-    $body       = '',
-    self        = this;
+function PersonCardModal(params) {
+    var container = params.container,
+        $body = '',
+        self = this;
 
 
-  /**
-   * Создание компонента ввода данных на форме
-   * @param {string}  className   - класс компонента (обычно это ширина колонки)
-   * @param {string}  caption     - название вводимого параметра
-   * @param {string}  type        - тип элемента input
-   * @param {string}  name        - имя элемента input
-   * @param {string}  placeholder - текст плейсходер
-   * @param {boolean} isReq       - признак обязательности заполнения поля (по умолчанию false)
-   * @return {jQuery}
-   */
-  function addField({className='',caption='Поле ввода',type='text',name='',placeholder='Введите текст',isReq=false}){
-    return $('<div/>',{class: className})
-      .append(
-        $('<label/>',{class: 'mt-3 text-dark',text: caption}),
-        $('<input/>',{
-          class:'form-control text-dark',
-          type: type,
-          placeholder: placeholder,
-          ready: function () {
-              $(this).unbind('focus').unbind('focusin');
-          },
-          name: name,
-          required: isReq
-        })
-      )
-  }
-
-
-  /**
-   * Создание модального окна ввода данных о пользователе и инициализация его как компонента iziModal
-   */
-  function render() {
-    $(container).find('.iziModal-content').remove();
-    $body = $('<div/>',{id:'modal', class:'skit__iziModal person-modal'}).append(
-      $('<form/>',{class: 'orderOver'}).append(
-        $('<div/>',{class:'container-fluid'}).append(
-          $('<div/>',{class:'row'}).append(
-            addField({
-              className:'col-sm-12',
-              caption: 'Фамилия :',
-              type: 'text',
-              name: 'lastName',
-              placeholder: 'Фамилия',
-              isReq: false
-            }),
-            addField({
-              className:'col-sm-12',
-              caption: 'Имя* :',
-              type: 'text',
-              name: 'firstName',
-              placeholder: 'Имя',
-              isReq: true
-            })
-          ),
-          $('<div/>',{class: 'row mt-3'}).append(
-            addField({
-              className:'col-sm-12',
-              caption: 'Телефон для связи* :',
-              type: 'text',
-              name: 'phone',
-              placeholder: '+375(ХХ)ХХХ-ХХ-ХХ',
-              isReq: true
-            })
-          ),
-          $('<div/>',{class:'row mt-3'}).append(
-            addField({
-              className:'col-sm-12',
-              caption: 'Адрес электронной почты* :',
-              type: 'text',
-              name: 'email',
-              placeholder: 'Example@mail.com',
-              isReq: true
-            })
-          ),
-          $('<div/>',{class:'row my-3'}).append(
-            $('<div/>',{class: 'col-12 d-flex justify-content-center'}).append(
-              $('<input type="submit" id="end-of-ordering" class="btn btn-outline-primary p-4" value="Отправить"/>'),
+    /**
+     * Создание компонента ввода данных на форме
+     * @param {string}  className   - класс компонента (обычно это ширина колонки)
+     * @param {string}  caption     - название вводимого параметра
+     * @param {string}  type        - тип элемента input
+     * @param {string}  name        - имя элемента input
+     * @param {string}  placeholder - текст плейсходер
+     * @param {boolean} isReq       - признак обязательности заполнения поля (по умолчанию false)
+     * @return {jQuery}
+     */
+    function addField({className = '', caption = 'Поле ввода', type = 'text', name = '', placeholder = 'Введите текст', isReq = false}) {
+        return $('<div/>', {class: className})
+            .append(
+                $('<label/>', {class: 'mt-3 text-dark', text: caption}),
+                $('<input/>', {
+                    class: 'form-control text-dark',
+                    type: type,
+                    placeholder: placeholder,
+                    ready: function () {
+                        $(this).unbind('focus').unbind('focusin');
+                    },
+                    name: name,
+                    required: isReq
+                })
             )
-          )
-        )//end container-fluid
-      )//end form
-    )
-      .appendTo(container);
-    $body.on('submit','.orderOver',function () {
-        $body.iziModal('close');
-        $('body').trigger('personModalClosed', self.getData());
-        return false;
-    });
-    $body.iziModal({
-      //autoOpen: true,
-      autofocus: false,
-      fullscreen: false,
-      headerColor: '#794a5e',
-      title: 'Шаг 2',
-      subtitle: 'Расскажите о себе',
-      icon: '.icon .icon__logo',
-      zindex: 2000,
-      /*onClosed: function(){
+    }
+
+
+    /**
+     * Создание модального окна ввода данных о пользователе и инициализация его как компонента iziModal
+     */
+    function render() {
+        $(container).find('.iziModal-content').remove();
+        $body = $('<div/>', {id: 'modal', class: 'skit__iziModal person-modal'}).append(
+            $('<form/>', {class: 'orderOver'}).append(
+                $('<div/>', {class: 'container-fluid'}).append(
+                    $('<div/>', {class: 'row'}).append(
+                        addField({
+                            className: 'col-sm-12',
+                            caption: 'Фамилия :',
+                            type: 'text',
+                            name: 'lastName',
+                            placeholder: 'Фамилия',
+                            isReq: false
+                        }),
+                        addField({
+                            className: 'col-sm-12',
+                            caption: 'Имя* :',
+                            type: 'text',
+                            name: 'firstName',
+                            placeholder: 'Имя',
+                            isReq: true
+                        })
+                    ),
+                    $('<div/>', {class: 'row mt-3'}).append(
+                        addField({
+                            className: 'col-sm-12',
+                            caption: 'Телефон для связи* :',
+                            type: 'text',
+                            name: 'phone',
+                            placeholder: '+375(ХХ)ХХХ-ХХ-ХХ',
+                            isReq: true
+                        })
+                    ),
+                    $('<div/>', {class: 'row mt-3'}).append(
+                        addField({
+                            className: 'col-sm-12',
+                            caption: 'Адрес электронной почты* :',
+                            type: 'text',
+                            name: 'email',
+                            placeholder: 'Example@mail.com',
+                            isReq: true
+                        })
+                    ),
+                    $('<div/>', {class: 'row my-3'}).append(
+                        $('<div/>', {class: 'col-12 d-flex justify-content-center'}).append(
+                            $('<input type="submit" id="end-of-ordering" class="btn btn-outline-primary p-4" value="Отправить"/>'),
+                        )
+                    )
+                )//end container-fluid
+            )//end form
+        )
+            .appendTo(container);
+        $body.on('submit', '.orderOver', function () {
+            $body.iziModal('close');
+            $('body').trigger('personModalClosed', self.getData());
+            return false;
+        });
+        $body.iziModal({
+            //autoOpen: true,
+            autofocus: false,
+            fullscreen: false,
+            headerColor: '#794a5e',
+            title: 'Шаг 2',
+            subtitle: 'Расскажите о себе',
+            icon: '.icon .icon__logo',
+            zindex: 2000,
+            /*onClosed: function(){
         $(this).iziModal('destroy');
         $body.remove();
       }*/
-    });
-  }
-
-  /**
-   * Возвратить объект в котором собраны все данные о пользователе
-   * @return {{lastName, firstName, phone, email}}
-   */
-  this.getData = function(){
-    return {
-      lastName: $body.find('[name="lastName"]').val(),
-      firstName: $body.find('[name="firstName"]').val(),
-      phone: $body.find('[name="phone"]').val(),
-      email: $body.find('[name="email"]').val()
+        });
     }
-  };
+
+    /**
+     * Возвратить объект в котором собраны все данные о пользователе
+     * @return {{lastName, firstName, phone, email}}
+     */
+    this.getData = function () {
+        return {
+            lastName: $body.find('[name="lastName"]').val(),
+            firstName: $body.find('[name="firstName"]').val(),
+            phone: $body.find('[name="phone"]').val(),
+            email: $body.find('[name="email"]').val()
+        }
+    };
 
 
-  /**
-   * Установить данные формы
-   * @param {string} lastName - фамилия
-   * @param {string} firstName - имя
-   * @param {string} phone - номер телефона
-   * @param {string} email - адрес электронной почты
-   */
-  this.setData = function({lastName='',firstName='',phone='',email=''}){
-    $body.find('[name="lastName"]').val(lastName);
-    $body.find('[name="firstName"]').val(firstName);
-    $body.find('[name="phone"]').val(phone);
-    $body.find('[name="email"]').val(email);
-  };
+    /**
+     * Установить данные формы
+     * @param {string} lastName - фамилия
+     * @param {string} firstName - имя
+     * @param {string} phone - номер телефона
+     * @param {string} email - адрес электронной почты
+     */
+    this.setData = function ({lastName = '', firstName = '', phone = '', email = ''}) {
+        $body.find('[name="lastName"]').val(lastName);
+        $body.find('[name="firstName"]').val(firstName);
+        $body.find('[name="phone"]').val(phone);
+        $body.find('[name="email"]').val(email);
+    };
 
 
-  /**
-   * Вызвать iziModal
-   */
-  this.show = function(){
-    $body.iziModal('open')
-  };
+    /**
+     * Вызвать iziModal
+     */
+    this.show = function () {
+        $body.iziModal('open')
+    };
 
 
-  /**
-   * Немедленное построение модального окна при создании экземпляра класса
-   * @constructor
-   */
-  (function(){
-    render();
-  })()
+    /**
+     * Немедленное построение модального окна при создании экземпляра класса
+     * @constructor
+     */
+    (function () {
+        render();
+    })()
 }
+
 /**
  * Продукт
  * @params  {{}}     params
@@ -762,144 +767,146 @@ function PersonCardModal(params){
  * @param   {string} params.settingFile     - наименование файла (объекта в window) настроек
  * @constructor
  */
-function Product(params){
-  var idProduct       = params.id,
-      thumb           = params.thumb || "...",
-      linkToCard      = params.href ||"#",
-      container       = params.productContainer,
-      gridSize        = params.gridSize || null,
-      tagList         = params.tagList || [],
-      name            = params.name || "Lorem ipsum",
-      description     = params.description || "",
-      overviewImages  = params.overviewImages,
-      settingFile     = params.settingFile,
-      hidden          = false,
-      body,
-      self            = this,
-      onClickFn       = function(){
-        new ProductReview({
-          container: linkToCard,
-          id: idProduct,
-          thumb: thumb,
-          name: name,
-          description: description,
-          imageList: overviewImages,
-          settingFile :settingFile
-        });
-      };
+function Product(params) {
+    var idProduct = params.id,
+        thumb = params.thumb || "...",
+        linkToCard = params.href || "#",
+        container = params.productContainer,
+        gridSize = params.gridSize || null,
+        tagList = params.tagList || [],
+        name = params.name || "Lorem ipsum",
+        description = params.description || "",
+        overviewImages = params.overviewImages,
+        settingFile = params.settingFile,
+        hidden = false,
+        body,
+        self = this,
+        onClickFn = function () {
+            new ProductReview({
+                container: linkToCard,
+                id: idProduct,
+                thumb: thumb,
+                name: name,
+                description: description,
+                imageList: overviewImages,
+                settingFile: settingFile
+            });
+        };
 
-  /**
-   * Отрисовать продукт если указан родительский элемент
-   */
-  this.render = function(){
-    if(!container){
-      console.warn("Product::container is not defined");
-      return false;
-    }
+    /**
+     * Отрисовать продукт если указан родительский элемент
+     */
+    this.render = function () {
+        if (!container) {
+            console.warn("Product::container is not defined");
+            return false;
+        }
 
-    gridSize = gridSize ? '-sm-'+gridSize : '-12';
+        gridSize = gridSize ? '-sm-' + gridSize : '-12';
 
-    body = $('<div/>',{
-      class: "tetragon"+gridSize+" stock__product p-1",
-      id: "product__"+idProduct,
-      click: onClickFn}).append(
-        $('<div/>',{class: 'tetragon__wrapper'}).append(
-          $('<div/>',{class: 'tetragon__content'}).append(
-            $('<img/>',{
-              class: 'product__thumb d-block h-100 w-100',
-              src: 'img/pre-loader.gif',
-              'data-src': thumb,
-              alt: name,
-              error: $(this).addClass('invalid-image-src')}),
-            $('<div/>',{class: 'product__description'}).append(
-              $('<h2/>',{text: name}),
-              $('<p/>',{class: 'text-nowrap text-truncate', text: description})
+        body = $('<div/>', {
+            class: "tetragon" + gridSize + " stock__product p-1",
+            id: "product__" + idProduct,
+            click: onClickFn
+        }).append(
+            $('<div/>', {class: 'tetragon__wrapper'}).append(
+                $('<div/>', {class: 'tetragon__content'}).append(
+                    $('<img/>', {
+                        class: 'product__thumb d-block h-100 w-100',
+                        src: 'img/pre-loader.gif',
+                        'data-src': thumb,
+                        alt: name,
+                        error: $(this).addClass('invalid-image-src')
+                    }),
+                    $('<div/>', {class: 'product__description'}).append(
+                        $('<h2/>', {text: name}),
+                        $('<p/>', {class: 'text-nowrap text-truncate', text: description})
+                    )
+                )
             )
-          )
-        )
-      );
-    body.appendTo(container);
-  };
+        );
+        body.appendTo(container);
+    };
 
-  this.removeLazyLoad = function () {
-    var $a = $(body).find('img');
-    var b = $a.attr('data-src');
-    $a.attr('src',b);
-  };
+    this.removeLazyLoad = function () {
+        var $a = $(body).find('img');
+        var b = $a.attr('data-src');
+        $a.attr('src', b);
+    };
 
-  /**
-   * Скрыть блок
-   */
-  this.hide = function(){
-    if( !body )
-      return;
-    hidden = true;
-    body.addClass("sort__hide animated flipOutY");
-  };
+    /**
+     * Скрыть блок
+     */
+    this.hide = function () {
+        if (!body)
+            return;
+        hidden = true;
+        body.addClass("sort__hide animated flipOutY");
+    };
 
-  /**
-   * Отобразить блок
-   */
-  this.show = function(){
-    if( !body )
-      return;
-    hidden = false;
-    body.removeClass('sort__hide animated flipOutY')
-      .addClass("sort__show animated flipInY");
-    setTimeout(function(){
-      body.removeClass("sort__show animated flipInY")
-    },500);
-  };
+    /**
+     * Отобразить блок
+     */
+    this.show = function () {
+        if (!body)
+            return;
+        hidden = false;
+        body.removeClass('sort__hide animated flipOutY')
+            .addClass("sort__show animated flipInY");
+        setTimeout(function () {
+            body.removeClass("sort__show animated flipInY")
+        }, 500);
+    };
 
-  /**
-   * Проверить существования тега в списке тегов
-   * @param tagName
-   * @returns {boolean}
-   */
-  this.hasTag = function (tagName) {
-    //console.log(tagName,name);
-    return tagList.indexOf(tagName) !== -1;
-  };
+    /**
+     * Проверить существования тега в списке тегов
+     * @param tagName
+     * @returns {boolean}
+     */
+    this.hasTag = function (tagName) {
+        //console.log(tagName,name);
+        return tagList.indexOf(tagName) !== -1;
+    };
 
-  /**
-   * Проверить скрыт ли компонент
-   * @return {boolean}
-   */
-  this.isHidden = function(){
-    return hidden;
-  };
+    /**
+     * Проверить скрыт ли компонент
+     * @return {boolean}
+     */
+    this.isHidden = function () {
+        return hidden;
+    };
 
-  this.getImage = function(){
-    return thumb
-  };
+    this.getImage = function () {
+        return thumb
+    };
 
-  this.getName = function(){
-    return name;
-  };
+    this.getName = function () {
+        return name;
+    };
 
-  this.getDescription = function(){
-    return description;
-  };
+    this.getDescription = function () {
+        return description;
+    };
 
-  /**
-   * Возвратить указатель на элемент в дереве объектов
-   * @returns {*}
-   */
-  this.getBody = function(){
-    return body;
-  };
+    /**
+     * Возвратить указатель на элемент в дереве объектов
+     * @returns {*}
+     */
+    this.getBody = function () {
+        return body;
+    };
 
-  /**
-   * Возвратить список тегов
-   * @returns {*|Array}
-   */
-  this.getTagList = function(){
-    return tagList
-  };
+    /**
+     * Возвратить список тегов
+     * @returns {*|Array}
+     */
+    this.getTagList = function () {
+        return tagList
+    };
 
-  (function(){
-    self.render();
-  })()
+    (function () {
+        self.render();
+    })()
 }
 
 
@@ -908,209 +915,210 @@ function Product(params){
  * @param params
  * @constructor
  */
-function ProductReview(params){
-  let container               = params.container,
-    id                        = params.id,
-    name                      = params.name,
-    description               = params.description,
-    thumb                     = params.thumb,
-    imageList                 = params.imageList || null,
-    settingFile               = params.settingFile,
-    self                      = this,
-    showGalleryOfThumbnails   = true,
-    thumbnailsCaption         = '',
-    note                      = '',
-    minimumOrder              = 1,
-    cost                      = 1,
-    min                       = 1,
-    max                       = 7,
-    step                      = 1,
-    weight                    = 0.50,
-    ration                    = 3,
-    breakpoints               = [],
-    noOptions                 = false,
-    tasteList                 = null,
-    decorCaption              = null,
-    decorList                 = null,
-    sizeList                  = null,
-    $body,
-    adStuffingList            = null,
-    orderCompletion           = null;
+function ProductReview(params) {
+    let container = params.container,
+        id = params.id,
+        name = params.name,
+        description = params.description,
+        thumb = params.thumb,
+        imageList = params.imageList || null,
+        settingFile = params.settingFile,
+        self = this,
+        showGalleryOfThumbnails = true,
+        thumbnailsCaption = '',
+        note = '',
+        minimumOrder = 1,
+        cost = 1,
+        min = 1,
+        max = 7,
+        step = 1,
+        weight = 0.50,
+        ration = 3,
+        breakpoints = [],
+        noOptions = false,
+        tasteList = null,
+        decorCaption = null,
+        decorList = null,
+        sizeList = null,
+        $body,
+        adStuffingList = null,
+        orderCompletion = null;
 
-  function render() {
-    $body = $('<div/>',{class: 'vnl_modal__product-review'}).append(
-        $('<div/>',{class: 'product-review py-5 px-3'}).append(
-          $('<form/>',{class: 'product-review__form'}).append(
-            $('<div/>',{class:'row'}).append(
-              addSection('product-review__gallery', addButtonGroup),
-              addSection('product-review__info','')
-            )//end row
-          ),//end form
-          ComponentRecommendedProducts({
-            productId               : id,
-            caption                 : 'C этим товаром так же покупают'
-          })//end recommended products block
-        )//end product-review
-      );//end vnl_modal__product-review
-    $body.appendTo('body');
-    $body.iziModal({
-      headerColor:common.primaryColor,
-      title: name,
-      subtitle: (description.length > 100 ? description.substr(0,100) + '...' : description),
-      fullscreen: true,
-      autoOpen: true,
-      width: 1200,
-      onClosed: function(){
-        $(this).iziModal('destroy');
-        $body.remove();
-      }
-    });
+    function render() {
+        $body = $('<div/>', {class: 'vnl_modal__product-review'}).append(
+            $('<div/>', {class: 'product-review py-5 px-3'}).append(
+                $('<form/>', {class: 'product-review__form'}).append(
+                    $('<div/>', {class: 'row'}).append(
+                        addSection('product-review__gallery', addButtonGroup),
+                        addSection('product-review__info', '')
+                    )//end row
+                ),//end form
+                ComponentRecommendedProducts({
+                    productId: id,
+                    caption: 'C этим товаром так же покупают'
+                })//end recommended products block
+            )//end product-review
+        );//end vnl_modal__product-review
+        $body.appendTo('body');
+        $body.iziModal({
+            headerColor: common.primaryColor,
+            title: name,
+            subtitle: (description.length > 100 ? description.substr(0, 100) + '...' : description),
+            fullscreen: true,
+            autoOpen: true,
+            width: 1200,
+            onClosed: function () {
+                $(this).iziModal('destroy');
+                $body.remove();
+            }
+        });
 
-    new ReviewGallery({
-      container               : $body.find('.product-review__gallery').find('.container-fluid') ,
-      id                      : id,
-      thumb                   : thumb,
-      name                    : name,
-      imageList               : imageList,
-      showGalleryOfThumbnails : showGalleryOfThumbnails,
-      thumbnailsCaption       : thumbnailsCaption,
-    });
-    new ReviewInfo({
-      container               : $body.find('.product-review__info').find('.container-fluid') ,
-      id                      : id,
-      name                    : name,
-      description             : description,
-      minimumOrder            : minimumOrder,
-      cost                    : cost,
-      min                     : min,
-      max                     : max,
-      step                    : step,
-      weight                  : weight,
-      ration                  : ration,
-      note                    : note,
-      noOptions               : noOptions,
-      breakpoints             : breakpoints,
-      tasteList               : tasteList,
-      decorCaption            : decorCaption,
-      decorList               : decorList,
-      sizeList                : sizeList,
-      adStuffingList          : adStuffingList,
-      orderCompletion         : orderCompletion,
-      //TODO варианты исполнения : торт|трайфлы
-    });
+        new ReviewGallery({
+            container: $body.find('.product-review__gallery').find('.container-fluid'),
+            id: id,
+            thumb: thumb,
+            name: name,
+            imageList: imageList,
+            showGalleryOfThumbnails: showGalleryOfThumbnails,
+            thumbnailsCaption: thumbnailsCaption,
+        });
+        new ReviewInfo({
+            container: $body.find('.product-review__info').find('.container-fluid'),
+            id: id,
+            name: name,
+            description: description,
+            minimumOrder: minimumOrder,
+            cost: cost,
+            min: min,
+            max: max,
+            step: step,
+            weight: weight,
+            ration: ration,
+            note: note,
+            noOptions: noOptions,
+            breakpoints: breakpoints,
+            tasteList: tasteList,
+            decorCaption: decorCaption,
+            decorList: decorList,
+            sizeList: sizeList,
+            adStuffingList: adStuffingList,
+            orderCompletion: orderCompletion,
+            //TODO варианты исполнения : торт|трайфлы
+        });
 
-    $('body').off('orderClosed').on('orderClosed',function(e,personData,orderData){
-      sendOrderData(personData,orderData);
-    });
-  }
-
-
-  /**
-   * Считать файл настроек и определить переменные
-   */
-  function readSettings(){
-    let o;
-    if( settingFile in window.setting )
-      o = window.setting[settingFile];
-      showGalleryOfThumbnails = ( 'showGalleryOfThumbnails' in o ) ? o.showGalleryOfThumbnails : true;
-      thumbnailsCaption       = ( 'thumbnailsCaption'       in o ) ? o.thumbnailsCaption : '';
-      note                    = ( 'note'                    in o ) ? o.note : '';
-      minimumOrder            = ( 'minimumOrder'            in o ) ? o.minimumOrder: '1 шт.';
-      cost                    = ( 'cost'                    in o ) ? o.cost : 1;
-      min                     = ( 'min'                     in o ) ? o.min : 1;
-      max                     = ( 'max'                     in o ) ? o.max : 7;
-      step                    = ( 'step'                    in o ) ? o.step : 1;
-      weight                  = ( 'weight'                  in o ) ? o.weight : 0.50;
-      ration                  = ( 'ration'                  in o ) ? o.ration : 3;
-      tasteList               = ( 'tasteList'               in o ) ? o.tasteList : null;
-      decorCaption            = ( 'decorCaption'            in o ) ? o.decorCaption : null;
-      decorList               = ( 'decorList'               in o ) ? o.decorList : null;
-      sizeList                = ( 'sizeList'                in o ) ? o.sizeList : null;
-      adStuffingList          = ( 'additionalStuffingList'  in o ) ? o.additionalStuffingList : null;
-      breakpoints             = ( 'breakpoints'             in o ) ? o.breakpoints : [];
-      noOptions               = ( 'noOptions'               in o ) ? o.noOptions : false;
-      orderCompletion         = ( 'orderCompletionModal'    in o ) ? o.orderCompletionModal : null;
-  }
+        $('body').off('orderClosed').on('orderClosed', function (e, personData, orderData) {
+            sendOrderData(personData, orderData);
+        });
+    }
 
 
-  /**
-   * Добавить раздел
-   * @param {string}   sectionName - наименование раздела
-   * @param {function} innerBody   - контент
-   * @return {*|jQuery}
-   */
-  function addSection(sectionName,innerBody){
-    if( !innerBody || typeof innerBody !== 'function' )
-      innerBody = function(){};
-
-    return $('<div/>',{class:'col-md ' + sectionName}).append(
-      $('<div/>',{class:'container-fluid'}),
-      innerBody()
-    )
-  }
-
-
-  /**
-   * Добавить группу кнопок с триггерами модальных окон
-   * @return {*|jQuery}
-   */
-  function addButtonGroup(){
-    return $('<div/>',{class:'card__btn-group'}).append(
-      $('<div/>',{class:'btn-group w-100 px-3', role:'group', 'aria-label':'OtherOptions'}).append(
-        addModalTrigger('Оформление', "#decorate-modal-open", ""),
-        addModalTrigger('Вопросы', "#faq-modal-open", 'mx-1'),
-        addModalTrigger('Вес', "#delivery-modal-open", "")
-      )
-    )
-  }
+    /**
+     * Считать файл настроек и определить переменные
+     */
+    function readSettings() {
+        let o;
+        if (settingFile in window.setting)
+            o = window.setting[settingFile];
+        showGalleryOfThumbnails = ('showGalleryOfThumbnails' in o) ? o.showGalleryOfThumbnails : true;
+        thumbnailsCaption = ('thumbnailsCaption' in o) ? o.thumbnailsCaption : '';
+        note = ('note' in o) ? o.note : '';
+        minimumOrder = ('minimumOrder' in o) ? o.minimumOrder : '1 шт.';
+        cost = ('cost' in o) ? o.cost : 1;
+        min = ('min' in o) ? o.min : 1;
+        max = ('max' in o) ? o.max : 7;
+        step = ('step' in o) ? o.step : 1;
+        weight = ('weight' in o) ? o.weight : 0.50;
+        ration = ('ration' in o) ? o.ration : 3;
+        tasteList = ('tasteList' in o) ? o.tasteList : null;
+        decorCaption = ('decorCaption' in o) ? o.decorCaption : null;
+        decorList = ('decorList' in o) ? o.decorList : null;
+        sizeList = ('sizeList' in o) ? o.sizeList : null;
+        adStuffingList = ('additionalStuffingList' in o) ? o.additionalStuffingList : null;
+        breakpoints = ('breakpoints' in o) ? o.breakpoints : [];
+        noOptions = ('noOptions' in o) ? o.noOptions : false;
+        orderCompletion = ('orderCompletionModal' in o) ? o.orderCompletionModal : null;
+    }
 
 
-  /**
-   * Добавить триггер для открытия модали
-   * @param {string} title      - наименоваие кнопки
-   * @param {string} modalName  - ИД модального блока
-   * @param {string} className  - Дополнительный класс для кнопки
-   * @return {*|jQuery|HTMLElement}
-   */
-  function addModalTrigger(title,modalName, className){
-    return $('<div/>',{
-      href: '#',
-      class: 'btn btn-outline-primary w-100 ' + className,
-      'data-izimodal-open': modalName,
-      'data-izimodal-zindex':"20000",
-      'data-izimodal-preventclose':"",
-      text: title
-    })
-  }
+    /**
+     * Добавить раздел
+     * @param {string}   sectionName - наименование раздела
+     * @param {function} innerBody   - контент
+     * @return {*|jQuery}
+     */
+    function addSection(sectionName, innerBody) {
+        if (!innerBody || typeof innerBody !== 'function')
+            innerBody = function () {
+            };
+
+        return $('<div/>', {class: 'col-md ' + sectionName}).append(
+            $('<div/>', {class: 'container-fluid'}),
+            innerBody()
+        )
+    }
 
 
-  /**
-   * Отправить данные заказа на сервер
-   * @param {[]} person - данные по клиенту
-   * @param {[]} order  - данные по заказу
-   */
-  function sendOrderData(person,order){
-    $.post('./core/orderController.php',
-      {
-        personData:JSON.stringify(person),
-        orderData:JSON.stringify(order)
-      },
-      function (data){
-        new OrderConfirmationModal({
-          content: data
+    /**
+     * Добавить группу кнопок с триггерами модальных окон
+     * @return {*|jQuery}
+     */
+    function addButtonGroup() {
+        return $('<div/>', {class: 'card__btn-group'}).append(
+            $('<div/>', {class: 'btn-group w-100 px-3', role: 'group', 'aria-label': 'OtherOptions'}).append(
+                addModalTrigger('Оформление', "#decorate-modal-open", ""),
+                addModalTrigger('Вопросы', "#faq-modal-open", 'mx-1'),
+                addModalTrigger('Вес', "#delivery-modal-open", "")
+            )
+        )
+    }
+
+
+    /**
+     * Добавить триггер для открытия модали
+     * @param {string} title      - наименоваие кнопки
+     * @param {string} modalName  - ИД модального блока
+     * @param {string} className  - Дополнительный класс для кнопки
+     * @return {*|jQuery|HTMLElement}
+     */
+    function addModalTrigger(title, modalName, className) {
+        return $('<div/>', {
+            href: '#',
+            class: 'btn btn-outline-primary w-100 ' + className,
+            'data-izimodal-open': modalName,
+            'data-izimodal-zindex': "20000",
+            'data-izimodal-preventclose': "",
+            text: title
         })
-      })
-  }
+    }
 
 
-  /**
-   * @constructor
-   */
-  (function(){
-    readSettings();
-    render();
-    $('body').trigger('productOpen');
-  })()
+    /**
+     * Отправить данные заказа на сервер
+     * @param {[]} person - данные по клиенту
+     * @param {[]} order  - данные по заказу
+     */
+    function sendOrderData(person, order) {
+        $.post('./core/orderController.php',
+            {
+                personData: JSON.stringify(person),
+                orderData: JSON.stringify(order)
+            },
+            function (data) {
+                new OrderConfirmationModal({
+                    content: data
+                })
+            })
+    }
+
+
+    /**
+     * @constructor
+     */
+    (function () {
+        readSettings();
+        render();
+        $('body').trigger('productOpen');
+    })()
 }
 
 /**
@@ -1118,234 +1126,236 @@ function ProductReview(params){
  * @param params
  * @constructor
  */
-function RangeSlider(params){
-  var container = params.rangeSliderContainer,
-    index           = params.index || "",
-    name            = params.name || 'slider',
-    caption         = params.caption || '',
-    prodInRation    = params.productsInRation || 3,  //количество единиц продуктав одной порции
-    minRangeValue   =  params.min || 1,             //минимально возвожное количество единиц продукции для заявки
-    maxRangeValue   = params.max || 7,              //максимально возможное количество
-    rangeStepValue  = params.step || 1,            //шаг слайдера
-    weight          = params.weight < 1 ? params.weight*1000 : params.weight,
-    units           = params.weight < 1 ? 'гр' : 'кг' || '',
-    $range,$count,$rations,body,$value,
-    self = this,
-    bpController,
-    currentValue,
-    breakpoints     = params.breakpoints || null;
+function RangeSlider(params) {
+    var container = params.rangeSliderContainer,
+        index = params.index || "",
+        name = params.name || 'slider',
+        caption = params.caption || '',
+        prodInRation = params.productsInRation || 3,  //количество единиц продуктав одной порции
+        minRangeValue = params.min || 1,             //минимально возвожное количество единиц продукции для заявки
+        maxRangeValue = params.max || 7,              //максимально возможное количество
+        rangeStepValue = params.step || 1,            //шаг слайдера
+        weight = params.weight < 1 ? params.weight * 1000 : params.weight,
+        units = params.weight < 1 ? 'гр' : 'кг' || '',
+        $range, $count, $rations, body, $value,
+        self = this,
+        bpController,
+        currentValue,
+        breakpoints = params.breakpoints || null;
 
-  function isBreakpointsDefine(){
-    return breakpoints && breakpoints.length >= 1
-  }
-
-  /**
-   * Отрисовать компонент
-   */
-  this.render = function(){
-    container.empty();
-    if( !isBreakpointsDefine() )
-      units = 'шт.';
-
-    var breakpointContainer = (breakpoints && breakpoints.length !== 0) ? '<div id="breakpoint__container"></div>' : '';
-    caption = caption ? '<input class="range__caption" data-taste-name="' +caption+ '" value="' +caption+ '"/>' : "";
-
-    body = $(
-      '<div id="' +index+ '" class="row range">' +
-      ' <div class="col-12 range__caption-container">' +
-        caption +
-      ' </div>' +
-      ' <div class="col-2 d-flex align-items-end">' +
-      '   <div class="w-100">' +
-      '     <input readonly="readonly" name="' +name+ '__weight" class="range__count w-100"/>' +
-      '     <div class="text-center">' +units+ '</div>' +
-      '   </div>' +
-      ' </div>' +
-      ' <div class="col-8 p-0 pb-4">' +
-          breakpointContainer +
-      '   <input type="range" class="html-input-range ' +index+ '">' +
-      '   <input type="hidden" name="' +name+ '" class="range__value"/>' +
-      ' </div>' +
-      ' <div class="col-2 d-flex align-items-end">' +
-      '   <div  class="w-100">' +
-      '     <input readonly="readonly" name="' +name+ '__rations" class="range__ration-count w-100"/>' +
-      '     <div class="text-center " style="white-space: nowrap">порций</div>' +
-      '   </div>' +
-      ' </div>' +
-      '</div>').insertAfter(container);
-
-    $range = $(body).find('.html-input-range');
-    $count = $(body).find('.range__count');
-    $value = $(body).find('.range__value');
-    $rations = $(body).find('.range__ration-count');
-    if(breakpoints)
-      bpController = new BreakPointContainer(breakpoints,self);
-
-    $range.ionRangeSlider({
-      max: maxRangeValue,
-      min: minRangeValue,
-      from: 1,
-      hide_min_max: true,
-      hide_from_to: true,
-      grid: false,
-      type: 'single',
-      step: rangeStepValue,
-      force_edges: true,
-      grid_snap: true,
-      hide_values: true,
-      onStart: init,
-      onChange: track
-    });
-  };
-
-  /**
-   * Разместить точки прерывания на шкале слайдера
-   * и установить стартовое значение слайдера
-   * @param data
-   */
-  function init(data){
-    if(breakpoints)
-      bpController.init();
-    track(data)
-  }
-
-  /**
-   * Отслеживать значение слайдера
-   * @param data
-   */
-  function track (data) {
-    currentValue = data.from;
-    $value.val(data.from);
-    if( isBreakpointsDefine() )
-      $count.val(data.from*weight);
-    else
-      $count.val(data.from);
-    $rations.val( Math.ceil(data.from / prodInRation) );
-    if(breakpoints)
-      bpController.selectAllbreakpointsLessThanValue(data.from)
-  }
-
-  this.minRangeValue = function () {
-    return minRangeValue
-  };
-
-  this.maxRangeValue = function () {
-    return maxRangeValue
-  };
-
-  this.rangeStepValue = function () {
-    return rangeStepValue
-  };
-
-  this.getBreakpointContainer = function(){
-    return $(body).find('#breakpoint__container')
-  };
-
-  this.getSliderReport = function(){
-    return {
-      tier: bpController.getActiveBreakpointsCount(),
-      count: currentValue,
-      totalWeight: $count.text(),
-      rations: $rations.text()
+    function isBreakpointsDefine() {
+        return breakpoints && breakpoints.length >= 1
     }
-  };
 
-  function Breakpoint(_$container,icon,leftOffset,className) {
-    var $container = _$container,
-      $body,
-      self = this;
+    /**
+     * Отрисовать компонент
+     */
+    this.render = function () {
+        container.empty();
+        if (!isBreakpointsDefine())
+            units = 'шт.';
 
-    this.render = function(){
-      $body = $('<div/>',{
-        class: "breakpoint " + (className ? className : 'default'),
-        style:"left:"+leftOffset})
-        .append(
-          $('<div/>',{class:'breakpoint__line'}),
-          icon
-        );
-      $body.appendTo($container)
+        var breakpointContainer = (breakpoints && breakpoints.length !== 0) ? '<div id="breakpoint__container"></div>' : '';
+        caption = caption ? '<input class="range__caption" data-taste-name="' + caption + '" value="' + caption + '"/>' : "";
+
+        body = $(
+            '<div id="' + index + '" class="row range">' +
+            ' <div class="col-12 range__caption-container">' +
+            caption +
+            ' </div>' +
+            ' <div class="col-2 d-flex align-items-end">' +
+            '   <div class="w-100">' +
+            '     <input readonly="readonly" name="' + name + '__weight" class="range__count w-100"/>' +
+            '     <div class="text-center">' + units + '</div>' +
+            '   </div>' +
+            ' </div>' +
+            ' <div class="col-8 p-0 pb-4">' +
+            breakpointContainer +
+            '   <input type="range" class="html-input-range ' + index + '">' +
+            '   <input type="hidden" name="' + name + '" class="range__value"/>' +
+            ' </div>' +
+            ' <div class="col-2 d-flex align-items-end">' +
+            '   <div  class="w-100">' +
+            '     <input readonly="readonly" name="' + name + '__rations" class="range__ration-count w-100"/>' +
+            '     <div class="text-center " style="white-space: nowrap">порций</div>' +
+            '   </div>' +
+            ' </div>' +
+            '</div>').insertAfter(container);
+
+        $range = $(body).find('.html-input-range');
+        $count = $(body).find('.range__count');
+        $value = $(body).find('.range__value');
+        $rations = $(body).find('.range__ration-count');
+        if (breakpoints)
+            bpController = new BreakPointContainer(breakpoints, self);
+
+        $range.ionRangeSlider({
+            max: maxRangeValue,
+            min: minRangeValue,
+            from: 1,
+            hide_min_max: true,
+            hide_from_to: true,
+            grid: false,
+            type: 'single',
+            step: rangeStepValue,
+            force_edges: true,
+            grid_snap: true,
+            hide_values: true,
+            onStart: init,
+            onChange: track
+        });
     };
 
-    this.isActive = function(){
-      return $body.hasClass('active')
-    };
+    /**
+     * Разместить точки прерывания на шкале слайдера
+     * и установить стартовое значение слайдера
+     * @param data
+     */
+    function init(data) {
+        if (breakpoints)
+            bpController.init();
+        track(data)
+    }
 
-    this.activate = function(){
-      $body.addClass('active')
-    };
-
-    this.deactivate = function(){
-      $body.removeClass('active')
-    };
-
-    (function(){
-      self.render();
-    })()
-  }
-
-  function BreakPointContainer(arrayOfValues,parent){
-    var selfContainer = parent.getBreakpointContainer(),
-      breakPointArray = [],
-      breakPointValuesArray = arrayOfValues || [],
-      self = this;
-
-    this.getActiveBreakpointsCount = function(){
-      var count = 0;
-      breakPointArray.forEach(function (item) {
-        if( item.isActive() )
-          count ++;
-      });
-      return count;
-    };
-
-    this.createBP = function(icon,offsetLeft,className){
-      if(!offsetLeft) return false;
-      breakPointArray.push(
-        new Breakpoint(selfContainer,icon,offsetLeft,className)
-      )
-    };
-
-    this.init = function() {
-      var className = '';
-      breakPointValuesArray.forEach(function (item) {
-        className = 'default';
-        if('className' in item)
-         className = item.className;
-        self.createBP( item.icon,getOffsetInPercent(item.value),className )
-      });
-    };
-
-    this.selectAllbreakpointsLessThanValue = function(value){
-      breakPointValuesArray.forEach(function (item,i) {
-        if( value >= item.value )
-          breakPointArray[i].activate();
+    /**
+     * Отслеживать значение слайдера
+     * @param data
+     */
+    function track(data) {
+        currentValue = data.from;
+        $value.val(data.from);
+        if (isBreakpointsDefine())
+            $count.val(data.from * weight);
         else
-          breakPointArray[i].deactivate();
-      })
-    };
-
-    this.deselectAllbreakpoints = function(){
-      breakPointArray.forEach(function(breakpoint){
-        breakpoint.deactivate();
-      });
-    };
-
-    function getOffsetInPercent(brPoint){
-      var oneStep;
-      var total = parent.maxRangeValue() - parent.minRangeValue();
-      if (total > 50)
-        oneStep = +(parent.rangeStepValue() / 0.5).toFixed(20);
-      else
-        oneStep = +(parent.rangeStepValue()/ (total / 100)).toFixed(20);
-      var offset = +( oneStep * (brPoint-1) /* (brPoint-32-2)*/ ).toFixed(20);
-      return offset + '%'
+            $count.val(data.from);
+        $rations.val(Math.ceil(data.from / prodInRation));
+        if (breakpoints)
+            bpController.selectAllbreakpointsLessThanValue(data.from)
     }
-  }
 
-  (function(){
-    self.render();
-  })()
+    this.minRangeValue = function () {
+        return minRangeValue
+    };
+
+    this.maxRangeValue = function () {
+        return maxRangeValue
+    };
+
+    this.rangeStepValue = function () {
+        return rangeStepValue
+    };
+
+    this.getBreakpointContainer = function () {
+        return $(body).find('#breakpoint__container')
+    };
+
+    this.getSliderReport = function () {
+        return {
+            tier: bpController.getActiveBreakpointsCount(),
+            count: currentValue,
+            totalWeight: $count.text(),
+            rations: $rations.text()
+        }
+    };
+
+    function Breakpoint(_$container, icon, leftOffset, className) {
+        var $container = _$container,
+            $body,
+            self = this;
+
+        this.render = function () {
+            $body = $('<div/>', {
+                class: "breakpoint " + (className ? className : 'default'),
+                style: "left:" + leftOffset
+            })
+                .append(
+                    $('<div/>', {class: 'breakpoint__line'}),
+                    icon
+                );
+            $body.appendTo($container)
+        };
+
+        this.isActive = function () {
+            return $body.hasClass('active')
+        };
+
+        this.activate = function () {
+            $body.addClass('active')
+        };
+
+        this.deactivate = function () {
+            $body.removeClass('active')
+        };
+
+        (function () {
+            self.render();
+        })()
+    }
+
+    function BreakPointContainer(arrayOfValues, parent) {
+        var selfContainer = parent.getBreakpointContainer(),
+            breakPointArray = [],
+            breakPointValuesArray = arrayOfValues || [],
+            self = this;
+
+        this.getActiveBreakpointsCount = function () {
+            var count = 0;
+            breakPointArray.forEach(function (item) {
+                if (item.isActive())
+                    count++;
+            });
+            return count;
+        };
+
+        this.createBP = function (icon, offsetLeft, className) {
+            if (!offsetLeft) return false;
+            breakPointArray.push(
+                new Breakpoint(selfContainer, icon, offsetLeft, className)
+            )
+        };
+
+        this.init = function () {
+            var className = '';
+            breakPointValuesArray.forEach(function (item) {
+                className = 'default';
+                if ('className' in item)
+                    className = item.className;
+                self.createBP(item.icon, getOffsetInPercent(item.value), className)
+            });
+        };
+
+        this.selectAllbreakpointsLessThanValue = function (value) {
+            breakPointValuesArray.forEach(function (item, i) {
+                if (value >= item.value)
+                    breakPointArray[i].activate();
+                else
+                    breakPointArray[i].deactivate();
+            })
+        };
+
+        this.deselectAllbreakpoints = function () {
+            breakPointArray.forEach(function (breakpoint) {
+                breakpoint.deactivate();
+            });
+        };
+
+        function getOffsetInPercent(brPoint) {
+            var oneStep;
+            var total = parent.maxRangeValue() - parent.minRangeValue();
+            if (total > 50)
+                oneStep = +(parent.rangeStepValue() / 0.5).toFixed(20);
+            else
+                oneStep = +(parent.rangeStepValue() / (total / 100)).toFixed(20);
+            var offset = +(oneStep * (brPoint - 1) /* (brPoint-32-2)*/).toFixed(20);
+            return offset + '%'
+        }
+    }
+
+    (function () {
+        self.render();
+    })()
 }
+
 /**
  * Галлерея изображений в обзоре товара
  * @params {object} params
@@ -1356,688 +1366,696 @@ function RangeSlider(params){
  * @param  {[]}     params.imageList  - список дополнительных изображений товара
  * @constructor
  */
-function ReviewGallery(params){
-  let container             = params.container,
-    id                      = params.id,
-    showGalleryOfThumbnails = params.showGalleryOfThumbnails || true,
-    thumbnailsCaption       = params.thumbnailsCaption,
-    thumb                   = params.thumb,
-    name                    = params.name || "mini-gallery",
-    imageList               = params.imageList || [],
-    self                    = this,
-    body;
+function ReviewGallery(params) {
+    let container = params.container,
+        id = params.id,
+        showGalleryOfThumbnails = params.showGalleryOfThumbnails || true,
+        thumbnailsCaption = params.thumbnailsCaption,
+        thumb = params.thumb,
+        name = params.name || "mini-gallery",
+        imageList = params.imageList || [],
+        self = this,
+        body;
 
 
-  /**
-   * Создать контейнер для изображения
-   * @param src       - путь к изображению
-   * @param className - кастомный класс для контейнера
-   * @return {void|*|jQuery}
-   */
-  function image(src,className){
-    return $('<a/>',{
-      class: "stock__product "+ className,
-      id: "product__"+id,
-      href: src,
-      'data-toggle':'lightbox',
-      'data-gallery': name + '-' + id,
-      'data-width': '800px',
-      'data-height':'800px',
-    })
-      .append(
-        $('<div/>',{class:'tetragon-12'})
-          .append(
-            $('<div/>',{class: 'tetragon__wrapper'})
-              .append(
-                $('<div/>',{class: 'tetragon__content'})
-                  .append(
-                    $('<img/>', {
-                      src: src,
-                      alt: name,
-                      'onerror': '$(this).addClass("invalid-image-src")',
-                      class: 'product__thumb d-block h-100 w-100',
-                    })
-                  )
-              )
-          )
-      )
-  }
-
-
-  /**
-   * Добавить галлерею миниатюр. Сетка 3*n изображений.
-   * При каждом создании галлереи изображения перемешиваются в рандомном порядке
-   * Если указан параметр <strong>showGalleryOfThumbnails = false</strong> галлерея не будет выводится
-   * @return {boolean|jQuery}
-   */
-  function galleryOfThumbnails(){
-    if(!showGalleryOfThumbnails) return false;
-    imageList = common.randomizeArray(imageList);
-    var $a = $('<div/>',{class:'row gallery-of-thumbnails p-3'})
-      .append(
-        $('<h4/>',{text:thumbnailsCaption,class:'d-block w-100'})
-      );
-    for(var i=0;i<4;i++){
-      $a.append(
-        image(imageList[i].thumb,'col-3 p-1')
-      )
+    /**
+     * Создать контейнер для изображения
+     * @param src       - путь к изображению
+     * @param className - кастомный класс для контейнера
+     * @return {void|*|jQuery}
+     */
+    function image(src, className) {
+        return $('<a/>', {
+            class: "stock__product " + className,
+            id: "product__" + id,
+            href: src,
+            'data-toggle': 'lightbox',
+            'data-gallery': name + '-' + id,
+            'data-width': '800px',
+            'data-height': '800px',
+        })
+            .append(
+                $('<div/>', {class: 'tetragon-12'})
+                    .append(
+                        $('<div/>', {class: 'tetragon__wrapper'})
+                            .append(
+                                $('<div/>', {class: 'tetragon__content'})
+                                    .append(
+                                        $('<img/>', {
+                                            src: src,
+                                            alt: name,
+                                            'onerror': '$(this).addClass("invalid-image-src")',
+                                            class: 'product__thumb d-block h-100 w-100',
+                                        })
+                                    )
+                            )
+                    )
+            )
     }
-    return $a;
-  }
 
 
-  /**
-   * Отрисовать компонент
-   */
-  function render(){
-    body = $('<div/>',{class:'product-review__gallery-content mb-4'})
-      .append(
-        $('<div/>',{class:'row product-review__primary-gallery'})
-          .append(
-            image(thumb,'col-12')
-          ),
-        $('<div/>',{class:'product-review__secondary-gallery w-100'})
-          .append(
-            galleryOfThumbnails()
-          )
-      );
-    $(container).empty(); //очистим контейнер чтобы избежать дублирования
-    body.appendTo(container);
-    body.on('click', '[data-toggle="lightbox"]', function(event) {
-      event.preventDefault();
-      $(this).ekkoLightbox({
-        onHidden: function() {
-          //$('body').addClass('modal-open');
-        },
-      });
-    });
-  }
+    /**
+     * Добавить галлерею миниатюр. Сетка 3*n изображений.
+     * При каждом создании галлереи изображения перемешиваются в рандомном порядке
+     * Если указан параметр <strong>showGalleryOfThumbnails = false</strong> галлерея не будет выводится
+     * @return {boolean|jQuery}
+     */
+    function galleryOfThumbnails() {
+        if (!showGalleryOfThumbnails) return false;
+        imageList = common.randomizeArray(imageList);
+        var $a = $('<div/>', {class: 'row gallery-of-thumbnails p-3'})
+            .append(
+                $('<h4/>', {text: thumbnailsCaption, class: 'd-block w-100'})
+            );
+        for (var i = 0; i < 4; i++) {
+            $a.append(
+                image(imageList[i].thumb, 'col-3 p-1')
+            )
+        }
+        return $a;
+    }
 
-  (function(){
-    render();
-  })()
+
+    /**
+     * Отрисовать компонент
+     */
+    function render() {
+        body = $('<div/>', {class: 'product-review__gallery-content mb-4'})
+            .append(
+                $('<div/>', {class: 'row product-review__primary-gallery'})
+                    .append(
+                        image(thumb, 'col-12')
+                    ),
+                $('<div/>', {class: 'product-review__secondary-gallery w-100'})
+                    .append(
+                        galleryOfThumbnails()
+                    )
+            );
+        $(container).empty(); //очистим контейнер чтобы избежать дублирования
+        body.appendTo(container);
+        body.on('click', '[data-toggle="lightbox"]', function (event) {
+            event.preventDefault();
+            $(this).ekkoLightbox({
+                onHidden: function () {
+                    //$('body').addClass('modal-open');
+                },
+            });
+        });
+    }
+
+    (function () {
+        render();
+    })()
 }
+
 /**
  * Информация о товаре
  * @params {object} params
  * @constructor
  */
-function ReviewInfo(params){
-  let container     = params.container,
-    id              = params.id,
-    name            = params.name,
-    description     = params.description,
-    minimumOrder    = params.minimumOrder,
-    cost            = params.cost,
-    note            = params.note,
-    step            = params.step,
-    weight          = params.weight,
-    min             = params.min,
-    max             = params.max,
-    ration          = params.ration,
-    tasteList       = params.tasteList || null,
-    decorCaption    = params.decorCaption,
-    decorList       = params.decorList || null,
-    sizeList        = params.sizeList  || null,
-    adStuffingList  = params.adStuffingList || null,
-    orderCompletion = params.orderCompletion || null,
-    breakpoints     = params.breakpoints,
-    noOptions       = params.noOptions,
-    sliderOpt       = {
-      index: id,
-      caption: '',
-      productsInRation: ration,
-      min: min,
-      max: max,
-      step: step,
-      weight: weight,
-      breakpoints: breakpoints
-    },
-    variantsOfExecution= params.variantsOfExecution || false,
-    optionsList = [],
-    body,
-    personModal,
-    slider;
+function ReviewInfo(params) {
+    let container = params.container,
+        id = params.id,
+        name = params.name,
+        description = params.description,
+        minimumOrder = params.minimumOrder,
+        cost = params.cost,
+        note = params.note,
+        step = params.step,
+        weight = params.weight,
+        min = params.min,
+        max = params.max,
+        ration = params.ration,
+        tasteList = params.tasteList || null,
+        decorCaption = params.decorCaption,
+        decorList = params.decorList || null,
+        sizeList = params.sizeList || null,
+        adStuffingList = params.adStuffingList || null,
+        orderCompletion = params.orderCompletion || null,
+        breakpoints = params.breakpoints,
+        noOptions = params.noOptions,
+        sliderOpt = {
+            index: id,
+            caption: '',
+            productsInRation: ration,
+            min: min,
+            max: max,
+            step: step,
+            weight: weight,
+            breakpoints: breakpoints
+        },
+        variantsOfExecution = params.variantsOfExecution || false,
+        optionsList = [],
+        body,
+        personModal,
+        slider;
 
-  /**
-   * Добавить строку характеристики продукта
-   * @param {string}  fieldName   - имя поля для отправки
-   * @param {string}  className   - дополнительный класс
-   * @param {string}  text        - наименование характеристики
-   * @param {boolean} isSeparated - флаг определяющий требуется ли показывать нижнюю границу под характеристикой
-   * @return {*|void|jQuery}
-   */
-  function featureRow(fieldName,className,text,isSeparated){
-    var bordered =  isSeparated === true ? ' border-bottom text-right' : '';
-    return $('<div/>',{class:'row'})
-      .append(
-        $('<div/>',{class:'col-12 '+className+'-container' + bordered})
-          .append(
-            $('<span/>',{
-              class:className,
-              text:text,
-              name: fieldName})
-          )
-      )
-  }
-
-
-  /**
-   * Добавить строку опций товара
-   * @param className
-   */
-  function addOrderOptionRow(className){
-    $('<div/>',{class: 'product-review__order-option '+className+' mt-3'}).appendTo(body)
-  }
-
-  function render(){
-
-    body = $('<div/>',{id: id,class: 'product-review__info-content'})
-      .append(
-        featureRow('name','product-review__name', name, true ),
-        featureRow('description','product-review__description !product-review__min-height pb-5', description ),
-        featureRow('minOrder', 'product-review__minimum-order ','Минимальный заказ: ' + minimumOrder  ),
-        featureRow('minCost', 'product-review__cost', 'Цена за 1 ' + ( minimumOrder.split(' ')[1] ? minimumOrder.split(' ')[1] : ' кусок' ) + ' от '+cost+' BYN' ),
-      );
-
-    $(container).empty();
-    body.appendTo(container);
-
-    personModal = new PersonCardModal({
-      container: body
-    });
-    $('body').off('personModalClosed').on('personModalClosed',function(e,d){
-      console.log(e,d);
-      $('body').trigger('orderClosed',[d,collectAllData()]);
-    });
-    //Если указаны вкусы :: создать компонент "Выбор вкуса"
-    if( isTastesSpecified() ){
-      optionsList.push(
-        addComponentTasteSelect()
-      );
+    /**
+     * Добавить строку характеристики продукта
+     * @param {string}  fieldName   - имя поля для отправки
+     * @param {string}  className   - дополнительный класс
+     * @param {string}  text        - наименование характеристики
+     * @param {boolean} isSeparated - флаг определяющий требуется ли показывать нижнюю границу под характеристикой
+     * @return {*|void|jQuery}
+     */
+    function featureRow(fieldName, className, text, isSeparated) {
+        var bordered = isSeparated === true ? ' border-bottom text-right' : '';
+        return $('<div/>', {class: 'row'})
+            .append(
+                $('<div/>', {class: 'col-12 ' + className + '-container' + bordered})
+                    .append(
+                        $('<span/>', {
+                            class: className,
+                            text: text,
+                            name: fieldName
+                        })
+                    )
+            )
     }
-    //Если указаны дополнения к начинке :: создать компонент "Дополнения к начинке"
-    if( isAdditionalStuffingSpecified() ){
-      optionsList.push(
-        addComponentAdditionalStuffingSelect()
-      )
+
+
+    /**
+     * Добавить строку опций товара
+     * @param className
+     */
+    function addOrderOptionRow(className) {
+        $('<div/>', {class: 'product-review__order-option ' + className + ' mt-3'}).appendTo(body)
     }
-    //Если указаны варианты декора :: создать компонент "Оформления"
-    if( isDecorSpecified() ){
-      optionsList.push(
-        addComponentDecorSelect()
-      )
+
+    function render() {
+
+        body = $('<div/>', {id: id, class: 'product-review__info-content'})
+            .append(
+                featureRow('name', 'product-review__name', name, true),
+                featureRow('description', 'product-review__description !product-review__min-height pb-5', description),
+                featureRow('minOrder', 'product-review__minimum-order ', 'Минимальный заказ: ' + minimumOrder),
+                featureRow('minCost', 'product-review__cost', 'Цена за 1 ' + (minimumOrder.split(' ')[1] ? minimumOrder.split(' ')[1] : ' кусок') + ' от ' + cost + ' BYN'),
+            );
+
+        $(container).empty();
+        body.appendTo(container);
+
+        personModal = new PersonCardModal({
+            container: body
+        });
+        $('body').off('personModalClosed').on('personModalClosed', function (e, d) {
+            console.log(e, d);
+            $('body').trigger('orderClosed', [d, collectAllData()]);
+        });
+        //Если указаны вкусы :: создать компонент "Выбор вкуса"
+        if (isTastesSpecified()) {
+            optionsList.push(
+                addComponentTasteSelect()
+            );
+        }
+        //Если указаны дополнения к начинке :: создать компонент "Дополнения к начинке"
+        if (isAdditionalStuffingSpecified()) {
+            optionsList.push(
+                addComponentAdditionalStuffingSelect()
+            )
+        }
+        //Если указаны варианты декора :: создать компонент "Оформления"
+        if (isDecorSpecified()) {
+            optionsList.push(
+                addComponentDecorSelect()
+            )
+        }
+        //Если указаны варианты размеров :: создать компонент "Размеры"
+        if (isSizesSpecified()) {
+            optionsList.push(
+                addComponentSizeSelect()
+            )
+        }
+        //Создать компонент "Комментарии"
+        optionsList.push(
+            addComponentNotification()
+        );
+        //Создать компонент "Изображения"
+        optionsList.push(
+            addComponentImage()
+        );
+        //Создать кнопку "Оформить заявку"
+        addTotalButton();
+        //Создать компонент "Рекомендуемые товары"
+        addComponentRecommendedProduct();
     }
-    //Если указаны варианты размеров :: создать компонент "Размеры"
-    if( isSizesSpecified() ){
-      optionsList.push(
-        addComponentSizeSelect()
-      )
+
+
+    /**
+     * Проверить указаны ли варианты выбора вкуса
+     * @return {boolean}
+     */
+    function isTastesSpecified() {
+        return !!tasteList && typeof tasteList === 'object' && tasteList.length !== 0
     }
-    //Создать компонент "Комментарии"
-    optionsList.push(
-      addComponentNotification()
-    );
-    //Создать компонент "Изображения"
-    optionsList.push(
-      addComponentImage()
-    );
-    //Создать кнопку "Оформить заявку"
-    addTotalButton();
-    //Создать компонент "Рекомендуемые товары"
-    addComponentRecommendedProduct();
-  }
 
 
-  /**
-   * Проверить указаны ли варианты выбора вкуса
-   * @return {boolean}
-   */
-  function isTastesSpecified(){
-    return !!tasteList && typeof tasteList === 'object' && tasteList.length !== 0
-  }
+    /**
+     * Добавить компонент выбора вкусов
+     * @return {ComponentTaste}
+     */
+    function addComponentTasteSelect() {
+        addOrderOptionRow("option__choose-taste");
+        return new ComponentTaste({
+            container: body.find(".option__choose-taste"),
+            productId: id,
+            tasteList: tasteList,
+            sliderOpt: sliderOpt
+        });
+    }
 
 
-  /**
-   * Добавить компонент выбора вкусов
-   * @return {ComponentTaste}
-   */
-  function addComponentTasteSelect(){
-    addOrderOptionRow("option__choose-taste");
-    return new ComponentTaste({
-      container: body.find(".option__choose-taste"),
-      productId: id,
-      tasteList: tasteList,
-      sliderOpt: sliderOpt
-    });
-  }
+    /**
+     * Проверить указаны ли варианты выбора оформления
+     * @return {boolean}
+     */
+    function isDecorSpecified() {
+        return !!decorList && typeof decorList === "object" && decorList.length !== 0
+    }
 
 
-  /**
-   * Проверить указаны ли варианты выбора оформления
-   * @return {boolean}
-   */
-  function isDecorSpecified(){
-    return !!decorList && typeof decorList === "object" && decorList.length !== 0
-  }
-
-
-  /**
-   * Добавить компонент для выбора вариантов оформления
-   * @return {ComponentDecor}
-   */
-  function addComponentDecorSelect(){
-    addOrderOptionRow("option__choose-decor");
-    return new ComponentDecor({
-      container: body.find('.option__choose-decor'),
-      productId: id,
-      decorList: decorList,
-      caption  : decorCaption
-    })
-  }
-
-
-  /**
-   * Проверить указаны ли варианты выбора дополнения к начинке
-   * @returns {boolean}
-   */
-  function isAdditionalStuffingSpecified(){
-    return !!adStuffingList && typeof adStuffingList === 'object' && adStuffingList.length !== 0
-  }
-
-
-  /**
-   * Добавить компонент для выбора дополнения в начинке
-   * @returns {ComponentAdditionalStuffing}
-   */
-  function addComponentAdditionalStuffingSelect(){
-    addOrderOptionRow('option__choose-additionalStuffing');
-    return new ComponentAdditionalStuffing({
-      container: body.find('.option__choose-additionalStuffing'),
-      productId: id,
-      additionalStuffingList: adStuffingList
-    })
-  }
-
-
-  /**
-   * Проверить указаны ли раз
-   * @returns {boolean}
-   */
-  function isSizesSpecified(){
-    return !!sizeList && typeof sizeList === "object" && sizeList.length !== 0
-  }
-
-
-  /**
-   * Добавить компонент для выбора размера готового продукта
-   * @returns {ComponentSize}
-   */
-  function addComponentSizeSelect(){
-    addOrderOptionRow('option__choose-size');
-    return new ComponentSize({
-      container: body.find('.option__choose-size'),
-      productId: id,
-      sizeList: sizeList
-    })
-  }
-
-
-  /**
-   * Добавить компонент для ввода комментария
-   * @returns {ComponentNotification}
-   */
-  function addComponentNotification(){
-    addOrderOptionRow('option__notification');
-    return new ComponentNotification({
-      container: body.find('.option__notification'),
-      productId: id,
-      text: note
-    })
-  }
-
-
-  /**
-   * Добавить компонент для заргузки изображения
-   * @returns {ComponentImage}
-   */
-  function addComponentImage(){
-    return new ComponentImage({
-      container: body.closest('.product-review__form'),
-      productId: id
-    })
-  }
-
-
-  /**
-   * Добавить компонент рекомендуемых продуктов
-   */
-  function addComponentRecommendedProduct() {
-    $('<div/>',{class:'mt-5'})
-      .append(
-        new ComponentRecommendedProducts({
-          container: body.closest('.product-review__form'),
-          productId: id,
-          caption: 'С этим продуктом покупают'
+    /**
+     * Добавить компонент для выбора вариантов оформления
+     * @return {ComponentDecor}
+     */
+    function addComponentDecorSelect() {
+        addOrderOptionRow("option__choose-decor");
+        return new ComponentDecor({
+            container: body.find('.option__choose-decor'),
+            productId: id,
+            decorList: decorList,
+            caption: decorCaption
         })
-      );
-  }
+    }
 
 
-  /**
-   * Добавить кнопку "Оформить заявку" при нежатии на котрую будет собираться вся инфа по выделенным
-   * опциям заявки и записываться в поле с name="total"
-   */
-  function addTotalButton() {
-    $('<div/>',{class: 'row product-review__total mt-5'})
-      .append(
-        $('<input/>',{type:'hidden',name:'total'}),
-        $('<div/>',{class:'col-12 d-flex justify-content-center'})
-          .append(
-            $('<a/>',{
-              id: 'send-to-next',
-              href: '#',
-              class: 'btn btn-outline-primary p-4',
-              text: 'Оформить заявку',
-              click: function(){
-                console.log(collectAllData());
-                personModal.show();
-              }
-            })
-          )
-      )
-      .appendTo( body.closest('.product-review__form') );
-  }
+    /**
+     * Проверить указаны ли варианты выбора дополнения к начинке
+     * @returns {boolean}
+     */
+    function isAdditionalStuffingSpecified() {
+        return !!adStuffingList && typeof adStuffingList === 'object' && adStuffingList.length !== 0
+    }
 
 
-  /**
-   * Собрать данные всех компонентов
-   * @return {string}
-   */
-  function collectAllData(){
-    var a = {};
-    optionsList.forEach( item => {
-      if(item) {
-        a[item.constructor.name] = item.getData();
-      }
-    });
-    return a;
-  }
+    /**
+     * Добавить компонент для выбора дополнения в начинке
+     * @returns {ComponentAdditionalStuffing}
+     */
+    function addComponentAdditionalStuffingSelect() {
+        addOrderOptionRow('option__choose-additionalStuffing');
+        return new ComponentAdditionalStuffing({
+            container: body.find('.option__choose-additionalStuffing'),
+            productId: id,
+            additionalStuffingList: adStuffingList
+        })
+    }
 
 
-  /**
-   * Немедленное построение компонента
-   */
-  (function(){
-    render();
-  })()
+    /**
+     * Проверить указаны ли раз
+     * @returns {boolean}
+     */
+    function isSizesSpecified() {
+        return !!sizeList && typeof sizeList === "object" && sizeList.length !== 0
+    }
+
+
+    /**
+     * Добавить компонент для выбора размера готового продукта
+     * @returns {ComponentSize}
+     */
+    function addComponentSizeSelect() {
+        addOrderOptionRow('option__choose-size');
+        return new ComponentSize({
+            container: body.find('.option__choose-size'),
+            productId: id,
+            sizeList: sizeList
+        })
+    }
+
+
+    /**
+     * Добавить компонент для ввода комментария
+     * @returns {ComponentNotification}
+     */
+    function addComponentNotification() {
+        addOrderOptionRow('option__notification');
+        return new ComponentNotification({
+            container: body.find('.option__notification'),
+            productId: id,
+            text: note
+        })
+    }
+
+
+    /**
+     * Добавить компонент для заргузки изображения
+     * @returns {ComponentImage}
+     */
+    function addComponentImage() {
+        return new ComponentImage({
+            container: body.closest('.product-review__form'),
+            productId: id
+        })
+    }
+
+
+    /**
+     * Добавить компонент рекомендуемых продуктов
+     */
+    function addComponentRecommendedProduct() {
+        $('<div/>', {class: 'mt-5'})
+            .append(
+                new ComponentRecommendedProducts({
+                    container: body.closest('.product-review__form'),
+                    productId: id,
+                    caption: 'С этим продуктом покупают'
+                })
+            );
+    }
+
+
+    /**
+     * Добавить кнопку "Оформить заявку" при нежатии на котрую будет собираться вся инфа по выделенным
+     * опциям заявки и записываться в поле с name="total"
+     */
+    function addTotalButton() {
+        $('<div/>', {class: 'row product-review__total mt-5'})
+            .append(
+                $('<input/>', {type: 'hidden', name: 'total'}),
+                $('<div/>', {class: 'col-12 d-flex justify-content-center'})
+                    .append(
+                        $('<a/>', {
+                            id: 'send-to-next',
+                            href: '#',
+                            class: 'btn btn-outline-primary p-4',
+                            text: 'Оформить заявку',
+                            click: function () {
+                                console.log(collectAllData());
+                                personModal.show();
+                            }
+                        })
+                    )
+            )
+            .appendTo(body.closest('.product-review__form'));
+    }
+
+
+    /**
+     * Собрать данные всех компонентов
+     * @return {string}
+     */
+    function collectAllData() {
+        var a = {};
+        optionsList.forEach(item => {
+            if (item) {
+                a[item.constructor.name] = item.getData();
+            }
+        });
+        return a;
+    }
+
+
+    /**
+     * Немедленное построение компонента
+     */
+    (function () {
+        render();
+    })()
 }
+
 /**
  * Витрина
  * @param params
  * @constructor
  */
-function Showcase(params){
-  var container = params.showcaseContainer,
-    gridSize = parseInt( (12/params.gridSize),10 ) || 4,
-    self = this,
-    uniqTags = new Tags(),
-    navbar,
-    body,
-    categories = [];
+function Showcase(params) {
+    var container = params.showcaseContainer,
+        gridSize = parseInt((12 / params.gridSize), 10) || 4,
+        self = this,
+        uniqTags = new Tags(),
+        navbar,
+        body,
+        categories = [];
 
-  this.addRange = function(list){
-    if(typeof list === "string")
-      list = JSON.parse(list);
+    this.addRange = function (list) {
+        if (typeof list === "string")
+            list = JSON.parse(list);
 
-    list.forEach(function(src,i){
-      uniqTags.add(src.categoryName);
-      categories.push(
-        new Category({
-          categoryContainer: container,
-          gridSize: ( list.length < gridSize && src.products.length ===1 ) ? null : gridSize,
-          categoryId: src.categoryId,
-          categoryName: src.categoryName,
-          products: ("products" in src) ? src.products : null,
-          galleryPath: src.galleryPath,
-          settingFile: src.categorySettings
+        list.forEach(function (src, i) {
+            uniqTags.add(src.categoryName);
+            categories.push(
+                new Category({
+                    categoryContainer: container,
+                    gridSize: (list.length < gridSize && src.products.length === 1) ? null : gridSize,
+                    categoryId: src.categoryId,
+                    categoryName: src.categoryName,
+                    products: ("products" in src) ? src.products : null,
+                    galleryPath: src.galleryPath,
+                    settingFile: src.categorySettings
+                })
+            );
+        });
+
+        navbar = new NavbarBlock({
+            container: $('.navbar__primary'),
+            source: uniqTags.getTagList(),
+            itemList: categories
         })
-      );
-    });
-
-    navbar = new NavbarBlock({
-      container: $('.navbar__primary'),
-      source: uniqTags.getTagList(),
-      itemList: categories
-    })
-  }
+    }
 }
 
 /**
  * Уникальные теги
  * @class
  */
-function Tags(){
-  var tagsList = [],
-    self = this;
+function Tags() {
+    var tagsList = [],
+        self = this;
 
 
-  /**
-   * Выделить уникальные теги
-   * @param source - список тегов в товаре
-   * @returns {boolean}
-   */
-  this.explore = function(source){
-    if(!source) return false;
+    /**
+     * Выделить уникальные теги
+     * @param source - список тегов в товаре
+     * @returns {boolean}
+     */
+    this.explore = function (source) {
+        if (!source) return false;
 
-    source.forEach(function(item,i){
-      if(!isExistedInList(tagsList,item))
+        source.forEach(function (item, i) {
+            if (!isExistedInList(tagsList, item))
+                tagsList.push(item);
+        })
+    };
+
+
+    /**
+     * Возвратить список уникальных тегов
+     * @returns {Array}
+     */
+    this.getTagList = function () {
+        return tagsList;
+    };
+
+    /**
+     * Добавить элемент в коллекцию
+     * @param {*} item - элемент
+     */
+    this.add = function (item) {
         tagsList.push(item);
-    })
-  };
+    };
+
+    /**
+     * Сортировать список продуктов по ключу (тэгу)
+     * @param {string} tag - тэг
+     */
+    this.sortByTag = function (tag) {
+        self.flushSort();
+        tagsList.forEach(function (item, i) {
+            if (!item.hasTag(tag))
+                item.hide();
+            else
+                item.removeLazyLoad()
+        })
+    };
 
 
-  /**
-   * Возвратить список уникальных тегов
-   * @returns {Array}
-   */
-  this.getTagList = function(){
-    return tagsList;
-  };
-
-  /**
-   * Добавить элемент в коллекцию
-   * @param {*} item - элемент
-   */
-  this.add = function (item) {
-    tagsList.push(item);
-  };
-
-  /**
-   * Сортировать список продуктов по ключу (тэгу)
-   * @param {string} tag - тэг
-   */
-  this.sortByTag = function(tag){
-    self.flushSort();
-    tagsList.forEach(function(item,i){
-      if( !item.hasTag(tag) )
-        item.hide();
-      else
-        item.removeLazyLoad()
-    })
-  };
+    /**
+     * Сбросить сортировку списка продуктов
+     */
+    this.flushSort = function () {
+        tagsList.forEach(function (item, i) {
+            item.show()
+        })
+    };
 
 
-  /**
-   * Сбросить сортировку списка продуктов
-   */
-  this.flushSort = function(){
-    tagsList.forEach(function(item,i){
-      item.show()
-    })
-  };
-
-
-  /**
-   * Проверить существование элемента в массиве
-   * @param {[]} itemList - массив элементов
-   * @param {string} itemName - искомый элемент
-   * @returns {boolean}
-   */
-  function isExistedInList(itemList,itemName){
-    return itemList.indexOf(itemName) !== -1;
-  }
+    /**
+     * Проверить существование элемента в массиве
+     * @param {[]} itemList - массив элементов
+     * @param {string} itemName - искомый элемент
+     * @returns {boolean}
+     */
+    function isExistedInList(itemList, itemName) {
+        return itemList.indexOf(itemName) !== -1;
+    }
 
 }
 
 
-function NavbarBlock(params){
-  var container = $(params.container),
-      itemList = params.itemList,
-      source = params.source,
-      selectedTags = [],
-      body,
-      self = this,
-      sortByTag = function(){
-        if( $(this).hasClass('active') ) {
-          $(this).removeClass('active');
-          var thisTag = $(this).attr('data-target');
-          selectedTags.remove(thisTag);
-          self.sortByTagList();
-          //self.clearSort();
-          //flushSelection();
-        }else {
-          //flushSelection();
-          selectedTags.push( $(this).attr('data-target') );
-          self.sortByTag( $(this).attr('data-target') );
-          $(this).addClass('active')
-        }
-      },
-      flushAll = function(){
-        self.clearSort();
-        flushSelection();
-        selectedTags = [];
-      };
+function NavbarBlock(params) {
+    var container = $(params.container),
+        itemList = params.itemList,
+        source = params.source,
+        selectedTags = [],
+        body,
+        self = this,
+        sortByTag = function () {
+            if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+                var thisTag = $(this).attr('data-target');
+                selectedTags.remove(thisTag);
+                self.sortByTagList();
+                //self.clearSort();
+                //flushSelection();
+            } else {
+                //flushSelection();
+                selectedTags.push($(this).attr('data-target'));
+                self.sortByTag($(this).attr('data-target'));
+                $(this).addClass('active')
+            }
+        },
+        flushAll = function () {
+            self.clearSort();
+            flushSelection();
+            selectedTags = [];
+        };
 
-  /**
-   * Отрисовать элемент
-   */
-  function render() {
-    var firstCol  = column('nav-tags__column col-6 col-sm');
-    var secondCol = column('nav-tags__column col-6 col-sm');
-    var thirdCol  = column('nav-tags__column col-12 col-sm');
-    var fourthCol = column('nav-tags__column col-6 col-sm');
-    var fifthCol  = column('nav-tags__column col-6 col-sm');
-    var itr = 1;
-    source.forEach(function (item) {
-      if( itr === 1 ) firstCol.append( tagButton(item) );
-      if( itr === 2 ) secondCol.append( tagButton(item) );
-      if( itr === 3 ) fourthCol.append( tagButton(item) );
-      if( itr === 4 ) fifthCol.append( tagButton(item) );
+    /**
+     * Отрисовать элемент
+     */
+    function render() {
+        var firstCol = column('nav-tags__column col-6 col-sm');
+        var secondCol = column('nav-tags__column col-6 col-sm');
+        var thirdCol = column('nav-tags__column col-12 col-sm');
+        var fourthCol = column('nav-tags__column col-6 col-sm');
+        var fifthCol = column('nav-tags__column col-6 col-sm');
+        var itr = 1;
+        source.forEach(function (item) {
+            if (itr === 1) firstCol.append(tagButton(item));
+            if (itr === 2) secondCol.append(tagButton(item));
+            if (itr === 3) fourthCol.append(tagButton(item));
+            if (itr === 4) fifthCol.append(tagButton(item));
 
-      if(itr === 4 ) itr = 1;
-      else itr ++
-    });
+            if (itr === 4) itr = 1;
+            else itr++
+        });
 
-    thirdCol.append( flushButton('Все'));
+        thirdCol.append(flushButton('Все'));
 
-    body = $('<div/>',{id:"taglist__primary",class:'row w-100'})
-          .append(
-            firstCol,
-            secondCol,
-            thirdCol,
-            fourthCol,
-            fifthCol
-          );
+        body = $('<div/>', {id: "taglist__primary", class: 'row w-100'})
+            .append(
+                firstCol,
+                secondCol,
+                thirdCol,
+                fourthCol,
+                fifthCol
+            );
 
-    body.appendTo(container)
-  }
-
-  function column(className){
-    return $('<div/>',{
-      style:'flex-wrap:wrap',
-      class:'d-flex flex-row d-sm-block p-0 ' + className})
-  }
-
-
-  function tagButton(target){
-    return $('<a/>',{
-      class: 'btn btn-link nav-tags__item p-0',
-      href: '#',
-      'data-target': target,
-      text: target,
-      click: sortByTag
-    })
-  }
-
-  function flushButton(text){
-    return $('<a/>',{
-      class: 'btn btn-link nav-tags__item nav-tags__item_primary',
-      href: '#',
-      'data-target': 'flush',
-      text: text,
-      click: flushAll
-    })
-  }
-
-
-  /**
-   * Сборсить выделение с активных тегов
-   */
-  function flushSelection(){
-    $('.nav-tags__item.active').removeClass('active');
-  }
-
-
-  /**
-   * Сортировка по тэгу
-   * Скрыть все товары без заданного тега
-   * @param tag
-   */
-  this.sortByTag = function(tag){
-    //self.clearSort();
-    var countOfItemsWithTag = 0;
-    itemList.forEach(function(item,i){
-      if( !item.hasTag(tag) )
-        item.hide();
-      else if( !item.isHidden() ){
-        countOfItemsWithTag ++;
-        item.removeLazyLoad();
-      }
-    });
-    if( countOfItemsWithTag === 0 ){
-      $('.null-result').remove();
-      $('<h2/>',{class:'null-result text-center p-5 w-100',style:'border: 1px dashed ' +common.primaryColor,text:'По комбинации тегов "' + selectedTags.join(' + ') + '" нет совпадений'})
-        .appendTo('.vnl__gallery,.vnl__showcase')
-    } else {
-      $('.null-result').remove()
+        body.appendTo(container)
     }
-  };
+
+    function column(className) {
+        return $('<div/>', {
+            style: 'flex-wrap:wrap',
+            class: 'd-flex flex-row d-sm-block p-0 ' + className
+        })
+    }
 
 
-  /**
-   * Сортировка по списку тегов
-   */
-  this.sortByTagList = function(){
-    self.clearSort();
-    selectedTags.forEach(function(tag){
-      self.sortByTag(tag)
-    });
-  };
+    function tagButton(target) {
+        return $('<a/>', {
+            class: 'btn btn-link nav-tags__item p-0',
+            href: '#',
+            'data-target': target,
+            text: target,
+            click: sortByTag
+        })
+    }
+
+    function flushButton(text) {
+        return $('<a/>', {
+            class: 'btn btn-link nav-tags__item nav-tags__item_primary',
+            href: '#',
+            'data-target': 'flush',
+            text: text,
+            click: flushAll
+        })
+    }
 
 
-  /**
-   * Очистить сортировку
-   */
-  this.clearSort = function(){
-    itemList.forEach(function(item,i){
-      item.show()
-    })
-  };
+    /**
+     * Сборсить выделение с активных тегов
+     */
+    function flushSelection() {
+        $('.nav-tags__item.active').removeClass('active');
+    }
 
-  (function () {
-    render()
-  })()
+
+    /**
+     * Сортировка по тэгу
+     * Скрыть все товары без заданного тега
+     * @param tag
+     */
+    this.sortByTag = function (tag) {
+        //self.clearSort();
+        var countOfItemsWithTag = 0;
+        itemList.forEach(function (item, i) {
+            if (!item.hasTag(tag))
+                item.hide();
+            else if (!item.isHidden()) {
+                countOfItemsWithTag++;
+                item.removeLazyLoad();
+            }
+        });
+        if (countOfItemsWithTag === 0) {
+            $('.null-result').remove();
+            $('<h2/>', {
+                class: 'null-result text-center p-5 w-100',
+                style: 'border: 1px dashed ' + common.primaryColor,
+                text: 'По комбинации тегов "' + selectedTags.join(' + ') + '" нет совпадений'
+            })
+                .appendTo('.vnl__gallery,.vnl__showcase')
+        } else {
+            $('.null-result').remove()
+        }
+    };
+
+
+    /**
+     * Сортировка по списку тегов
+     */
+    this.sortByTagList = function () {
+        self.clearSort();
+        selectedTags.forEach(function (tag) {
+            self.sortByTag(tag)
+        });
+    };
+
+
+    /**
+     * Очистить сортировку
+     */
+    this.clearSort = function () {
+        itemList.forEach(function (item, i) {
+            item.show()
+        })
+    };
+
+    (function () {
+        render()
+    })()
 }
 
 /**
@@ -2050,82 +2068,83 @@ function NavbarBlock(params){
  * @constructor
  */
 function ComponentAdditionalStuffing(params) {
-  var container           = params.container,
-    productId             = params.productId,
-    additionalStuffingList= params.additionalStuffingList,
-    $body       = '',
-    counter     = 1;
+    var container = params.container,
+        productId = params.productId,
+        additionalStuffingList = params.additionalStuffingList,
+        $body = '',
+        counter = 1;
 
-  /**
-   * Создать элемент выбора дополнения к начинке
-   * @param {string} name - название элемента
-   * @returns {*|void|jQuery}
-   */
-  function createStuffingItem(name) {
-    return $('<div/>',{class:"custom-control custom-checkbox"})
-      .append(
-        $('<input/>',{
-          type: 'checkbox',
-          class: 'custom-control-input',
-          id: 'checkbox-ads-'+productId+''+counter,
-          value: name
-        }),
-        $('<label/>',{
-          class: 'custom-control-label',
-          for: 'checkbox-ads-'+productId+''+counter ++,
-          text: name
+    /**
+     * Создать элемент выбора дополнения к начинке
+     * @param {string} name - название элемента
+     * @returns {*|void|jQuery}
+     */
+    function createStuffingItem(name) {
+        return $('<div/>', {class: "custom-control custom-checkbox"})
+            .append(
+                $('<input/>', {
+                    type: 'checkbox',
+                    class: 'custom-control-input',
+                    id: 'checkbox-ads-' + productId + '' + counter,
+                    value: name
+                }),
+                $('<label/>', {
+                    class: 'custom-control-label',
+                    for: 'checkbox-ads-' + productId + '' + counter++,
+                    text: name
+                })
+            )
+    }
+
+
+    /**
+     * Отрисовать компонент
+     */
+    function render() {
+        $body = $('<div/>', {class: 'product-review__additionalStuffing-container'})
+            .append(
+                $('<span/>', {text: 'Укажите дополнения к начинке'}),
+                $('<hr>')
+            );
+        additionalStuffingList.forEach(function (stuff, i) {
+            $body.append(createStuffingItem(stuff.name))
+        });
+        $body.appendTo(container);
+    }
+
+    /**
+     * Возвратить выделенные данные
+     * @returns {[]}
+     */
+    this.getData = function () {
+        var additionalStuffingList = [];
+        $body.find(':checkbox:checked').each(function (i, stuff) {
+            additionalStuffingList.push(
+                $(stuff).attr('value')
+            )
+        });
+        return additionalStuffingList;
+    };
+
+    /**
+     * Установить данные
+     * @param {[]} values
+     */
+    this.setData = function (values) {
+        values.forEach(function (value) {
+            $('.custom-control-input').find('[value=' + value + ']')
+                .attr('checked', 'checked')
         })
-      )
-  }
+    };
 
-
-  /**
-   * Отрисовать компонент
-   */
-  function render(){
-    $body = $('<div/>',{class:'product-review__additionalStuffing-container'})
-      .append(
-        $('<span/>',{text: 'Укажите дополнения к начинке'}),
-        $('<hr>')
-      );
-    additionalStuffingList.forEach(function(stuff,i){
-      $body.append( createStuffingItem(stuff.name) )
-    });
-    $body.appendTo(container);
-  }
-
-  /**
-   * Возвратить выделенные данные
-   * @returns {[]}
-   */
-  this.getData = function(){
-    var additionalStuffingList = [];
-    $body.find(':checkbox:checked').each(function(i,stuff){
-      additionalStuffingList.push(
-        $(stuff).attr('value')
-      )
-    });
-    return additionalStuffingList;
-  };
-
-  /**
-   * Установить данные
-   * @param {[]} values
-   */
-  this.setData = function (values) {
-    values.forEach(function(value){
-      $('.custom-control-input').find('[value='+value+']')
-        .attr('checked','checked')
-    })
-  };
-
-  /**
-   * Функция конструктор
-   */
-  (function(){
-    render();
-  })()
+    /**
+     * Функция конструктор
+     */
+    (function () {
+        render();
+    })()
 }
+
 /**
  * Компонент для отображения списка декоров(оформлений) для продукта в заявке
  * @params {object} params
@@ -2137,81 +2156,82 @@ function ComponentAdditionalStuffing(params) {
  * @constructor
  */
 function ComponentDecor(params) {
-  var container = params.container,
-    productId   = params.productId,
-    decorList   = params.decorList,
-    caption     = params.caption,
-    $body       = '',
-    counter     = 1;
+    var container = params.container,
+        productId = params.productId,
+        decorList = params.decorList,
+        caption = params.caption,
+        $body = '',
+        counter = 1;
 
-  /**
-   * Создать элемент выбора оформления
-   * @param name
-   * @returns {*|void|jQuery}
-   */
-  function createDecorItem(name) {
-    return $('<div/>',{class:"custom-control custom-checkbox"})
-      .append(
-        $('<input/>',{
-          type: 'checkbox',
-          class: 'custom-control-input',
-          id: 'checkbox-dcr-'+productId+''+counter,
-          value: name
-        }),
-        $('<label/>',{
-          class: 'custom-control-label',
-          for: 'checkbox-dcr-'+productId+''+counter++,
-          text: name
+    /**
+     * Создать элемент выбора оформления
+     * @param name
+     * @returns {*|void|jQuery}
+     */
+    function createDecorItem(name) {
+        return $('<div/>', {class: "custom-control custom-checkbox"})
+            .append(
+                $('<input/>', {
+                    type: 'checkbox',
+                    class: 'custom-control-input',
+                    id: 'checkbox-dcr-' + productId + '' + counter,
+                    value: name
+                }),
+                $('<label/>', {
+                    class: 'custom-control-label',
+                    for: 'checkbox-dcr-' + productId + '' + counter++,
+                    text: name
+                })
+            )
+    }
+
+    /**
+     * Отрисовать контейнер
+     */
+    function render() {
+        var decorCaption = caption ? caption : 'Выберите вариант оформления';
+        $body = $('<div/>', {class: 'product-review__decor-container'})
+            .append(
+                $('<span/>', {text: decorCaption}),
+                $('<hr>')
+            );
+        decorList.forEach(function (decor) {
+            $body.append(createDecorItem(decor.name))
+        });
+        $body.appendTo(container);
+    }
+
+    /**
+     * Возвратить список выбранных элементов оформления
+     * @returns {[]}
+     */
+    this.getData = function () {
+        var decorList = [];
+        $body.find(':checkbox:checked').each(function (i, decor) {
+            decorList.push($(decor).attr('value'))
+        });
+        return decorList;
+    };
+
+    /**
+     * Установить данные
+     * @param {[]} values
+     */
+    this.setData = function (values) {
+        values.forEach(function (value) {
+            $('.custom-control-input').find('[value=' + value + ']')
+                .attr('checked', 'checked')
         })
-      )
-  }
+    };
 
-  /**
-   * Отрисовать контейнер
-   */
-  function render(){
-    var decorCaption = caption ? caption : 'Выберите вариант оформления';
-    $body = $('<div/>',{class:'product-review__decor-container'})
-      .append(
-        $('<span/>',{text: decorCaption}),
-        $('<hr>')
-      );
-    decorList.forEach(function(decor){
-      $body.append( createDecorItem(decor.name) )
-    });
-    $body.appendTo(container);
-  }
-
-  /**
-   * Возвратить список выбранных элементов оформления
-   * @returns {[]}
-   */
-  this.getData = function(){
-    var decorList = [];
-    $body.find(':checkbox:checked').each(function(i,decor){
-      decorList.push( $(decor).attr('value') )
-    });
-    return decorList;
-  };
-
-  /**
-   * Установить данные
-   * @param {[]} values
-   */
-  this.setData = function (values) {
-    values.forEach(function(value){
-      $('.custom-control-input').find('[value='+value+']')
-        .attr('checked','checked')
-    })
-  };
-
-  /**
-   * Функция конструктор
-   */
-  (function(){
-    render();
-  })()
+    /**
+     * Функция конструктор
+     */
+    (function () {
+        render();
+    })()
 }
+
 /**
  * Компонент для вставки|загрузки изображений
  * @param params
@@ -2221,199 +2241,203 @@ function ComponentDecor(params) {
  * @author skipperTeam
  * @constructor
  */
-function ComponentImage(params){
-  var container = params.container,
-    productId   = params.productId,
-    $body       = '',
-    counter     = 0;
+function ComponentImage(params) {
+    var container = params.container,
+        productId = params.productId,
+        $body = '',
+        counter = 0;
 
-  function createImageItem(){
-    counter ++;
-    return $('<div/>',{class:'vnl-card__wrapper p-3 col-sm-4 animate bounceInUp'})
-      .append(
-        $('<div/>',{class:'card border-success product-review__image-upload '})
-          .append(
-            $('<span/>',{text:'Ваше изображение',class:'border-bottom text-center'}),
-            $('<img/>',{
-              class:'card-img-top bg-light border-bottom',
-              style:'height: 180px;object-fit:contain;color: #f8f9fa;',
-              alt: 'upload-image',
-            }),
-            $('<div/>',{class:'card-body pb-3'})
-              .append(
-                //TODO provide commentaries for image
-                //$('<h5/>',{class: 'card-title',text:'Введите описание'}),
-                //$('<textarea/>',{class: 'card-text w-100',rows:5}),
-                $('<div/>',{class:'card-upload-type'})
-                  .append(
-                    createComponentUploadType()
-                  )
-              )
-          )
-      )
-  }
-
-
-  function createComponentUploadType(){
-    return $('<div/>',{class:'image-container__controls my-3'})
-      .append(
-        $('<div/>',{class:"custom-control custom-radio"})
-          .append(
-            $('<input/>',{
-              checked: 'checked',
-              type: 'radio',
-              id: 'control-radio'+counter+'__'+counter,
-              class: 'custom-control-input',
-              name: 'control-radio'+counter+'__'+counter,
-              click: function(){
-                $(this).closest('.image-container__controls').find('.ref-upload').show();
-                $(this).closest('.image-container__controls').find('.img-upload').hide();
-              }
-            }),
-            $('<label/>',{
-              class: 'custom-control-label',
-              for: 'control-radio'+counter+'__'+counter,
-              text: 'Загрузить изображение по ссылке'
-            })
-          ),
-        $('<div/>',{class:"custom-control custom-radio"})
-          .append(
-            $('<input/>',{
-              type: 'radio',
-              id: 'control-radio2'+counter+'__'+counter,
-              class: 'custom-control-input',
-              name: 'control-radio'+counter+'__'+counter,
-              click: function(){
-                $(this).closest('.image-container__controls').find('.img-upload').show();
-                $(this).closest('.image-container__controls').find('.ref-upload').hide();
-              }
-            }),
-            $('<label/>',{
-              class: 'custom-control-label',
-              for: 'control-radio2'+counter+'__'+counter,
-              text: 'Загрузить изображение с диска'
-            })
-          ),
-        $('<div/>')
-          .append(
-            $('<input/>',{
-              class:'form-control w-100 ref-upload',
-              id:'load-link__'+counter, //example http://api.jquery.com/jquery-wp-content/themes/jquery/content/donate.png
-              type:'text',
-              change: function(){
-                $(this).closest('.card').find('.card-img-top').attr('src', $(this).val() );
-              }
-            }),
-            $('<input/>',{
-              class:'form-control w-100 img-upload border-0',
-              id:'load-image__'+counter,
-              type:'file',
-              change: function (evt) {
-                try {
-                  let that = this,
-                      files = evt.target.files;
-                  if (!files[0].type.match('image.*')) {
-                    console.warn('file type is not an image');
-                    return
-                  }
-                  let reader = new FileReader();
-                  reader.onload = (function (theFile) {
-                    return function (e) {
-                      $(that).closest('.card').find('.card-img-top').attr('src', e.target.result);
-                    };
-                  })(files[0]);
-                  reader.readAsDataURL(files[0]);
-                } catch (err) { console.warn(err) }
-              },
-              accept:"image/*,image/jpeg"})
-          )
-      )
-
-  }
-
-  /**
-   * Отрисовать компонент
-   */
-  function render(){
-
-    $body = $('<div/>',{class: 'row d-flex flex-row-reverse product-review__images-container mt-3'})
-      .append(
-        $('<div/>',{class:'col-12 image-container__preview text-center pb-3 border-bottom'})
-          .append(
-            $('<input/>',{
-              class:'btn btn-outline-info mx-auto',
-              type :'button',
-              value:"Добавить больше изображений",
-              click:function(){
-                $(this).closest('.product-review__images-container').append(
-                  createImageItem()
-                );
-                $body.find('.img-upload:last').hide()
-              }
-            })
-          ),
-        createImageItem()
-      );
-
-    $body.appendTo(container);
-    $body.find('.img-upload').hide()
-  }
+    function createImageItem() {
+        counter++;
+        return $('<div/>', {class: 'vnl-card__wrapper p-3 col-sm-4 animate bounceInUp'})
+            .append(
+                $('<div/>', {class: 'card border-success product-review__image-upload '})
+                    .append(
+                        $('<span/>', {text: 'Ваше изображение', class: 'border-bottom text-center'}),
+                        $('<img/>', {
+                            class: 'card-img-top bg-light border-bottom',
+                            style: 'height: 180px;object-fit:contain;color: #f8f9fa;',
+                            alt: 'upload-image',
+                        }),
+                        $('<div/>', {class: 'card-body pb-3'})
+                            .append(
+                                //TODO provide commentaries for image
+                                //$('<h5/>',{class: 'card-title',text:'Введите описание'}),
+                                //$('<textarea/>',{class: 'card-text w-100',rows:5}),
+                                $('<div/>', {class: 'card-upload-type'})
+                                    .append(
+                                        createComponentUploadType()
+                                    )
+                            )
+                    )
+            )
+    }
 
 
-  /**
-   * Возвратить строку с изображением в формате data:image/png;base64
-   * Вся магия происходит за счёт элемента <canvas/> в который мы загружаем
-   * изображение
-   * Если изображение по каким-то причинам не удалось обработать
-   * (чаще всего из-за политики безопасности требующей разрешения кроссдоменного запроса)
-   * то возвратить ссылку на изображение
-   * !!!возможный вариант решения данной проблемы это создание собственного сервера
-   * @param {object|string} item - изображение
-   * @return {string}
-   */
-  function getBase64FromImageURL(item) {
-    let result = $(item).attr('src'),
-      canvas = $("<canvas/>", {class: '!d-none'}).appendTo('body'),
-      img = document.createElement("img");
-    img.src = result;
-    img.onload = function() {
-      canvas.width = $(item).outerWidth();
-      canvas.height = $(item).outerHeight();
-      var ctx = canvas.get(0).getContext("2d");
-      try {
-        ctx.drawImage($(item)[0], 0, 0);
-        result = canvas.get(0).toDataURL("image/png");
-      } catch (err) {
-        console.warn(err);
-      }
+    function createComponentUploadType() {
+        return $('<div/>', {class: 'image-container__controls my-3'})
+            .append(
+                $('<div/>', {class: "custom-control custom-radio"})
+                    .append(
+                        $('<input/>', {
+                            checked: 'checked',
+                            type: 'radio',
+                            id: 'control-radio' + counter + '__' + counter,
+                            class: 'custom-control-input',
+                            name: 'control-radio' + counter + '__' + counter,
+                            click: function () {
+                                $(this).closest('.image-container__controls').find('.ref-upload').show();
+                                $(this).closest('.image-container__controls').find('.img-upload').hide();
+                            }
+                        }),
+                        $('<label/>', {
+                            class: 'custom-control-label',
+                            for: 'control-radio' + counter + '__' + counter,
+                            text: 'Загрузить изображение по ссылке'
+                        })
+                    ),
+                $('<div/>', {class: "custom-control custom-radio"})
+                    .append(
+                        $('<input/>', {
+                            type: 'radio',
+                            id: 'control-radio2' + counter + '__' + counter,
+                            class: 'custom-control-input',
+                            name: 'control-radio' + counter + '__' + counter,
+                            click: function () {
+                                $(this).closest('.image-container__controls').find('.img-upload').show();
+                                $(this).closest('.image-container__controls').find('.ref-upload').hide();
+                            }
+                        }),
+                        $('<label/>', {
+                            class: 'custom-control-label',
+                            for: 'control-radio2' + counter + '__' + counter,
+                            text: 'Загрузить изображение с диска'
+                        })
+                    ),
+                $('<div/>')
+                    .append(
+                        $('<input/>', {
+                            class: 'form-control w-100 ref-upload',
+                            id: 'load-link__' + counter, //example http://api.jquery.com/jquery-wp-content/themes/jquery/content/donate.png
+                            type: 'text',
+                            change: function () {
+                                $(this).closest('.card').find('.card-img-top').attr('src', $(this).val());
+                            }
+                        }),
+                        $('<input/>', {
+                            class: 'form-control w-100 img-upload border-0',
+                            id: 'load-image__' + counter,
+                            type: 'file',
+                            change: function (evt) {
+                                try {
+                                    let that = this,
+                                        files = evt.target.files;
+                                    if (!files[0].type.match('image.*')) {
+                                        console.warn('file type is not an image');
+                                        return
+                                    }
+                                    let reader = new FileReader();
+                                    reader.onload = (function (theFile) {
+                                        return function (e) {
+                                            $(that).closest('.card').find('.card-img-top').attr('src', e.target.result);
+                                        };
+                                    })(files[0]);
+                                    reader.readAsDataURL(files[0]);
+                                } catch (err) {
+                                    console.warn(err)
+                                }
+                            },
+                            accept: "image/*,image/jpeg"
+                        })
+                    )
+            )
+
+    }
+
+    /**
+     * Отрисовать компонент
+     */
+    function render() {
+
+        $body = $('<div/>', {class: 'row d-flex flex-row-reverse product-review__images-container mt-3'})
+            .append(
+                $('<div/>', {class: 'col-12 image-container__preview text-center pb-3 border-bottom'})
+                    .append(
+                        $('<input/>', {
+                            class: 'btn btn-outline-info mx-auto',
+                            type: 'button',
+                            value: "Добавить больше изображений",
+                            click: function () {
+                                $(this).closest('.product-review__images-container').append(
+                                    createImageItem()
+                                );
+                                $body.find('.img-upload:last').hide()
+                            }
+                        })
+                    ),
+                createImageItem()
+            );
+
+        $body.appendTo(container);
+        $body.find('.img-upload').hide()
+    }
+
+
+    /**
+     * Возвратить строку с изображением в формате data:image/png;base64
+     * Вся магия происходит за счёт элемента <canvas/> в который мы загружаем
+     * изображение
+     * Если изображение по каким-то причинам не удалось обработать
+     * (чаще всего из-за политики безопасности требующей разрешения кроссдоменного запроса)
+     * то возвратить ссылку на изображение
+     * !!!возможный вариант решения данной проблемы это создание собственного сервера
+     * @param {object|string} item - изображение
+     * @return {string}
+     */
+    function getBase64FromImageURL(item) {
+        let result = $(item).attr('src'),
+            canvas = $("<canvas/>", {class: '!d-none'}).appendTo('body'),
+            img = document.createElement("img");
+        img.src = result;
+        img.onload = function () {
+            canvas.width = $(item).outerWidth();
+            canvas.height = $(item).outerHeight();
+            var ctx = canvas.get(0).getContext("2d");
+            try {
+                ctx.drawImage($(item)[0], 0, 0);
+                result = canvas.get(0).toDataURL("image/png");
+            } catch (err) {
+                console.warn(err);
+            }
+        };
+        $(canvas).remove();
+        return result;
+    }
+
+    function isUploadByLink(src) {
+        return (src.indexOf('://') > -1 || src.indexOf('img') > -1);
+    }
+
+    this.getData = function () {
+        let rez = [];
+        $body.find('.card-img-top').each(function (i, item) {
+            let src = $(item).attr('src') || '';
+            if (!src) return;
+            if (!isUploadByLink(src)) {
+                src = getBase64FromImageURL(item);
+                src = src.split(',');
+                src = src[1];
+            }
+            rez.push(src)
+        });
+        return rez;
     };
-    $(canvas).remove();
-    return result;
-  }
 
-  function isUploadByLink(src){
-    return (src.indexOf('://') > -1 || src.indexOf('img') > -1);
-  }
-
-  this.getData = function(){
-    let rez = [];
-    $body.find('.card-img-top').each(function(i,item){
-      let src = $(item).attr('src') || '';
-      if( !src ) return;
-      if( !isUploadByLink(src) ) {
-        src = getBase64FromImageURL(item);
-        src = src.split(',');
-        src = src[1];
-      }
-      rez.push(src)
-    });
-    return rez;
-  };
-
-  (function(){
-    render()
-  })()
+    (function () {
+        render()
+    })()
 }
+
 /**
  * Компонент для отображения комментариев к заказу
  * @params {object} params
@@ -2424,54 +2448,55 @@ function ComponentImage(params){
  * @author skipperTeam
  * @constructor
  */
-function ComponentNotification(params){
-  var container = params.container,
-    productId   = params.productId,
-    text        = params.text,
-    title       = params.title || 'Дополнительные пожелания',
-    $body       = '';
+function ComponentNotification(params) {
+    var container = params.container,
+        productId = params.productId,
+        text = params.text,
+        title = params.title || 'Дополнительные пожелания',
+        $body = '';
 
-  /**
-   * Отрисовать компонент
-   */
-  function render(){
-    $body = $('<div/>',{class:'product-review__notification-container'})
-      .append(
-        $('<span/>',{text: title}),
-        $('<hr/>'),
-        $('<textarea/>',{
-          id: 'notification-'+productId,
-          name: 'notification',
-          class: 'form-control w-100',
-          placeholder: text,
-          rows: 9
-        })
-      );
-    $body.appendTo(container)
-  }
+    /**
+     * Отрисовать компонент
+     */
+    function render() {
+        $body = $('<div/>', {class: 'product-review__notification-container'})
+            .append(
+                $('<span/>', {text: title}),
+                $('<hr/>'),
+                $('<textarea/>', {
+                    id: 'notification-' + productId,
+                    name: 'notification',
+                    class: 'form-control w-100',
+                    placeholder: text,
+                    rows: 9
+                })
+            );
+        $body.appendTo(container)
+    }
 
-  /**
-   * Возвратить введённый комментарий к заказу
-   */
-  this.getData = function(){
-    return $body.find('textarea').val();
-  };
+    /**
+     * Возвратить введённый комментарий к заказу
+     */
+    this.getData = function () {
+        return $body.find('textarea').val();
+    };
 
-  /**
-   * Установить комментарий к заказу
-   * @param {string} value текст комментария
-   */
-  this.setData = function(value){
-    $body.find('textarea').val(value);
-  };
+    /**
+     * Установить комментарий к заказу
+     * @param {string} value текст комментария
+     */
+    this.setData = function (value) {
+        $body.find('textarea').val(value);
+    };
 
-  /**
-   * Функция конструктор
-   */
-  (function(){
-    render();
-  })()
+    /**
+     * Функция конструктор
+     */
+    (function () {
+        render();
+    })()
 }
+
 /**
  * Компонент "рекомендуемые товары"
  * Cоздание блока с четырьмя раандомно выбранными из массива recommendedProducts товарами
@@ -2481,116 +2506,118 @@ function ComponentNotification(params){
  * @return {HTMLElement}
  * @constructor
  */
-function ComponentRecommendedProducts(params){
-  var productId = params.productId,
-    caption     = params.caption,
-    dir         = 'img/With_this_product_buy/',
-    count       = 8,
-    name        = 'With_this_product_buy',
-    recArray    = [],
-    $body       = '',
-    recommendedProducts = [
-      {
-        thumb: dir + name + 1 + '.jpg',
-        name : 'recommended product',
-        link : 'gallery__dessert.html?goto=Cupcakes2'
-      },
-      {
-        thumb: dir + name + 2 + '.jpg',
-        name : 'recommended product',
-        link : 'gallery__dessert.html?goto=Zephyr3'
-      },
-      {
-        thumb: dir + name + 3 + '.jpg',
-        name : 'recommended product',
-        link : 'gallery__dessert.html?goto=type8'
-      },
-      {
-        thumb: dir + name + 4 + '.jpg',
-        name : 'recommended product',
-        link : 'gallery__dessert.html?goto=type23'
-      },
-      {
-        thumb: dir + name + 5 + '.jpg',
-        name : 'recommended product',
-        link : 'gallery__dessert.html?goto=cakepops2'
-      },
-      {
-        thumb: dir + name + 6 + '.jpg',
-        name : 'recommended product',
-        link : 'gallery__dessert.html?goto=Marmalade2'
-      },
-      {
-        thumb: dir + name + 7 + '.jpg',
-        name : 'recommended product',
-        link : 'gallery__dessert.html?goto=For_children5'
-      },
-      {
-        thumb: dir + name + 8 + '.jpg',
-        name : 'recommended product',
-        link : 'gallery__dessert.html?goto=Zephyr1'
-      }
-    ];
+function ComponentRecommendedProducts(params) {
+    var productId = params.productId,
+        caption = params.caption,
+        dir = 'img/With_this_product_buy/',
+        count = 8,
+        name = 'With_this_product_buy',
+        recArray = [],
+        $body = '',
+        recommendedProducts = [
+            {
+                thumb: dir + name + 1 + '.jpg',
+                name: 'recommended product',
+                link: 'gallery__dessert.html?goto=Cupcakes2'
+            },
+            {
+                thumb: dir + name + 2 + '.jpg',
+                name: 'recommended product',
+                link: 'gallery__dessert.html?goto=Zephyr3'
+            },
+            {
+                thumb: dir + name + 3 + '.jpg',
+                name: 'recommended product',
+                link: 'gallery__dessert.html?goto=type8'
+            },
+            {
+                thumb: dir + name + 4 + '.jpg',
+                name: 'recommended product',
+                link: 'gallery__dessert.html?goto=type23'
+            },
+            {
+                thumb: dir + name + 5 + '.jpg',
+                name: 'recommended product',
+                link: 'gallery__dessert.html?goto=cakepops2'
+            },
+            {
+                thumb: dir + name + 6 + '.jpg',
+                name: 'recommended product',
+                link: 'gallery__dessert.html?goto=Marmalade2'
+            },
+            {
+                thumb: dir + name + 7 + '.jpg',
+                name: 'recommended product',
+                link: 'gallery__dessert.html?goto=For_children5'
+            },
+            {
+                thumb: dir + name + 8 + '.jpg',
+                name: 'recommended product',
+                link: 'gallery__dessert.html?goto=Zephyr1'
+            }
+        ];
 
 
-  /**
-   * Создать контейнер для изображения
-   * @param src       - путь к изображению
-   * @param className - кастомный класс для контейнера
-   * @param link      - ссылка
-   * @return {void|*|jQuery}
-   */
-  function image(src,className,link){
-    return $('<a/>',{
-      class: "stock__product "+ className,
-      id: "product__"+productId,
-      href: link
-    })
-      .append(
-        $('<div/>',{class:'tetragon-12'})
-          .append(
-            $('<div/>',{class: 'tetragon__wrapper'})
-              .append(
-                $('<div/>',{class: 'tetragon__content'})
-                  .append(
-                    $('<img/>',{
-                      class: 'product__thumb d-block h-100 w-100',
-                      src: src,
-                      alt: name,
-                      error: $(this).addClass('invalid-image-src')}),
-                  )
-              )
-          )
-      );
-  }
-
-
-  /**
-   * Отрисовать компонент
-   */
-  function render() {
-    recommendedProducts = common.randomizeArray(recommendedProducts);
-    $body = $('<div/>', {class: 'row product-review__recommended-products mt-5 border rounded'})
-      .append(
-        $('<div/>',{class:'col-12'})
-          .append(
-            $('<h2/>',{text:caption})
-          )
-      );
-    for (var i = 0; i < 4; i++) {
-      $body.append(
-        $('<div/>', {class: 'col-3 d-none d-sm-block p-1'})
-          .append(
-            image(recommendedProducts[i].thumb,'',recommendedProducts[i].link)
-          )
-      )
+    /**
+     * Создать контейнер для изображения
+     * @param src       - путь к изображению
+     * @param className - кастомный класс для контейнера
+     * @param link      - ссылка
+     * @return {void|*|jQuery}
+     */
+    function image(src, className, link) {
+        return $('<a/>', {
+            class: "stock__product " + className,
+            id: "product__" + productId,
+            href: link
+        })
+            .append(
+                $('<div/>', {class: 'tetragon-12'})
+                    .append(
+                        $('<div/>', {class: 'tetragon__wrapper'})
+                            .append(
+                                $('<div/>', {class: 'tetragon__content'})
+                                    .append(
+                                        $('<img/>', {
+                                            class: 'product__thumb d-block h-100 w-100',
+                                            src: src,
+                                            alt: name,
+                                            error: $(this).addClass('invalid-image-src')
+                                        }),
+                                    )
+                            )
+                    )
+            );
     }
-    return $body;
-  }
 
 
-  return render();
+    /**
+     * Отрисовать компонент
+     */
+    function render() {
+        recommendedProducts = common.randomizeArray(recommendedProducts);
+        $body = $('<div/>', {class: 'row product-review__recommended-products mt-5 border rounded'})
+            .append(
+                $('<div/>', {class: 'col-12'})
+                    .append(
+                        $('<h2/>', {text: caption})
+                    )
+            );
+        for (var i = 0; i < 4; i++) {
+            $body.append(
+                $('<div/>', {class: 'col-3 d-none d-sm-block p-1'})
+                    .append(
+                        image(recommendedProducts[i].thumb, '', recommendedProducts[i].link)
+                    )
+            )
+        }
+        return $body;
+    }
+
+
+    return render();
 }
+
 /**
  * Компонент для отображения комментариев к заказу
  * @params {object} params
@@ -2599,76 +2626,77 @@ function ComponentRecommendedProducts(params){
  * @author skipperTeam
  * @constructor
  */
-function ComponentSize(params){
-  var container = params.container,
-    sizeList    = params.sizeList,
-    $body       = '',
-    counter     = 1;
+function ComponentSize(params) {
+    var container = params.container,
+        sizeList = params.sizeList,
+        $body = '',
+        counter = 1;
 
-  /**
-   * Создать элемент выбора размера продукта
-   * @param {string} thumb - ссылка на картинку
-   * @param {string} name  - наименование элемента
-   * @returns {*|jQuery|HTMLElement}
-   */
-  function createSizeItem(thumb,name){
-    return $('<option/>',{
-      'data-img-src': thumb,
-      text: name,
-      'data-img-label': name,
-      value: counter ++
-    })
-  }
-
-
-  /**
-   * Отрисовать компонент
-   */
-  function render(){
-    $body = $('<div>',{class: 'product-review__sizes-container'})
-      .append(
-        $('<span/>',{text:"Выберите размер"}),
-        $('<hr/>'),
-        $('<select/>',{
-          class: "image-picker show-labels show-html",
-          'data-limit' : 1
+    /**
+     * Создать элемент выбора размера продукта
+     * @param {string} thumb - ссылка на картинку
+     * @param {string} name  - наименование элемента
+     * @returns {*|jQuery|HTMLElement}
+     */
+    function createSizeItem(thumb, name) {
+        return $('<option/>', {
+            'data-img-src': thumb,
+            text: name,
+            'data-img-label': name,
+            value: counter++
         })
-      );
+    }
 
-    sizeList.forEach(function(size,i){
-      $body.find('select').append( createSizeItem(size.image,size.name) )
-    });
 
-    $body.appendTo(container);
-    $body.find('select').imagepicker({show_label: true});
-  }
+    /**
+     * Отрисовать компонент
+     */
+    function render() {
+        $body = $('<div>', {class: 'product-review__sizes-container'})
+            .append(
+                $('<span/>', {text: "Выберите размер"}),
+                $('<hr/>'),
+                $('<select/>', {
+                    class: "image-picker show-labels show-html",
+                    'data-limit': 1
+                })
+            );
 
-  /**
-   * Возвратить название выбраного элемента
-   */
-  this.getData = function(){
-    return $body
-      .find(".image_picker_selector")
-      .find('.selected')
-      .find('p')
-      .text()
-  };
+        sizeList.forEach(function (size, i) {
+            $body.find('select').append(createSizeItem(size.image, size.name))
+        });
 
-  /**
-   * Выделить элемент
-   * @param {number} index
-   */
-  this.setData = function(index){
-    //TODO set item
-  };
+        $body.appendTo(container);
+        $body.find('select').imagepicker({show_label: true});
+    }
 
-  /**
-   * Функция конструктор
-   */
-  (function(){
-    render();
-  })()
+    /**
+     * Возвратить название выбраного элемента
+     */
+    this.getData = function () {
+        return $body
+            .find(".image_picker_selector")
+            .find('.selected')
+            .find('p')
+            .text()
+    };
+
+    /**
+     * Выделить элемент
+     * @param {number} index
+     */
+    this.setData = function (index) {
+        //TODO set item
+    };
+
+    /**
+     * Функция конструктор
+     */
+    (function () {
+        render();
+    })()
 }
+
 /**
  * Выбор вкуса
  * Если указан массив вкусов то будет создан селект с возможность выбора вкуса, при этм сразу
@@ -2692,198 +2720,198 @@ function ComponentSize(params){
  * @param  {number} params.sliderOpt.breakpoints
  * @constructor
  */
-function ComponentTaste(params){
-  var container = params.container,
-    productId   = params.productId,
-    tasteList   = params.tasteList,
-    mode        = params.mode,
-    sliderOpt   = params.sliderOpt,
-    $body,
-    $component  = '';
+function ComponentTaste(params) {
+    var container = params.container,
+        productId = params.productId,
+        tasteList = params.tasteList,
+        mode = params.mode,
+        sliderOpt = params.sliderOpt,
+        $body,
+        $component = '';
 
-  function createTasteItem(value,name,isSelected){
-    if(!isSelected) isSelected = false;
-    return $('<option/>',{
-      value: value,
-      text: name,
-      selected: isSelected
-    })
-  }
-
-  /**
-   * Отрисовать компонент
-   * Если в настройках параметр "tasteList" содержит массив значений, значит отобразить селект вкусов,
-   * при выборе определённого вкуса создается RangeSlider
-   */
-  function render(){
-    $body = $('<div/>',{class: 'product-review__taste-container'})
-      .append(
-        $('<span/>',{text: (tasteList.length > 1 ? "Укажите вкус" : "Укажите количество")}),
-        $('<hr>'),
-        $('<select/>',{
-          id:"taste-select_"+productId,
-          class: "card__taste-select multipleSelect",
-          multiple: true,
-          name: 'taste'
-        }),
-        $('<div/>',{
-          class: 'taste-select__range',
-          id: 'taste-select__range-'+productId
+    function createTasteItem(value, name, isSelected) {
+        if (!isSelected) isSelected = false;
+        return $('<option/>', {
+            value: value,
+            text: name,
+            selected: isSelected
         })
-      );
-    tasteList.forEach(function(taste,i){
-      $body.find('select').append( createTasteItem(taste.val,taste.name, i === 0 ))
-    });
-
-    $body.appendTo(container);
-    sliderOpt.rangeSliderContainer = $body.find('#taste-select__range-'+productId);
-
-    if( isMultipleTastes() )
-      initTastes();
-    else {
-      $('#taste-select_'+productId).hide();
-      new RangeSlider(sliderOpt)
     }
-  }
 
+    /**
+     * Отрисовать компонент
+     * Если в настройках параметр "tasteList" содержит массив значений, значит отобразить селект вкусов,
+     * при выборе определённого вкуса создается RangeSlider
+     */
+    function render() {
+        $body = $('<div/>', {class: 'product-review__taste-container'})
+            .append(
+                $('<span/>', {text: (tasteList.length > 1 ? "Укажите вкус" : "Укажите количество")}),
+                $('<hr>'),
+                $('<select/>', {
+                    id: "taste-select_" + productId,
+                    class: "card__taste-select multipleSelect",
+                    multiple: true,
+                    name: 'taste'
+                }),
+                $('<div/>', {
+                    class: 'taste-select__range',
+                    id: 'taste-select__range-' + productId
+                })
+            );
+        tasteList.forEach(function (taste, i) {
+            $body.find('select').append(createTasteItem(taste.val, taste.name, i === 0))
+        });
 
-  /**
-   * Возвратить вычисленный вес торта
-   * вес одного куска/штуки задаётся параметром "weight" в настройках
-   * @param {RangeSlider} item
-   * @return {number}
-   */
-  function getCalculatedCakeWeight(item){
-    return +$(item).find('.range__count').val();
-  }
+        $body.appendTo(container);
+        sliderOpt.rangeSliderContainer = $body.find('#taste-select__range-' + productId);
 
-
-  /**
-   * Возвратить вычисленное количество порций
-   * соотношение порций к количеству задаётся параметром "ration" в настойках
-   * @param {RangeSlider} item
-   * @return {number}
-   */
-  function getCalculatedRationCount(item){
-    return +$(item).find('.range__ration-count').val()
-  }
-
-
-  /**
-   * Возвратить значение слайдера
-   * шаг слайдера задается параметром "step" однако (лучше истользовать 1 так как с дробными значениями возникают ошибки)
-   * минимальное значение параметром "min", максимальное - "max" в настройках
-   * @param {RangeSlider} item
-   * @return {number}
-   */
-  function getRangeValue(item){
-    return +$(item).find('.range__value').val()
-  }
-
-
-  /**
-   * Возвратить данные по всем указанным вкусам
-   * @return {[]}
-   */
-  this.getData = function(){
-    var tastes = [];
-    $body.find('.range').each(function(index,range){
-      var $item = $(range).find('.range__caption');
-      var taste = $item.attr('data-taste-name') === $item.val() ?
-        $item.val() :
-        $item.attr('data-taste-name') + ' (' + $item.val() + ')';
-      taste = taste ? taste : 'единственный';
-      tastes.push(
-        {
-          taste       : taste,
-          weight      : getCalculatedCakeWeight(range),
-          value       : getRangeValue(range),
-          rationCount : getCalculatedRationCount(range),
+        if (isMultipleTastes())
+            initTastes();
+        else {
+            $('#taste-select_' + productId).hide();
+            new RangeSlider(sliderOpt)
         }
-      );
-    });
-    return tastes;
-  };
-
-  function initTastes() {
-    $component = $('#taste-select_'+productId);
-    $component.fastselect({
-      placeholder: "Выберите иначе мы выберем сами :)",
-      controlsClass: 'taste-select_'+productId+'__fstControls',
-      onItemSelect: function () {
-        //TODO: проверка на то что элемент уже выбран (или оставит это как фичу?)
-        var tasteBind = getSelectedTaste();
-        addListenerForRemoveTaste(tasteBind);
-        new RangeSlider( updSliderOpt(getTasteIdentifier(tasteBind),getTasteName(tasteBind)) )
-      },
-    });
-    //var tasteContainer = getContainer();
-    var selectedTaste = getSelectedTaste();//$(tasteContainer).find('.fstChoiceItem');
-    addListenerForRemoveTaste(selectedTaste);
-    new RangeSlider( updSliderOpt(getTasteIdentifier(selectedTaste),getTasteName(selectedTaste)) );
-  }
+    }
 
 
-  function updSliderOpt(_index,_caption) {
-    sliderOpt.index = _index;
-    sliderOpt.caption = _caption;
-    return sliderOpt
-  }
-
-  function addListenerForRemoveTaste(taste) {
-    $(taste).on('click', 'button.fstChoiceRemove', function () {
-      $('#' + $(taste).attr('data-value')).remove();
-    });
-  }
-
-  /**
-   * Проверка
-   * @return {*[]|boolean}
-   */
-  function isMultipleTastes() {
-    return tasteList && tasteList.length > 1
-  }
-
-  /**
-   * Возвратить указатель на кнопку удаления вкуса
-   * !необходимо для удаления компонента "Диапазон значений" (RangeSlider) созданного при выборе этого вкуса
-   * @return {jQuery}
-   */
-  function getSelectedTaste(){
-    return $('.taste-select_'+productId+'__fstControls>div:last').get(0);
-  }
-
-  /**
-   * Возвратить идентификатор вкуса
-   * @param selectedTaste
-   * @return {*|jQuery}
-   */
-  function getTasteIdentifier(selectedTaste){
-    return $(selectedTaste).attr('data-value');
-  }
+    /**
+     * Возвратить вычисленный вес торта
+     * вес одного куска/штуки задаётся параметром "weight" в настройках
+     * @param {RangeSlider} item
+     * @return {number}
+     */
+    function getCalculatedCakeWeight(item) {
+        return +$(item).find('.range__count').val();
+    }
 
 
-  /**
-   * Возвратить название вкуса
-   * @param selectedTaste
-   * @return {*|jQuery}
-   */
-  function getTasteName(selectedTaste){
-    return $(selectedTaste).attr('data-text');
-  }
+    /**
+     * Возвратить вычисленное количество порций
+     * соотношение порций к количеству задаётся параметром "ration" в настойках
+     * @param {RangeSlider} item
+     * @return {number}
+     */
+    function getCalculatedRationCount(item) {
+        return +$(item).find('.range__ration-count').val()
+    }
 
-  /**
-   * Возвратить контейнер
-   * @return {jQuery}
-   */
-  function getContainer(){
-    var tasteContainer = $component.get(0);
-    return $(tasteContainer).closest('.fstElement').get(0);
-  }
 
-  (function(){
-    render();
-  })()
+    /**
+     * Возвратить значение слайдера
+     * шаг слайдера задается параметром "step" однако (лучше истользовать 1 так как с дробными значениями возникают ошибки)
+     * минимальное значение параметром "min", максимальное - "max" в настройках
+     * @param {RangeSlider} item
+     * @return {number}
+     */
+    function getRangeValue(item) {
+        return +$(item).find('.range__value').val()
+    }
+
+
+    /**
+     * Возвратить данные по всем указанным вкусам
+     * @return {[]}
+     */
+    this.getData = function () {
+        var tastes = [];
+        $body.find('.range').each(function (index, range) {
+            var $item = $(range).find('.range__caption');
+            var taste = $item.attr('data-taste-name') === $item.val() ?
+                $item.val() :
+                $item.attr('data-taste-name') + ' (' + $item.val() + ')';
+            taste = taste ? taste : 'единственный';
+            tastes.push(
+                {
+                    taste: taste,
+                    weight: getCalculatedCakeWeight(range),
+                    value: getRangeValue(range),
+                    rationCount: getCalculatedRationCount(range),
+                }
+            );
+        });
+        return tastes;
+    };
+
+    function initTastes() {
+        $component = $('#taste-select_' + productId);
+        $component.fastselect({
+            placeholder: "Выберите иначе мы выберем сами :)",
+            controlsClass: 'taste-select_' + productId + '__fstControls',
+            onItemSelect: function () {
+                //TODO: проверка на то что элемент уже выбран (или оставит это как фичу?)
+                var tasteBind = getSelectedTaste();
+                addListenerForRemoveTaste(tasteBind);
+                new RangeSlider(updSliderOpt(getTasteIdentifier(tasteBind), getTasteName(tasteBind)))
+            },
+        });
+        //var tasteContainer = getContainer();
+        var selectedTaste = getSelectedTaste();//$(tasteContainer).find('.fstChoiceItem');
+        addListenerForRemoveTaste(selectedTaste);
+        new RangeSlider(updSliderOpt(getTasteIdentifier(selectedTaste), getTasteName(selectedTaste)));
+    }
+
+
+    function updSliderOpt(_index, _caption) {
+        sliderOpt.index = _index;
+        sliderOpt.caption = _caption;
+        return sliderOpt
+    }
+
+    function addListenerForRemoveTaste(taste) {
+        $(taste).on('click', 'button.fstChoiceRemove', function () {
+            $('#' + $(taste).attr('data-value')).remove();
+        });
+    }
+
+    /**
+     * Проверка
+     * @return {*[]|boolean}
+     */
+    function isMultipleTastes() {
+        return tasteList && tasteList.length > 1
+    }
+
+    /**
+     * Возвратить указатель на кнопку удаления вкуса
+     * !необходимо для удаления компонента "Диапазон значений" (RangeSlider) созданного при выборе этого вкуса
+     * @return {jQuery}
+     */
+    function getSelectedTaste() {
+        return $('.taste-select_' + productId + '__fstControls>div:last').get(0);
+    }
+
+    /**
+     * Возвратить идентификатор вкуса
+     * @param selectedTaste
+     * @return {*|jQuery}
+     */
+    function getTasteIdentifier(selectedTaste) {
+        return $(selectedTaste).attr('data-value');
+    }
+
+
+    /**
+     * Возвратить название вкуса
+     * @param selectedTaste
+     * @return {*|jQuery}
+     */
+    function getTasteName(selectedTaste) {
+        return $(selectedTaste).attr('data-text');
+    }
+
+    /**
+     * Возвратить контейнер
+     * @return {jQuery}
+     */
+    function getContainer() {
+        var tasteContainer = $component.get(0);
+        return $(tasteContainer).closest('.fstElement').get(0);
+    }
+
+    (function () {
+        render();
+    })()
 }
 
 

@@ -22,13 +22,13 @@ class MainController extends Controller
                 'img' => 'img/processed/slide2.jpg',
                 'title' => 'Любой каприз за ваши деньги!',
                 'linkText' => 'Что у вас есть?',
-                'linkHref' => route('gallery.index'),
+                'linkHref' => route('gallery.cakes'),
             ],
             [
                 'img' => 'img/processed/slide3.jpg',
                 'title' => 'Пряники по индивидуальному заказу',
                 'linkText' => 'Пряники',
-                'linkHref' => route('gallery.index', ['sortByTag' => 'Пряники']),
+                'linkHref' => route('gallery.cakes', ['sortByTag' => 'Пряники']),
             ],
         ];
 
