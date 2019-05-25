@@ -443,13 +443,16 @@
         ],
         orderCompletionModal: '#id-card-open'
       };
+
+      App.setAssetsPath("{{ asset('') }}");
+
       var showcase = new Showcase({
         showcaseContainer: $('.vnl__showcase'),
         gridSize: 3
       });
 
       $(function(){
-        $.get("src/stuffing.json",function (data) {
+        $.get("{{asset("src/stuffing.json")}}",function (data) {
           showcase.addRange(data);
           $('img.product__thumb').lazyLoadXT();
         });
