@@ -27,6 +27,8 @@
 @section('script')
     <script>
         $(document).ready(function () {
+            App.setAssetsPath("{{ asset('') }}");
+
             var gallery = new Gallery({
                 productLink: 'showcase__dessert.html',
                 productLinkTitle: 'К десертам',
