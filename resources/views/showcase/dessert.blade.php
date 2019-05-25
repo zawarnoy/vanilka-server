@@ -348,15 +348,14 @@
             orderCompletionModal: '#id-card__gingerbread-open'
         };
 
-        let showcase = new Showcase({
-            showcaseContainer: $('.vnl__showcase'),
-            gridSize: 3,
-            assetsPath : '{{asset('')}}'
-        });
-
         $(document).ready(function () {
 
-            setAssetsPath('{{ asset('') }}');
+            App.setAssetsPath('{{ asset('') }}');
+
+            let showcase = new Showcase({
+                showcaseContainer: $('.vnl__showcase'),
+                gridSize: 3,
+            });
 
             $(function () {
                 $.get("{{asset('src/desserts.json')}}", function (data) {

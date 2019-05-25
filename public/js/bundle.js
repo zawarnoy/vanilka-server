@@ -1,14 +1,19 @@
-App = {
-};
+App = {};
 
-function setAssetsPath(assetsPath) {
+App.setAssetsPath = function (assetsPath) {
     App.assetsPath = assetsPath;
-}
+};
 
 function getAssetsPath() {
     return App.assetsPath;
 }
 
+App.isFullLink = function (link) {
+    let regExp = new RegExp('^(http|https)://');
+    console.log(link);
+    console.log(regExp.test(link) ? "eto ssilka" : "ne ssilka");
+    return regExp.test(link);
+};
 
 /**
  * Категория товаров
@@ -36,7 +41,6 @@ function Category(params) {
         settingFile = params.settingFile,                     //Данные для настройки карты продукта
         uniqTags = new Tags(),                             //Список уникальных тегов
         products = [],
-        assetsPath = params.assetsPath,
         navbarConstructor, childContainer, body, navbar,
         hidden = false;
     self = this;
@@ -116,7 +120,7 @@ function Category(params) {
                     href: src.href,
                     name: src.name,
                     description: src.description,
-                    thumb: getAssetsPath() + src.thumb,
+                    thumb: App.isFullLink(src.thumb) ? src.thumb : getAssetsPath() + src.thumb,
                     tagList: src.tagList,
                     overviewImages: src.overview ? src.overview : [],
                     settingFile: settingFile
@@ -339,7 +343,6 @@ function Gallery(params) {
         productLink = params.productLink || "showcase__stuffing.html",
         productLinkTitle = params.productLinkTitle || "В начинки",
         src = params.src,
-        assetsPath = params.assetsPath,
         imageArray = [],
         navbar,
         body,
@@ -352,7 +355,7 @@ function Gallery(params) {
             for (var i = 1; i < (category.length + 1); i++) {
                 result.push({
                     index: i,
-                    imgSrc: assetsPath + category.folder + '/' + category.prefix + i + '.jpg',
+                    imgSrc: getAssetsPath() + category.folder + '/' + category.prefix + i + '.jpg',
                     href: ('directTransitionTo' in category ? category.directTransitionTo : null),
                     name: category.tag,
                     tags: category.tagList
@@ -369,15 +372,14 @@ function Gallery(params) {
             items.push(
                 new GalleryItem({
                     container: container,
-                    thumb: item.imgSrc,
+                    thumb: App.isFullLink(item.imgSrc) ? item.imgSrc : getAssetsPath() + item.imgSrc,
                     gridSize: gridSize,
                     productLink: productLink,
                     directTransitionTo: item.href,
                     productLinkTitle: productLinkTitle,
                     id: item.index,
                     name: item.name,
-                    tagList: item.tags,
-                    assetsPath : assetsPath
+                    tagList: item.tags
                 })
             );
         });
@@ -400,8 +402,14 @@ function Gallery(params) {
  * @constructor
  */
 function GalleryItem(params) {
+
+    if (params.thumb) {
+        var thumb = App.isFullLink(params.thumb) ? params.thumb : getAssetsPath() + params.thumb;
+    } else {
+        var thumb = "..."
+    }
+
     var idProduct = params.id,
-        thumb = params.thumb || "...",
         productLink = params.productLink || "showcase__stuffing.html",
         productLinkTitle = params.productLinkTitle || "В начинки",
         directTransitionTo = params.directTransitionTo || null,
@@ -411,8 +419,7 @@ function GalleryItem(params) {
         name = params.name || "Lorem ipsum",
         hidden = false,
         body,
-        self = this,
-        assetsPath = params.assetsPath;
+        self = this;
 
     /**
      * Отрисовать продукт если указан родительский элемент
@@ -444,7 +451,7 @@ function GalleryItem(params) {
 
         body = $('<a/>', {
             class: "tetragon" + gridSize + " stock__product p-1",
-            href: thumb,
+            href: App.isFullLink(thumb) ? thumb : getAssetsPath() + thumb,
             //'data-title': name,
             'data-footer': footer,
             'data-gallery': "gallery__item",
@@ -465,8 +472,8 @@ function GalleryItem(params) {
                             .append(
                                 $('<img/>', {
                                     class: 'product__thumb d-block w-100 h-100',
-                                    src: assetsPath + 'img/pre-loader.gif',
-                                    'data-src': thumb,
+                                    src: getAssetsPath() + 'img/pre-loader.gif',
+                                    'data-src': App.isFullLink(thumb) ? thumb : getAssetsPath() + thumb,
                                     alt: name,
                                     error: function () {
                                         this.classList.add('invalid-image-src')
@@ -795,7 +802,6 @@ function Product(params) {
         settingFile = params.settingFile,
         hidden = false,
         body,
-        assetsPath = params.assetsPath,
         self = this,
         onClickFn = function () {
             new ProductReview({
@@ -829,8 +835,8 @@ function Product(params) {
                 $('<div/>', {class: 'tetragon__content'}).append(
                     $('<img/>', {
                         class: 'product__thumb d-block h-100 w-100',
-                        src: 'img/pre-loader.gif',
-                        'data-src': thumb,
+                        src: getAssetsPath() + 'img/pre-loader.gif',
+                        'data-src': App.isFullLink(thumb) ? thumb : getAssetsPath() + thumb,
                         alt: name,
                         error: $(this).addClass('invalid-image-src')
                     }),
@@ -1404,7 +1410,7 @@ function ReviewGallery(params) {
         return $('<a/>', {
             class: "stock__product " + className,
             id: "product__" + id,
-            href: src,
+            href: App.isFullLink(src) ? src : getAssetsPath() + src,
             'data-toggle': 'lightbox',
             'data-gallery': name + '-' + id,
             'data-width': '800px',
@@ -1418,7 +1424,7 @@ function ReviewGallery(params) {
                                 $('<div/>', {class: 'tetragon__content'})
                                     .append(
                                         $('<img/>', {
-                                            src: src,
+                                            src: App.isFullLink(src) ? src : getAssetsPath() + src,
                                             alt: name,
                                             'onerror': '$(this).addClass("invalid-image-src")',
                                             class: 'product__thumb d-block h-100 w-100',
@@ -1813,8 +1819,8 @@ function Showcase(params) {
         uniqTags = new Tags(),
         navbar,
         body,
-        assetsPath = params.assetsPath,
         categories = [];
+
 
     this.addRange = function (list) {
         if (typeof list === "string")
@@ -1830,7 +1836,6 @@ function Showcase(params) {
                     categoryName: src.categoryName,
                     products: ("products" in src) ? src.products : null,
                     galleryPath: src.galleryPath,
-                    assetsPath : assetsPath,
                     settingFile: src.categorySettings
                 })
             );
@@ -2534,42 +2539,42 @@ function ComponentRecommendedProducts(params) {
         $body = '',
         recommendedProducts = [
             {
-                thumb: dir + name + 1 + '.jpg',
+                thumb: getAssetsPath() + dir + name + 1 + '.jpg',
                 name: 'recommended product',
                 link: 'gallery__dessert.html?goto=Cupcakes2'
             },
             {
-                thumb: dir + name + 2 + '.jpg',
+                thumb: getAssetsPath() + dir + name + 2 + '.jpg',
                 name: 'recommended product',
                 link: 'gallery__dessert.html?goto=Zephyr3'
             },
             {
-                thumb: dir + name + 3 + '.jpg',
+                thumb: getAssetsPath() + dir + name + 3 + '.jpg',
                 name: 'recommended product',
                 link: 'gallery__dessert.html?goto=type8'
             },
             {
-                thumb: dir + name + 4 + '.jpg',
+                thumb: getAssetsPath() + dir + name + 4 + '.jpg',
                 name: 'recommended product',
                 link: 'gallery__dessert.html?goto=type23'
             },
             {
-                thumb: dir + name + 5 + '.jpg',
+                thumb: getAssetsPath() + dir + name + 5 + '.jpg',
                 name: 'recommended product',
                 link: 'gallery__dessert.html?goto=cakepops2'
             },
             {
-                thumb: dir + name + 6 + '.jpg',
+                thumb: getAssetsPath() + dir + name + 6 + '.jpg',
                 name: 'recommended product',
                 link: 'gallery__dessert.html?goto=Marmalade2'
             },
             {
-                thumb: dir + name + 7 + '.jpg',
+                thumb: getAssetsPath() + dir + name + 7 + '.jpg',
                 name: 'recommended product',
                 link: 'gallery__dessert.html?goto=For_children5'
             },
             {
-                thumb: dir + name + 8 + '.jpg',
+                thumb: getAssetsPath() + dir + name + 8 + '.jpg',
                 name: 'recommended product',
                 link: 'gallery__dessert.html?goto=Zephyr1'
             }
