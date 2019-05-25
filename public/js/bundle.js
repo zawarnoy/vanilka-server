@@ -1,3 +1,15 @@
+App = {
+};
+
+function setAssetsPath(assetsPath) {
+    App.assetsPath = assetsPath;
+}
+
+function getAssetsPath() {
+    return App.assetsPath;
+}
+
+
 /**
  * Категория товаров
  * @param {{}} params
@@ -24,6 +36,7 @@ function Category(params) {
         settingFile = params.settingFile,                     //Данные для настройки карты продукта
         uniqTags = new Tags(),                             //Список уникальных тегов
         products = [],
+        assetsPath = params.assetsPath,
         navbarConstructor, childContainer, body, navbar,
         hidden = false;
     self = this;
@@ -103,7 +116,7 @@ function Category(params) {
                     href: src.href,
                     name: src.name,
                     description: src.description,
-                    thumb: src.thumb,
+                    thumb: getAssetsPath() + src.thumb,
                     tagList: src.tagList,
                     overviewImages: src.overview ? src.overview : [],
                     settingFile: settingFile
@@ -363,7 +376,8 @@ function Gallery(params) {
                     productLinkTitle: productLinkTitle,
                     id: item.index,
                     name: item.name,
-                    tagList: item.tags
+                    tagList: item.tags,
+                    assetsPath : assetsPath
                 })
             );
         });
@@ -397,7 +411,8 @@ function GalleryItem(params) {
         name = params.name || "Lorem ipsum",
         hidden = false,
         body,
-        self = this;
+        self = this,
+        assetsPath = params.assetsPath;
 
     /**
      * Отрисовать продукт если указан родительский элемент
@@ -450,7 +465,7 @@ function GalleryItem(params) {
                             .append(
                                 $('<img/>', {
                                     class: 'product__thumb d-block w-100 h-100',
-                                    src: 'img/pre-loader.gif',
+                                    src: assetsPath + 'img/pre-loader.gif',
                                     'data-src': thumb,
                                     alt: name,
                                     error: function () {
@@ -780,6 +795,7 @@ function Product(params) {
         settingFile = params.settingFile,
         hidden = false,
         body,
+        assetsPath = params.assetsPath,
         self = this,
         onClickFn = function () {
             new ProductReview({
@@ -1797,6 +1813,7 @@ function Showcase(params) {
         uniqTags = new Tags(),
         navbar,
         body,
+        assetsPath = params.assetsPath,
         categories = [];
 
     this.addRange = function (list) {
@@ -1813,6 +1830,7 @@ function Showcase(params) {
                     categoryName: src.categoryName,
                     products: ("products" in src) ? src.products : null,
                     galleryPath: src.galleryPath,
+                    assetsPath : assetsPath,
                     settingFile: src.categorySettings
                 })
             );

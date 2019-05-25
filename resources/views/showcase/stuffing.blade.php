@@ -39,7 +39,7 @@
               </li>
       
               <li class="nav-item col p-0">
-                <a href="./showcase__stuffing.html" class="btn btn-primary p-0 w-100">
+                <a href="./stuffing.blade.php" class="btn btn-primary p-0 w-100">
                   <h2 class="d-none d-sm-inline-block header__item">Начинки<br>&nbsp;</h2>
       
                 </a>
@@ -74,7 +74,7 @@
                 </a>
               </li>
               <li class="d-block d-lg-none nav-item">
-                <a class="btn btn-primary p-0 w-100 text-left" href="./showcase__stuffing.html">
+                <a class="btn btn-primary p-0 w-100 text-left" href="./stuffing.blade.php">
                   <h3>Начинки</h3>
                 </a>
               </li>
@@ -94,7 +94,7 @@
                 <span class=" icon icon__delimiter"></span>
               </li>
               <li class="nav-item col-lg p-0">
-                <a href="showcase__dessert.html" class="btn btn-primary p-0 w-100 text-left text-lg-center">
+                <a href="dessert.blade.php" class="btn btn-primary p-0 w-100 text-left text-lg-center">
                   <h2 class="d-none d-lg-inline-block header__item">Десерты<br></h2>
                   <h3 class="d-lg-none">Десерты</h3>
                 </a>

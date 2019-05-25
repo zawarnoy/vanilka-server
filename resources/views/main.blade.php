@@ -119,7 +119,7 @@
                     </div>
                     <div class="col-sm-6 pt-3 pr-0">
 
-                        <a class="stock__product tetragon-12" href="showcase/showcase__stuffing.html?goto=type47">
+                        <a class="stock__product tetragon-12" href="showcase/stuffing.blade.php?goto=type47">
                             <div class="tetragon__wrapper">
                                 <div class="tetragon__content">
                                     <img class="product__thumb d-block w-100 h-100"
@@ -243,7 +243,7 @@
                         </div>
                         <div class="row mb-3 h-100">
 
-                            <a class="stock__product tetragon-12" href="showcase/showcase__candybar.html"
+                            <a class="stock__product tetragon-12" href="showcase/candybar.blade.php"
                                style='max-height: 245px'>
                                 <div class="tetragon__wrapper">
                                     <div class="tetragon__content" style='max-height: 245px'>
