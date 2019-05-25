@@ -8,41 +8,24 @@
                     <li data-target="#vnl__slider-body" data-slide-to="{{ $i }}" class="active"></li>
                 @endfor
             </ol>
-            @foreach($sliderPosts as $post)
+
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img class="vnl__banner" src="{{asset("")}}"
-                             onerror="this.classList.add('invalid-image-src')" alt="Slide">
-                        <div class="vnl__banner-caption carousel-caption d-none d-md-block d-flex align-items-center justify-content-center">
-                            <div class="vnl__banner-content">
-                                <h3></h3>
-                                <a href="{{ $post['link'] }}" class="btn btn-outline-primary mt-3"></a>
+                    @php($i=0)
+                    @foreach($sliderPosts as $post)
+                        <div class="carousel-item {{ !$i ? 'acive' : '' }}">
+                            <img class="vnl__banner" src="{{asset("")}}"
+                                 onerror="this.classList.add('invalid-image-src')" alt="Slide">
+                            <div class="vnl__banner-caption carousel-caption d-none d-md-block d-flex align-items-center justify-content-center">
+                                <div class="vnl__banner-content">
+                                    <h3></h3>
+                                    <a href="{{ $post['link'] }}" class="btn btn-outline-primary mt-3"></a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="carousel-item">
-                        <img class="vnl__banner" src="{{asset("img/processed/slide2.jpg")}}"
-                             onerror="this.classList.add('invalid-image-src')" alt="Second slide">
-                        <div class="vnl__banner-caption carousel-caption d-none d-md-block d-flex align-items-center justify-content-center">
-                            <div class="vnl__banner-content">
-                                <h3>Любой каприз за ваши деньги</h3>
-                                <a href="gallery__cakes.html" class="btn btn-outline-primary mt-3">Что у вас есть?</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <img class="vnl__banner" src="{{asset("img/processed/slide3.jpg")}}"
-                             onerror="this.classList.add('invalid-image-src')" alt="Third slide">
-                        <div class="vnl__banner-caption carousel-caption d-none d-md-block d-flex align-items-center justify-content-center">
-                            <div class="vnl__banner-content">
-                                <h3>Пряники по индивидуальному заказу</h3>
-                                <a href="gallery__dessert.html?sortByTag=Пряники"
-                                   class="btn btn-outline-primary mt-3">Пряники</a>
-                            </div>
-                        </div>
-                    </div>
+                        @php($i++)
+                    @endforeach
                 </div>
-            @endforeach
+
             <a class="carousel-control-prev" href="#vnl__slider-body" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="sr-only">Туда</span>
