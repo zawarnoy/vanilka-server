@@ -19,5 +19,5 @@
 
     <link rel="shortcut icon" href="{{asset('img/favicon.png')}}" type="image/png">
     <link type="text/css" rel="stylesheet" href="{{asset('css/libs.min.css')}}">
-    <link type="text/css" rel="stylesheet" href="{{asset("css/main.min.css")}}">
+    <link type="text/css" rel="stylesheet" href="{{asset("css/main.css")}}">
 </head>

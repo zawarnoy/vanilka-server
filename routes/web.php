@@ -14,3 +14,8 @@
 Route::get('/', 'MainController@choice')->name('choice');
 
 Route::get('/main', 'MainController@main')->name('main');
+
+Route::get('/person', 'MainController@entity')->name('entity');
+
+Route::get('/gallery', 'GalleryController@index')->name('gallery.index');
+

@@ -20,15 +20,15 @@ class MainController extends Controller
             ],
             [
                 'img' => 'img/processed/slide2.jpg',
-                'title' => 'Хотите попробовать лучший чизкейк в городе?',
-                'linkText' => 'Хочу! Как мне вас найти?',
-                'linkHref' => 'https://goo.gl/maps/HQuajyDebbo',
+                'title' => 'Любой каприз за ваши деньги!',
+                'linkText' => 'Что у вас есть?',
+                'linkHref' => route('gallery.index'),
             ],
             [
                 'img' => 'img/processed/slide3.jpg',
-                'title' => 'Хотите попробовать лучший чизкейк в городе?',
-                'linkText' => 'Хочу! Как мне вас найти?',
-                'linkHref' => 'https://goo.gl/maps/HQuajyDebbo',
+                'title' => 'Пряники по индивидуальному заказу',
+                'linkText' => 'Пряники',
+                'linkHref' => route('gallery.index', ['sortByTag' => 'Пряники']),
             ],
         ];
 
@@ -43,5 +43,4 @@ class MainController extends Controller
     {
         return view('entity');
     }
-
 }

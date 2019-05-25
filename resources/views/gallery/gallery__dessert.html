@@ -16,8 +16,8 @@
   <!--[if lt IE 9]><script src="//css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script><![endif]-->
 
   <link rel="shortcut icon" href="/img/favicon.png" type="image/png">
-  <link type="text/css" rel="stylesheet" href="../../public/css/libs.min.css" >
-  <link type="text/css" rel="stylesheet" href="../../public/css/main.min.css" >
+  <link type="text/css" rel="stylesheet" href="../../../public/css/libs.min.css" >
+  <link type="text/css" rel="stylesheet" href="../../../public/css/main.min.css" >
 </head>
 <body>
 <div class="vnl__content-wrapper">
@@ -34,7 +34,7 @@
           </li>
   
           <li class="nav-item col p-0">
-            <a href="./showcase__stuffing.html" class="btn btn-primary p-0 w-100">
+            <a href="../showcase/showcase__stuffing.html" class="btn btn-primary p-0 w-100">
               <h2 class="d-none d-sm-inline-block header__item">Начинки<br>&nbsp;</h2>
   
             </a>
@@ -45,7 +45,7 @@
           </li>
   
           <li class="nav-item col p-0">
-            <a href="./gallery__cakes.html" class="btn btn-primary p-0 w-100">
+            <a href="gallery__cakes.html" class="btn btn-primary p-0 w-100">
               <span class="d-none d-lg-inline-block header__item"><h2 style="line-height: 15px">Торты</h2><h4>Галлерея</h4></span>
               <h3 class="d-lg-none">Галлерея тортов</h3>
             </a>
@@ -69,12 +69,12 @@
             </a>
           </li>
           <li class="d-block d-lg-none nav-item">
-            <a class="btn btn-primary p-0 w-100 text-left" href="./showcase__stuffing.html">
+            <a class="btn btn-primary p-0 w-100 text-left" href="../showcase/showcase__stuffing.html">
               <h3>Начинки</h3>
             </a>
           </li>
           <li class="d-block d-lg-none nav-item">
-            <a class="btn btn-primary p-0 w-100 text-left" href="./gallery__cakes.html">
+            <a class="btn btn-primary p-0 w-100 text-left" href="gallery__cakes.html">
               <h3>Галлерея тортов</h3>
             </a>
           </li>
@@ -89,7 +89,7 @@
             <span class=" icon icon__delimiter"></span>
           </li>
           <li class="nav-item col-lg p-0">
-            <a href="./showcase__dessert.html" class="btn btn-primary p-0 w-100 text-left text-lg-center">
+            <a href="../showcase/showcase__dessert.html" class="btn btn-primary p-0 w-100 text-left text-lg-center">
               <h2 class="d-none d-lg-inline-block header__item">Десерты<br></h2>
               <h3 class="d-lg-none">Десерты</h3>
             </a>
@@ -110,7 +110,7 @@
       <ol class="breadcrumb mb-0 bg-light border-bottom">
         <li class="breadcrumb-item"><a href="main.html">Главная</a></li>
         <li class="breadcrumb-item"><a href="#">Галлерея</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Торты</li>
+        <li class="breadcrumb-item active" aria-current="page">Десерты</li>
       </ol>
     </nav>
   </div>
@@ -376,8 +376,8 @@
     </div>
 </div>
 
-<script type="text/javascript" src="../../public/js/libs.min.js" ></script>
-<script type="text/javascript" src="../../public/js/bundle.js"></script>
+<script type="text/javascript" src="../../../public/js/libs.min.js" ></script>
+<script type="text/javascript" src="../../../public/js/bundle.js"></script>
 <script>
   $(function(){
     $("#decorate-modal-open,#delivery-modal-open,#faq-modal-open").iziModal({
@@ -388,68 +388,117 @@
 </script>
 <script>
   var gallery = new Gallery({
-    productLink : 'showcase__stuffing.html',
-    productLinkTitle : 'Заказать',
+    productLink : 'showcase__dessert.html',
+    productLinkTitle : 'К десертам',
     galleryContainer: $('.vnl__gallery'),
     src:[
       {
-        tagList: ["Для мальчиков"],
-        folder: 'img/Cakes/Cakes_for_boy',
-        prefix: 'For_boys',
-        length: 38
+        tagList: ["Капкейки"],
+        directTransitionTo: 'Капкейки',
+        folder: 'img/Cupcakes',
+        prefix: 'Cupcakes',
+        length: 17
       },
       {
-        tagList: ["Для мужчин"],
-        folder: 'img/Cakes/Men',
-        prefix: 'Men',
-        length: 36
+        tagList: ["Зефир"],
+        directTransitionTo: 'Зефир',
+        folder: 'img/Zephyr',
+        prefix: 'Zephyr',
+        length: 5
       },
       {
-        tagList: ["Чизкейки"],
-        folder: 'img/Cakes/Cheesecakes',
-        prefix: 'Cheesecakes',
-        length: 18
+        tagList: ["Пряники"],
+        directTransitionTo: 'Пряники',
+        folder: 'img/Gingerbread/Heroes_characters',
+        prefix: 'heroBread',
+        length: 19
       },
       {
-        tag: ["Корпоративные"],
-        folder: 'img/Cakes/Corporate',
-        prefix: 'Corporate',
-        length: 13
+        tagList: ["Пряники","Детские"],
+        directTransitionTo: 'Пряники',
+        folder: 'img/Gingerbread/For_children',
+        prefix: 'For_children',
+        length: 37
       },
       {
-        tagList: ["Для девочек"],
-        folder: 'img/Cakes/Cakes_for_girls',
-        prefix: 'Cakes_for_girls',
-        length: 34
+        tagList: ["Кейкпопсы"],
+        directTransitionTo: 'Кейкпопсы',
+        folder: 'img/Cakepops',
+        prefix: 'cakepops',
+        length: 10
       },
       {
-        tagList: ["Для женщин"],
-        folder: 'img/Cakes/Women',
-        prefix: 'Women',
-        length: 21
+        tagList: ["Мармелад"],
+        directTransitionTo: 'Мармелад',
+        folder: 'img/Marmalade',
+        prefix: 'Marmalade',
+        length: 3
       },
       {
-        tagList: ["Классические"],
-        folder: 'img/Cakes/Classic_decor',
-        prefix: 'Classic_decor',
-        length: 35
+        tagList: ["Леденцы"],
+        directTransitionTo: 'Леденцы',
+        folder: 'img/Lollipops',
+        prefix: 'type',
+        length: 25
       },
       {
-        tagList: ["Свадебные"],
-        folder: 'img/Cakes/Wedding_buns',
-        prefix: 'Wedding_buns',
-        length: 13
-      }
-
+        tagList: ["Пряники","Новогодние"],
+        directTransitionTo: 'Пряники',
+        folder: 'img/Gingerbread/New_Year',
+        prefix: 'New_Year',
+        length: 17
+      },
+      {
+        tagList: ["Трайфлы"],
+        directTransitionTo: 'Трайфлы',
+        folder: 'img/Trifley',
+        prefix: 'Trifley',
+        length: 6
+      },
+      {
+        tagList: ["Маршмеллоу"],
+        directTransitionTo: 'Маршмеллоу',
+        folder: 'img/Marshmalloy',
+        prefix: 'type',
+        length: 2
+      },
+      {
+        tagList: ["Пряники","Корпоративные"],
+        directTransitionTo: 'Пряники',
+        folder: 'img/Gingerbread/Gingerbreads_corporeal',
+        prefix: 'type',
+        length: 6
+      },
+      {
+        tagList: ["Пряники","Классические"],
+        directTransitionTo: 'Пряники',
+        folder: 'img/Gingerbread/Heroes_characters',
+        prefix: 'heroBread',
+        length: 19
+      },
+      {
+        tagList: ["Пряники","Длямужчин"],
+        directTransitionTo: 'Пряники',
+        folder: 'img/Gingerbread/4men',
+        prefix: 'type',
+        length: 3
+      },
+      {
+        tagList: ["Пряники","Дляженщин"],
+        directTransitionTo: 'Пряники',
+        folder: 'img/Gingerbread/4woman',
+        prefix: 'type',
+        length: 8
+      },
     ]
   });
 
-  var urlParams = common.getURLParams();
-  console.log(urlParams);
-  if( common.isSortActionRequired(urlParams) )
-    common.sortByTag(urlParams.sortByTag);
-  if( common.isSelectTargetImageRequired(urlParams) )
-    common.findGalleryItemByImageName(urlParams.goto).click();
+  var params = common.getURLParams();
+  console.log(params);
+  if( common.isSortActionRequired(params) )
+    common.sortByTag(params.sortByTag);
+  if( common.isSelectTargetImageRequired(params) )
+    common.findGalleryItemByImageName(params.goto).click();
 </script>
 </body>
 </html>
