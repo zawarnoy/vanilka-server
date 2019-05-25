@@ -27,7 +27,7 @@
                     <div class="tetragon__content">
                         <img class="product__thumb d-block w-100 h-100"
                              src="{{ asset('img/pre-loader.gif') }}"
-                             data-src="img/cdbr/type1.jpg"
+                             data-src="{{asset("img/cdbr/type1.jpg")}}"
                              alt="Candybar"
                              onerror="this.classList.add('invalid-image-src')">
                     </div>
@@ -37,8 +37,8 @@
                 <div class="tetragon__wrapper">
                     <div class="tetragon__content">
                         <img class="product__thumb d-block w-100 h-100"
-                             src="../../../public/img/pre-loader.gif"
-                             data-src="img/cdbr/type2.jpg"
+                             src="{{ asset('img/pre-loader.gif') }}"
+                             data-src="{{asset("img/cdbr/type2.jpg")}}"
                              alt="Candybar"
                              onerror="this.classList.add('invalid-image-src')">
                     </div>
