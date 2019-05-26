@@ -82,7 +82,7 @@
                     <h4 class="footer-component__column__section-name" style="text-align: center">#Реквизиты</h4>
                     <div class="footer__org-info">
                         <div class="col p-0" style="text-align: center">
-                            {{ setting('footer.requisites') }}
+                            {!!   setting('footer.requisites') !!}
                         </div>
                     </div>
                 </div>
