@@ -5,7 +5,7 @@
     <div class="vnl__article transparent container p-0 mb-0 mt-5">
         <nav aria-label="breadcrumb mb-0 rounded-0 bg-light ">
             <ol class="breadcrumb mb-0 bg-light border-bottom">
-                <li class="breadcrumb-item"><a href="main.html">Главная</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('main') }}">Главная</a></li>
                 <li class="breadcrumb-item"><a href="#">Галлерея</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Десерты</li>
             </ol>

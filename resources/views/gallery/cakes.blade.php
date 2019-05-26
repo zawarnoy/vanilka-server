@@ -5,7 +5,7 @@
     <div class="vnl__article transparent container p-0 mb-0 mt-5">
         <nav aria-label="breadcrumb mb-0 rounded-0 bg-light ">
             <ol class="breadcrumb mb-0 bg-light border-bottom">
-                <li class="breadcrumb-item"><a href="main.html">Главная</a></li>
+                <li class="breadcrumb-item"><a href="{{ asset('') }}">Главная</a></li>
                 <li class="breadcrumb-item"><a href="#">Галлерея</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Десерты</li>
             </ol>
@@ -26,6 +26,9 @@
 @section('script')
     <script>
         $(document).ready(function () {
+
+            App.setAssetsPath("{{ asset('') }}");
+
             var gallery = new Gallery({
                 productLink: 'showcase__stuffing.html',
                 productLinkTitle: 'Заказать',
