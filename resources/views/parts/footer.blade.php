@@ -56,18 +56,13 @@
                 </div>
                 <div class="col entity-page__footer-component__column hidden-sm">
                     <h4 class="footer-component__column__section-name">#Информация</h4>
-                    @foreach(\TCG\Voyager\Models\Menu::where('name', '=', 'Footer menu')->first()->items as $menuItem)
-                        <a class="btn btn-link d-block text-dark text-left"
-                           href="{{ $menuItem->url }}">{{ $menuItem->title }}</a>
-                    @endforeach
-                    {{--                    <a href="#" class="btn btn-link d-block text-dark text-left"--}}
-                    {{--                       data-izimodal-open="#decorate-modal-open" data-izimodal-zindex="20000"--}}
-                    {{--                       data-izimodal-preventclose="">Оформление</a>--}}
-                    {{--                    <a href="#" class="btn btn-link d-block text-dark text-left" data-izimodal-open="#faq-modal-open"--}}
-                    {{--                       data-izimodal-zindex="20000" data-izimodal-preventclose="">Вопросы</a>--}}
-                    {{--                    <a href="#" class="btn btn-link d-block text-dark text-left"--}}
-                    {{--                       data-izimodal-open="#delivery-modal-open" data-izimodal-zindex="20000"--}}
-                    {{--                       data-izimodal-preventclose="">Вес</a>--}}
+                    @php($menu = \TCG\Voyager\Models\Menu::where('name', '=', 'Footer menu')->first())
+                    @if(!empty($menu->items))
+                        @foreach($menu->items as $menuItem)
+                            <a class="btn btn-link d-block text-dark text-left"
+                               href="{{ $menuItem->url }}">{{ $menuItem->title }}</a>
+                        @endforeach
+                    @endif
                 </div>
                 <div class="col entity-page__footer-component__column">
                     <h4 class="footer-component__column__section-name">#Мы в социальных сетях</h4>

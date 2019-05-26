@@ -9,22 +9,22 @@
                 @endfor
             </ol>
 
-                <div class="carousel-inner">
-                    @php($i=0)
-                    @foreach($sliderPosts as $post)
-                        <div class="carousel-item {{ !$i ? 'active' : '' }}">
-                            <img class="vnl__banner" src="{{asset($post['img'])}}"
-                                 onerror="this.classList.add('invalid-image-src')" alt="Slide {{$i}}">
-                            <div class="vnl__banner-caption carousel-caption d-none d-md-block d-flex align-items-center justify-content-center">
-                                <div class="vnl__banner-content">
-                                    <h3>{{ $post['title'] }}</h3>
-                                    <a href="{{ $post['linkHref'] }}" class="btn btn-outline-primary mt-3">{{ $post['linkText'] }}</a>
-                                </div>
+            <div class="carousel-inner">
+                @php($i=0)
+                @foreach($sliderPosts as $post)
+                    <div class="carousel-item {{ !$i ? 'active' : '' }}">
+                        <img class="vnl__banner" src="{{asset($post['img'])}}"
+                             onerror="this.classList.add('invalid-image-src')" alt="Slide {{$i}}">
+                        <div class="vnl__banner-caption carousel-caption d-none d-md-block d-flex align-items-center justify-content-center">
+                            <div class="vnl__banner-content">
+                                <h3>{{ $post['title'] }}</h3>
+                                <a href="{{ $post['linkHref'] }}" class="btn btn-outline-primary mt-3">{{ $post['linkText'] }}</a>
                             </div>
                         </div>
-                        @php($i++)
-                    @endforeach
-                </div>
+                    </div>
+                    @php($i++)
+                @endforeach
+            </div>
 
             <a class="carousel-control-prev" href="#vnl__slider-body" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -42,7 +42,7 @@
         <div class="vnl__popular-goods row p-2">
             <div class="popular-goods__most-viewed col-md-6 pt-3 pr-0" style="padding-left: 14px!important;">
 
-                <a class="stock__product tetragon-12" href="gallery/gallery__cakes.html?goto=Women13">
+                <a class="stock__product tetragon-12" href="gallery/cakes?goto=Women13">
                     <div class="tetragon__wrapper">
                         <div class="tetragon__content">
                             <img class="product__thumb d-block w-100 mh-100"
@@ -63,7 +63,7 @@
                 <div class="row h-100">
                     <div class="col-sm-6 pt-3 pr-0">
 
-                        <a class="stock__product tetragon-12" href="gallery/gallery__dessert.html?goto=Trifley2">
+                        <a class="stock__product tetragon-12" href="gallery/desserts?goto=Trifley2">
                             <div class="tetragon__wrapper">
                                 <div class="tetragon__content">
                                     <img class="product__thumb d-block w-100 h-100"
@@ -81,7 +81,7 @@
                     </div>
                     <div class="col-sm-6 pt-3 pr-0">
 
-                        <a class="stock__product tetragon-12" href="gallery/gallery__dessert.html?goto=heroBread11">
+                        <a class="stock__product tetragon-12" href="gallery/desserts?goto=heroBread11">
                             <div class="tetragon__wrapper">
                                 <div class="tetragon__content">
                                     <img class="product__thumb d-block w-100 h-100"
@@ -101,7 +101,7 @@
                 <div class="row h-100">
                     <div class="col-sm-6 pt-3 pr-0">
 
-                        <a class="stock__product tetragon-12" href="gallery/gallery__cakes.html?goto=Cheesecakes12">
+                        <a class="stock__product tetragon-12" href="gallery/cakes?goto=Cheesecakes12">
                             <div class="tetragon__wrapper">
                                 <div class="tetragon__content">
                                     <img class="product__thumb d-block w-100 h-100"
@@ -119,7 +119,7 @@
                     </div>
                     <div class="col-sm-6 pt-3 pr-0">
 
-                        <a class="stock__product tetragon-12" href="showcase/stuffing.blade.php?goto=type47">
+                        <a class="stock__product tetragon-12" href="showcase/stuffing?goto=type47">
                             <div class="tetragon__wrapper">
                                 <div class="tetragon__content">
                                     <img class="product__thumb d-block w-100 h-100"
@@ -149,7 +149,7 @@
                     <div class="col-sm-6">
                         <div class="row mb-3">
 
-                            <a class="stock__product tetragon-12" href="gallery/gallery__dessert.html?sortByTag=Трайфлы"
+                            <a class="stock__product tetragon-12" href="gallery/desserts?sortByTag=Трайфлы"
                                style='max-height: 245px'>
                                 <div class="tetragon__wrapper">
                                     <div class="tetragon__content" style='max-height: 245px'>
@@ -168,7 +168,7 @@
                         </div>
                         <div class="row mb-3">
 
-                            <a class="stock__product tetragon-12" href="gallery/gallery__cakes.html?sortByTag=Свадебные"
+                            <a class="stock__product tetragon-12" href="gallery/cakes?sortByTag=Свадебные"
                                style='max-height: 245px'>
                                 <div class="tetragon__wrapper">
                                     <div class="tetragon__content" style='max-height: 245px'>
@@ -188,7 +188,7 @@
                     </div>
                     <div class="col-sm-6 mb-3 px-0 px-sm-3">
 
-                        <a class="stock__product " href="gallery/gallery__cakes.html?sortByTag=Классические"
+                        <a class="stock__product " href="gallery/cakes?sortByTag=Классические"
                            style="max-height:510px">
                             <img class="product__thumb d-block w-100"
                                  src="../../public/img/pre-loader.gif"
@@ -208,7 +208,7 @@
                 <div class="row h-100">
                     <div class="col-sm-6 mb-3 px-0 px-sm-3">
 
-                        <a class="stock__product" href="gallery/gallery__dessert.html?sortByTag=Пряники"
+                        <a class="stock__product" href="gallery/desserts?sortByTag=Пряники"
                            style="max-height:510px">
                             <img class="product__thumb d-block w-100 mh-100"
                                  src="../../public/img/pre-loader.gif"
@@ -224,7 +224,7 @@
                     <div class="col-sm-6 d-flex flex-column">
                         <div class="row h-100 mb-3">
 
-                            <a class="stock__product tetragon-12" href="gallery/gallery__dessert.html?sortByTag=zephyr"
+                            <a class="stock__product tetragon-12" href="gallery/desserts?sortByTag=zephyr"
                                style='max-height: 245px'>
                                 <div class="tetragon__wrapper">
                                     <div class="tetragon__content" style='max-height: 245px'>
@@ -243,7 +243,7 @@
                         </div>
                         <div class="row mb-3 h-100">
 
-                            <a class="stock__product tetragon-12" href="showcase/candybar.blade.php"
+                            <a class="stock__product tetragon-12" href="showcase/candybar"
                                style='max-height: 245px'>
                                 <div class="tetragon__wrapper">
                                     <div class="tetragon__content" style='max-height: 245px'>
@@ -370,7 +370,7 @@
                             Нет. Это не современно, сильно снижает полезный вес торта ( мастику обычно выкидывают, а это
                             ¼
                             веса торта). Вместо этого могу покрыть торт кремом и поставить съедобные пряники. <a
-                                    href="gallery/gallery__cakes.html">См фото работ</a>
+                                    href="gallery/cakes">См фото работ</a>
                         </div>
                     </div>
                 </div>
@@ -388,7 +388,7 @@
                     <div id="faq__collapse-5" class="collapse" aria-labelledby="faq__heading-5"
                          data-parent="#faq__accordion">
                         <div class="card-body">
-                            Да, если это <a href="gallery/gallery__cakes.html">в моём стиле</a>
+                            Да, если это <a href="gallery/cakes">в моём стиле</a>
                         </div>
                     </div>
                 </div>

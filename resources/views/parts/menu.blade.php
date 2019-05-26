@@ -48,7 +48,7 @@
             </ul>
         </div>
 
-        <a class="navbar-brand col-auto mx-auto p-0" href="{{ route('main') }}">
+        <a class="navbar-brand col-auto mx-auto p-0" href="{{ route('choice') }}">
             <i class="icon icon__xl icon__logo_full"></i>
         </a>
         <button class="navbar-toggler position-absolute" style="top:40px" type="button" data-toggle="collapse"

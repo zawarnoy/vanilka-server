@@ -22,7 +22,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col choose-user-role__element">
+                <div class="col choose-user-role__element hidden-mobile">
                     <a href="#" class="btn btn-link d-block text-dark text-left"
                        data-izimodal-open="#decorate-modal-open" data-izimodal-zindex="20000"
                        data-izimodal-preventclose="">Оформление</a>

@@ -11,6 +11,7 @@ Route::get('/gallery/cakes', 'GalleryController@cakes')->name('gallery.cakes');
 Route::get('/gallery/desserts', 'GalleryController@deserts')->name('gallery.deserts');
 
 
+
 Route::get('/showcase/candybar', 'ShowcaseController@candybar')->name('showcase.candybar');
 
 Route::get('/showcase/desserts', 'ShowcaseController@dessert')->name('showcase.deserts');
