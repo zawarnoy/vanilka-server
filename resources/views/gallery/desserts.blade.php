@@ -30,7 +30,7 @@
             App.setAssetsPath("{{ asset('') }}");
 
             var gallery = new Gallery({
-                productLink: 'showcase__dessert.html',
+                productLink: '/showcase/desserts',
                 productLinkTitle: 'К десертам',
                 galleryContainer: $('.vnl__gallery'),
                 assetsPath: '{{ asset('') }}',

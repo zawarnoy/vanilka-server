@@ -3,7 +3,7 @@
   "categoryName":"Капкейки",
   "categoryId": 6,
   "categorySettings": "cupcakesSettings",
-  "galleryPath": "./gallery__desert.html?sortByTag=Капкейки",
+  "galleryPath": "/gallery/desserts?sortByTag=Капкейки",
   "products": [
     {
       "id": 61,
@@ -85,7 +85,7 @@
     "categoryName": "Зефир",
     "categoryId": 3,
     "categorySettings": "zephyrSettings",
-    "galleryPath": "./gallery__desert.html?sortByTag=Зефир",
+    "galleryPath": "/gallery/desserts?sortByTag=Зефир",
     "products":[
       {
         "id": 31,
@@ -153,7 +153,7 @@
     "categoryName": "Кейкпопсы",
     "categoryId": 2,
     "categorySettings": "cakepopsSettings",
-    "galleryPath": "./gallery__desert.html?sortByTag=Кейкпопсы",
+    "galleryPath": "/gallery/desserts?sortByTag=Кейкпопсы",
     "products":[
       {
         "id": 21,
@@ -207,7 +207,7 @@
     "categoryName" : "Мармелад",
     "categoryId" : 4,
     "categorySettings": "marmaladeSettings",
-    "galleryPath" : "./gallery__dessert.html?sortByTag=Мармелад",
+    "galleryPath" : "/gallery/desserts?sortByTag=Мармелад",
     "products" : [
       {
         "id" : 41,
@@ -241,7 +241,7 @@
     "categoryName": "Леденцы",
     "categoryId": 9,
     "categorySettings": "lollipopsSettings",
-    "galleryPath": "./gallery__gingerbread.html?sortByTag=Леденцы",
+    "galleryPath": "/gallery/gingerbread?sortByTag=Леденцы",
     "products":[
       {
         "id": 91,
@@ -283,7 +283,7 @@
     "categoryName":"Трайфлы",
     "categoryId": 5,
     "categorySettings": "trifleySettings",
-    "galleryPath": "./gallery__desert.html?sortByTag=Трайфлы",
+    "galleryPath": "/gallery/desserts?sortByTag=Трайфлы",
     "products": [
       {
         "id": 51,
@@ -321,7 +321,7 @@
     "categoryName" : "Маршмеллоу",
     "categoryId" : 7,
     "categorySettings": "marshmalloySettings",
-    "galleryPath" : "./gallery__dessert.html?sortByTag=Маршмеллоу",
+    "galleryPath" : "/gallery/desserts?sortByTag=Маршмеллоу",
     "products" : [
       {
         "id": 71,

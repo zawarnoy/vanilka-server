@@ -4,7 +4,7 @@
     <div class="vnl__article vnl__container transparent container p-0 mb-0 mt-5">
         <nav aria-label="breadcrumb mb-0 rounded-0 bg-light ">
             <ol class="breadcrumb mb-0 bg-light border-bottom">
-                <li class="breadcrumb-item"><a href="main.html">Главная</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('main') }}">Главная</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Candybar</li>
             </ol>
         </nav>
@@ -87,7 +87,7 @@
         }
 
         function sendData() {
-            $.post('./core/orderController.php',
+            $.post('/order',
                 {
                     personData: JSON.stringify(prsCard.getData()),
                     orderData: JSON.stringify({

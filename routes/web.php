@@ -10,7 +10,7 @@ Route::get('/gallery/cakes', 'GalleryController@cakes')->name('gallery.cakes');
 
 Route::get('/gallery/desserts', 'GalleryController@deserts')->name('gallery.deserts');
 
-
+Route::post('/order', 'OrderController@order')->name('order');
 
 Route::get('/showcase/candybar', 'ShowcaseController@candybar')->name('showcase.candybar');
 

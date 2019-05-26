@@ -13,6 +13,8 @@ class OrderEntityService
 
     protected $boundary;
 
+    protected $result;
+
     public function sendMail(array $requestData)
     {
         $subject = 'Номер заказа: ' . time();
@@ -30,13 +32,20 @@ class OrderEntityService
         $multipart .= "Content-Transfer-Encoding: 8bit\r\n";
         $multipart .= "\r\n";
         $multipart .= $common . " " . $taste;
-        $multipart .= $this->getAttachments($requestData['orderData'][self::IMAGE_COMPONENT], $this->boundary);//$message_part;
+        $multipart .= $this->getAttachments(json_decode($requestData['orderData'])->{self::IMAGE_COMPONENT});
 
-        if (mail("postbox4you@inbox.ru", $subject, $multipart, $mailheaders)) {
-            echo "<center>" . $subject . "</center>";
+        $multipart = wordwrap($multipart);
+
+        if (mail("zawarnoy@gmail.com", $subject, $multipart, $mailheaders)) {
+            $this->result = "<center>" . $subject . "</center>";
         } else {
-            echo "<center>Заказ не сформирован, приносим извинения</center>";
+            $this->result ="<center>Заказ не сформирован, приносим извинения</center>";
         }
+    }
+
+    public function getResult()
+    {
+        return $this->result;
     }
 
     protected function getHandledTasteDataFromRequestData(array $requestData)
@@ -219,9 +228,10 @@ class OrderEntityService
         $result = '';
         if (is_array($componentData)) {
             for ($i = 0; $i < count($componentData); $i++) {
-                if (!is_base64_encoded($componentData[$i])) {
-                    if (is_self_image($componentData[$i])) {
-                        $fb = file_get_contents($basedir . '/' . $componentData[$i], 'r');
+                if (!$this->is_base64_encoded($componentData[$i])) {
+                    if ($this->is_self_image($componentData[$i])) {
+//                        print_r($componentData); die;
+                        $fb = file_get_contents($componentData[$i], 'r');
                     } else {
                         $fb = file_get_contents($componentData[$i], 'r');
                     }

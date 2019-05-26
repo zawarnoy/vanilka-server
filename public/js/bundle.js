@@ -1120,7 +1120,7 @@ function ProductReview(params) {
      * @param {[]} order  - данные по заказу
      */
     function sendOrderData(person, order) {
-        $.post('./core/orderController.php',
+        $.post('/order',
             {
                 personData: JSON.stringify(person),
                 orderData: JSON.stringify(order)
@@ -2541,42 +2541,42 @@ function ComponentRecommendedProducts(params) {
             {
                 thumb: getAssetsPath() + dir + name + 1 + '.jpg',
                 name: 'recommended product',
-                link: 'gallery__dessert.html?goto=Cupcakes2'
+                link: '/gallery/desserts?goto=Cupcakes2'
             },
             {
                 thumb: getAssetsPath() + dir + name + 2 + '.jpg',
                 name: 'recommended product',
-                link: 'gallery__dessert.html?goto=Zephyr3'
+                link: '/gallery/desserts?goto=Zephyr3'
             },
             {
                 thumb: getAssetsPath() + dir + name + 3 + '.jpg',
                 name: 'recommended product',
-                link: 'gallery__dessert.html?goto=type8'
+                link: '/gallery/desserts?goto=type8'
             },
             {
                 thumb: getAssetsPath() + dir + name + 4 + '.jpg',
                 name: 'recommended product',
-                link: 'gallery__dessert.html?goto=type23'
+                link: '/gallery/desserts?goto=type23'
             },
             {
                 thumb: getAssetsPath() + dir + name + 5 + '.jpg',
                 name: 'recommended product',
-                link: 'gallery__dessert.html?goto=cakepops2'
+                link: '/gallery/desserts?goto=cakepops2'
             },
             {
                 thumb: getAssetsPath() + dir + name + 6 + '.jpg',
                 name: 'recommended product',
-                link: 'gallery__dessert.html?goto=Marmalade2'
+                link: '/gallery/desserts?goto=Marmalade2'
             },
             {
                 thumb: getAssetsPath() + dir + name + 7 + '.jpg',
                 name: 'recommended product',
-                link: 'gallery__dessert.html?goto=For_children5'
+                link: '/gallery/desserts?goto=For_children5'
             },
             {
                 thumb: getAssetsPath() + dir + name + 8 + '.jpg',
                 name: 'recommended product',
-                link: 'gallery__dessert.html?goto=Zephyr1'
+                link: '/gallery/desserts?goto=Zephyr1'
             }
         ];
 
