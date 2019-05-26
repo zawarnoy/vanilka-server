@@ -21,6 +21,8 @@
         </a>
     </div>
 
+    <script type="text/javascript" src="{{ asset("js/libs.min.js") }}"></script>
+
     @include('parts.choice_page_footer')
 </div>
 </body>

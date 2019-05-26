@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\PersonItem;
+
 class MainController extends Controller
 {
     public function choice()
@@ -41,6 +43,13 @@ class MainController extends Controller
 
     public function entity()
     {
-        return view('entity');
+        $items = PersonItem::all();
+
+        $params =
+            [
+                'items' => $items,
+            ];
+
+        return view('entity', $params);
     }
 }

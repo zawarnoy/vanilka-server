@@ -1131,7 +1131,6 @@ a:visited {
 
 @media (max-width: 766px) {
     .vnl__footer {
-        margin-top: -40px;
         padding: 0 20px 10px 20px;
     }
 }
@@ -1270,7 +1269,6 @@ a:visited {
     .choose-role__wrapper {
         flex-direction: column;
         height: 1200px;
-        margin-bottom: 60px;
     }
 
     .choose-role__button {

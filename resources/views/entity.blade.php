@@ -22,73 +22,118 @@
 
     <div class="entity-page__tables__wrapper">
         <hr class="tables__divider"/>
-        <!-- Image -->
-        <div class="entity-page__table__wrapper entity-page__not-last-element">
-            <button type="button"
-                    class="btn btn-primary tables__table-button"
-                    data-toggle="modal"
-                    data-target="#exampleModal1"
-            >
-                <img src="./img/Stuffing/type50.jpg" class="table__image-content"/>
-            </button>
-            <!-- Modal which appears on image click -->
-            <div class="modal fade" id="exampleModal1" tabIndex="-1" role="dialog"
-                 aria-labelledby="modalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content modal-component__opened">
-                        <div class="modal-header modal-header__custom">
-                            <img src="./img/Stuffing/type50.jpg"/>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+
+        @for($i = 0; $i < count($items); $i++)
+            <div class="entity-page__table__wrapper entity-page__not-last-element">
+                <button type="button"
+                        class="btn btn-primary tables__table-button"
+                        data-toggle="modal"
+                        data-target="#exampleModal{{ $i }}"
+                >
+                    <img src="{{ \TCG\Voyager\Facades\Voyager::image($items[$i]->image) }}"
+                         class="table__image-content"/>
+                </button>
+                <!-- Modal which appears on image click -->
+                <div class="modal fade" id="exampleModal{{ $i }}" tabIndex="-1" role="dialog"
+                     aria-labelledby="modalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content modal-component__opened">
+                            <div class="modal-header modal-header__custom">
+                                <img src="{{ \TCG\Voyager\Facades\Voyager::image($items[$i]->image) }}"/>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <span class="table-details__name">Торт-чизкейк «Лакшери»</span>
-            <!-- Table -->
-            <div class="tables__table__details-wrapper">
-                <hr class="table-details__divider"/>
-                <span class="table-details__description">
-                        Варианты: «Классический», «Орео», «Лайм», «Шоко»
+                <span class="table-details__name">{{ $items[$i]->title }}</span>
+                <!-- Table -->
+                <div class="tables__table__details-wrapper">
+                    <hr class="table-details__divider"/>
+                    <span class="table-details__description">
+                        {{ $items[$i]->description }}
                 </span>
-                <div class="table__wrapper">
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th scope="col">Ед. измерения</th>
-                            <th scope="col">Цена(бел.руб)</th>
-                            <th scope="col">Кол-во(шт.)</th>
-                            <th scope="col">Отсрочка</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">1кг/шт.</th>
-                            <td>25</td>
-                            <td>1-4</td>
-                            <td>2 недели**</td>
-                        </tr>
-                        <tr>
-                            <th scope="row"></th>
-                            <td>23</td>
-                            <td>5-30</td>
-                            <td>2 недели**</td>
-                        </tr>
-                        <tr>
-                            <th scope="row"></th>
-                            <td>21.4</td>
-                            <td>от 30</td>
-                            <td>2 недели**</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <div class="table__wrapper">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col">Ед. измерения</th>
+                                <th scope="col">Цена(бел.руб)</th>
+                                <th scope="col">Кол-во(шт.)</th>
+                                <th scope="col">Отсрочка</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">{{ $items[$i]->units }}.</th>
+                                <td>{{ $items[$i]->price1 }}</td>
+                                <td>{{ $items[$i]->count1 }}</td>
+                                <td>{{ $items[$i]->delay1 }}</td>
+                            </tr>
+                            @if ($items[$i]->price2)
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td>{{ $items[$i]->price2 }}</td>
+                                    <td>{{ $items[$i]->count2 }}</td>
+                                    <td>{{ $items[$i]->delay2 }}</td>
+                                </tr>
+                            @endif
+                            @if ($items[$i]->price3)
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td>{{ $items[$i]->price3 }}</td>
+                                    <td>{{ $items[$i]->count3 }}</td>
+                                    <td>{{ $items[$i]->delay3 }}</td>
+                                </tr>
+                            @endif
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-        <hr class="tables__divider"/>
+            <hr class="tables__divider"/>
+        @endfor
 
     </div>
+
+    <div class="container">
+        <div class="row">
+            <h2 style="width: 100%; text-align: center">Примечания</h2>
+        </div>
+        <ul>
+            <li>НА ПРОДУКЦИЮ ЕСТЬ ДЕКЛАРАЦИИ СООТВЕТСТВИЯ</li>
+            <li>ПЕРВАЯ ПАРТИЯ ОТ 200 РУБ ПО ПРЕДОПЛАТЕ</li>
+            <li>ВСЯ ПРОДУКЦИЯ СВЕЖАЯ, НЕ МОРОЖЕНИЯ</li>
+            <li>СРОК ГОДНОСТИ ПРЯНИКИ 20 СУТОК, ЗЕФИР 30 СУТОК, ЛЕДЕНЦЫ 6 МЕС., ТОРТЫ/ КАПКЕЙКИ/ ТРАЙФЛЫ 72 ЧАСА</li>
+            <li>ДОСТАВКА: бесплатно при заказа от 150 руб или при заказе 220 в течение раб.недели. Также
+                возможен самовывоз с ул. Шаранговича 19</li>
+        </ul>
+{{--        <div class="row">--}}
+{{--            <h6>НА ПРОДУКЦИЮ ЕСТЬ ДЕКЛАРАЦИИ СООТВЕТСТВИЯ</h6>--}}
+{{--        </div>--}}
+{{--        <div class="row">--}}
+{{--            <h6>*ПЕРВАЯ ПАРТИЯ ОТ 200 РУБ ПО ПРЕДОПЛАТЕ;</h6>--}}
+{{--        </div>--}}
+
+{{--        <div class="row">--}}
+{{--            <h6>**ВСЯ ПРОДУКЦИЯ СВЕЖАЯ, НЕ МОРОЖЕНИЯ;</h6>--}}
+{{--        </div>--}}
+{{--        <div class="row">--}}
+{{--            <h6>***СРОК ГОДНОСТИ: ПРЯНИКИ 20 СУТОК, ЗЕФИР 30 СУТОК, ЛЕДЕНЦЫ 6 МЕС., ТОРТЫ/ КАПКЕЙКИ/ ТРАЙФЛЫ 72 ЧАСА;</h6>--}}
+{{--        </div>--}}
+{{--        <div class="row">--}}
+{{--            <h6>***ДОСТАВКА: бесплатно при заказа от 150 руб или при заказе 220 в течение раб.недели. Также--}}
+{{--                возможен самовывоз с ул. Шаранговича 19.</h6>--}}
+{{--        </div>--}}
+        <div class="row">
+            <h4 style="width: 100%; text-align: center"><a href="{{ route('main') }}">ФОТО ПРОДУКЦИИ</a></h4>
+        </div>
+
+    </div>
+
+</div>
+
 </div>
 
 <script type="text/javascript" src="{{ asset('js/libs.min.js') }}"></script>
