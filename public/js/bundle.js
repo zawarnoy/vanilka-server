@@ -340,7 +340,7 @@ function Gallery(params) {
         gridSize = 4,
         self = this,
         uniqTags = new Tags(),
-        productLink = params.productLink || "showcase__stuffing.html",
+        productLink = params.productLink || "/showcase/stuffing",
         productLinkTitle = params.productLinkTitle || "В начинки",
         src = params.src,
         imageArray = [],
@@ -410,7 +410,7 @@ function GalleryItem(params) {
     }
 
     var idProduct = params.id,
-        productLink = params.productLink || "showcase__stuffing.html",
+        productLink = params.productLink || "/showcase/stuffing",
         productLinkTitle = params.productLinkTitle || "В начинки",
         directTransitionTo = params.directTransitionTo || null,
         container = params.container,
