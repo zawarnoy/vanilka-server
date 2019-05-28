@@ -22,14 +22,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col choose-user-role__element hidden-mobile">
-                    <a href="#" class="btn btn-link d-block text-dark text-left"
-                       data-izimodal-open="#decorate-modal-open" data-izimodal-zindex="20000"
-                       data-izimodal-preventclose="">Оформление</a>
-                    <a href="#" class="btn btn-link d-block text-dark text-left"
-                       data-izimodal-open="#faq-modal-open" data-izimodal-zindex="20000"
-                       data-izimodal-preventclose="">Вопросы</a>
-                </div>
                 <div class="col choose-user-role__element choose-user-role__footer__about-us">
                     <h4>#Мы в социальных сетях</h4>
                     <div class="footer__contact-us">

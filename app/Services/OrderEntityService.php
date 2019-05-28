@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Mail;
+
 class OrderEntityService
 {
     const TASTE_COMPONENT = 'ComponentTaste';
@@ -36,7 +38,7 @@ class OrderEntityService
 
         $multipart = wordwrap($multipart);
 
-        if (mail("zawarnoy@gmail.com", $subject, $multipart, $mailheaders)) {
+        if (mail("vanilka.by@yandex.by", $subject, $multipart, $mailheaders)) {
             $this->result = "<center>" . $subject . "</center>";
         } else {
             $this->result ="<center>Заказ не сформирован, приносим извинения</center>";

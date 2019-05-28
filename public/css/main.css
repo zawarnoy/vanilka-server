@@ -1151,12 +1151,14 @@ a:visited {
 .vnl__footer .footer__contact-us {
     display: flex;
     flex-direction: row;
+    padding-top: 10px;
 }
 
 .vnl__footer .footer__org-info {
     margin: 0 auto;
     padding-top: 15px;
     color: #000;
+
 }
 
 .accordion .btn-link {

@@ -472,8 +472,9 @@ function GalleryItem(params) {
                             .append(
                                 $('<img/>', {
                                     class: 'product__thumb d-block w-100 h-100',
-                                    src: getAssetsPath() + 'img/pre-loader.gif',
-                                    'data-src': App.isFullLink(thumb) ? thumb : getAssetsPath() + thumb,
+                                    src: App.isFullLink(thumb) ? thumb : getAssetsPath() + thumb,
+                                    // src: getAssetsPath() + 'img/pre-loader.gif',
+                                    // 'data-src': App.isFullLink(thumb) ? thumb : getAssetsPath() + thumb,
                                     alt: name,
                                     error: function () {
                                         this.classList.add('invalid-image-src')
