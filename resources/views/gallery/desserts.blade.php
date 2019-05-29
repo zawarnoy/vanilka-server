@@ -137,7 +137,6 @@
             });
 
             var params = common.getURLParams();
-            console.log(params);
             if (common.isSortActionRequired(params))
                 common.sortByTag(params.sortByTag);
             if (common.isSelectTargetImageRequired(params))

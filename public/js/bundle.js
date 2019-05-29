@@ -10,8 +10,6 @@ function getAssetsPath() {
 
 App.isFullLink = function (link) {
     let regExp = new RegExp('^(http|https)://');
-    console.log(link);
-    console.log(regExp.test(link) ? "eto ssilka" : "ne ssilka");
     return regExp.test(link);
 };
 

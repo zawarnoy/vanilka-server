@@ -88,7 +88,6 @@
             });
 
             var urlParams = common.getURLParams();
-            console.log(urlParams);
             if (common.isSortActionRequired(urlParams))
                 common.sortByTag(urlParams.sortByTag);
             if (common.isSelectTargetImageRequired(urlParams))

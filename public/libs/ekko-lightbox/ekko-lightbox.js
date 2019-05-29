@@ -198,8 +198,14 @@ var Lightbox = (function ($) {
 
 				if (this._galleryIndex === 0) {
 					if (this._config.wrapping) this._galleryIndex = this._$galleryItems.length - 1;else return;
-				} else //circular
+				} else {
 					this._galleryIndex--;
+				}
+
+				if ($(this._$galleryItems[this._galleryIndex]).hasClass('sort__hide')) {
+					this.navigateLeft();
+					return;
+				}
 
 				this._config.onNavigate.call(this, 'left', this._galleryIndex);
 				return this.navigateTo(this._galleryIndex);
@@ -214,8 +220,14 @@ var Lightbox = (function ($) {
 
 				if (this._galleryIndex === this._$galleryItems.length - 1) {
 					if (this._config.wrapping) this._galleryIndex = 0;else return;
-				} else //circular
+				} else {
 					this._galleryIndex++;
+				}
+
+				if ($(this._$galleryItems[this._galleryIndex]).hasClass('sort__hide')) {
+					this.navigateRight();
+					return;
+				}
 
 				this._config.onNavigate.call(this, 'right', this._galleryIndex);
 				return this.navigateTo(this._galleryIndex);
