@@ -353,9 +353,9 @@ function Gallery(params) {
             for (var i = 1; i < (category.length + 1); i++) {
                 result.push({
                     index: i,
-                    imgSrc: getAssetsPath() + category.folder + '/' + category.prefix + i + '.jpg',
+                    imgSrc: category.images[i - 1],
                     href: ('directTransitionTo' in category ? category.directTransitionTo : null),
-                    name: category.tag,
+                    name: category.name ? category.name : category.tag,
                     tags: category.tagList
                 })
             }

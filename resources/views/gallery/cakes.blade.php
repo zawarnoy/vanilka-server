@@ -30,62 +30,13 @@
             App.setAssetsPath("{{ asset('') }}");
 
             var gallery = new Gallery({
-                productLink: '/showcase/stuffing',
-                productLinkTitle: 'Заказать',
-                assetsPath: '{{ asset('') }}',
-                galleryContainer: $('.vnl__gallery'),
-                src: [
-                    {
-                        tagList: ["Для мальчиков"],
-                        folder: 'img/Cakes/Cakes_for_boy',
-                        prefix: 'For_boys',
-                        length: 38
-                    },
-                    {
-                        tagList: ["Для мужчин"],
-                        folder: 'img/Cakes/Men',
-                        prefix: 'Men',
-                        length: 36
-                    },
-                    {
-                        tagList: ["Чизкейки"],
-                        folder: 'img/Cakes/Cheesecakes',
-                        prefix: 'Cheesecakes',
-                        length: 18
-                    },
-                    {
-                        tag: ["Корпоративные"],
-                        folder: 'img/Cakes/Corporate',
-                        prefix: 'Corporate',
-                        length: 13
-                    },
-                    {
-                        tagList: ["Для девочек"],
-                        folder: 'img/Cakes/Cakes_for_girls',
-                        prefix: 'Cakes_for_girls',
-                        length: 34
-                    },
-                    {
-                        tagList: ["Для женщин"],
-                        folder: 'img/Cakes/Women',
-                        prefix: 'Women',
-                        length: 21
-                    },
-                    {
-                        tagList: ["Классические"],
-                        folder: 'img/Cakes/Classic_decor',
-                        prefix: 'Classic_decor',
-                        length: 35
-                    },
-                    {
-                        tagList: ["Свадебные"],
-                        folder: 'img/Cakes/Wedding_buns',
-                        prefix: 'Wedding_buns',
-                        length: 13
-                    }
-
-                ]
-            });
+                    productLink: '/showcase/stuffing',
+                    productLinkTitle: 'Заказать',
+                    assetsPath: '{{ asset('') }}',
+                    galleryContainer: $('.vnl__gallery'),
+                    src: JSON.parse('{!! $categories !!}')
+                }
+            );
 
             var urlParams = common.getURLParams();
             if (common.isSortActionRequired(urlParams))
