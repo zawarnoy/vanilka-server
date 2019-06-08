@@ -18,8 +18,6 @@ class GalleryController extends Controller
     public function cakes()
     {
         $categories = $this->handleService->transformToJsonForFrontend(Category::where('type', 'cakes')->get());
-//        echo '<pre>';
-//        print_r($categories); die;
 
         $params = [
             'categories' => $categories,
@@ -30,8 +28,12 @@ class GalleryController extends Controller
 
     public function deserts()
     {
-        $categories = Category::where('type', 'desserts')->get();
+        $categories = $this->handleService->transformToJsonForFrontend(Category::where('type', 'desserts')->get());
 
-        return view('gallery.desserts');
+        $params = [
+            'categories' => $categories,
+        ];
+
+        return view('gallery.desserts', $params);
     }
 }

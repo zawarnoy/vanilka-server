@@ -17,3 +17,5 @@ Route::get('/showcase/candybar', 'ShowcaseController@candybar')->name('showcase.
 Route::get('/showcase/desserts', 'ShowcaseController@dessert')->name('showcase.deserts');
 
 Route::get('/showcase/stuffing', 'ShowcaseController@stuffing')->name('showcase.stuffing');
+
+Route::get('/page/{slug}', 'PagesController@page')->name('page.show');

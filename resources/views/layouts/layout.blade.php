@@ -3,7 +3,9 @@
 @include('parts.header')
 <body>
 @include('parts.menu')
-@yield('content')
+<div class="content-wrapper">
+    @yield('content')
+</div>
 @include('parts.footer')
 </body>
 </html>

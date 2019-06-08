@@ -29,13 +29,15 @@
         $(document).ready(function () {
             App.setAssetsPath("{{ asset('') }}");
 
+
             var gallery = new Gallery({
-                productLink: '/showcase/desserts',
-                productLinkTitle: 'К десертам',
-                galleryContainer: $('.vnl__gallery'),
-                assetsPath: '{{ asset('') }}',
-                src: '{!! $categories !!}'
-            });
+                    productLink: '/showcase/desserts',
+                    productLinkTitle: 'К Десертам',
+                    assetsPath: '{{ asset('') }}',
+                    galleryContainer: $('.vnl__gallery'),
+                    src: JSON.parse('{!! $categories !!}')
+                }
+            );
 
             var params = common.getURLParams();
             if (common.isSortActionRequired(params))
