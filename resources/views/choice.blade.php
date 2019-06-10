@@ -3,6 +3,9 @@
 
 @include('parts.header')
 
+<link type="text/css" rel="stylesheet" href="{{asset("css/choice_page.css")}}">
+
+
 <body>
 <div class="choose-role-page__wrapper">
 

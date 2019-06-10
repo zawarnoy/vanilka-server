@@ -1,0 +1,23 @@
+@media (max-width: 768px) {
+    .footer__contact-us {
+        flex-flow: row wrap;
+    }
+
+    .line-break {
+        padding-top: 10px;
+        width: 100%;
+    }
+
+    .address-block {
+        width: inherit;
+        max-width: inherit;
+    }
+
+    .btn-info {
+
+    }
+}
+
+.icon-link {
+    visibility: hidden;
+}

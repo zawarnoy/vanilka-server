@@ -276,7 +276,7 @@ a:visited {
     border: none;
     box-shadow: none;
     min-width: 44px;
-    margin: 0 8px;
+    margin: 0 2px;
 }
 
 .btn-info:hover {
@@ -1152,6 +1152,17 @@ a:visited {
     display: flex;
     flex-direction: row;
     padding-top: 10px;
+}
+
+@media (max-width : 992px){
+    /*.vnl__footer .footer__contact-us {*/
+    /*    flex-flow: row wrap;*/
+    /*}*/
+
+    /*.line-break {*/
+    /*    padding-top: 10px;*/
+    /*    width: 100%;*/
+    /*}*/
 }
 
 .vnl__footer .footer__org-info {

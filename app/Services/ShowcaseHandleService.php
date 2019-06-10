@@ -12,4 +12,8 @@ class ShowcaseHandleService
         return $categories;
     }
 
+    private function handleImagesInShowcase()
+    {
+
+    }
 }

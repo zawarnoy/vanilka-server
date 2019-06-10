@@ -6,7 +6,7 @@
 
                 @if (Route::currentRouteName() == 'choice')
                     <li class="nav-item col-auto p-0">
-                        <a href="{{route('main')}}" class="btn btn-primary p-0 w-100" data-toggle="tooltip"
+                        <a href="{{route('main')}}" class="btn btn-primary p-0 w-100 icon-link" data-toggle="tooltip"
                            data-placement="bottom" title="Главная страница">
                             <i class="fas fa-home fa-2x"></i>
                         </a>
@@ -96,7 +96,7 @@
                 </li>
 
                 <li class="nav-item col-lg-auto p-0">
-                    <a href="#faq-modal-open" class="btn btn-primary p-0 w-100 text-left text-lg-center"
+                    <a href="#faq-modal-open" class="btn btn-primary p-0 w-100 text-left text-lg-center icon-link"
                        data-toggle="tooltip" data-placement="bottom" title="Вопросы/Ответы">
                         <i class="d-none d-lg-inline-block fas fa-question-circle fa-2x"></i>
                         <h3 class="d-lg-none">Вопросы и ответы</h3>

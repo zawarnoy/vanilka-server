@@ -11,7 +11,7 @@
                                         <div class="col-auto d-flex align-items-center">
                                             <i class="fas fa-map-marked-alt"></i>
                                         </div>
-                                        <div class="col text-left">
+                                        <div class="col text-left address-block">
                                             {{ setting('footer.about_us_address') }}
                                             <br>
                                             {{ setting('footer.about_us_address_index') }}

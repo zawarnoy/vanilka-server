@@ -990,6 +990,7 @@ function ProductReview(params) {
             width: 1200,
             onClosed: function () {
                 $(this).iziModal('destroy');
+
                 $body.remove();
             }
         });
