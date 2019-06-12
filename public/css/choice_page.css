@@ -24,8 +24,10 @@
     }
 }
 
-@media (mex-width: 370px) {
-    
+@media (min-width: 405px) {
+    .info-line-break {
+        display: none;
+    }
 }
 
 .icon-link {

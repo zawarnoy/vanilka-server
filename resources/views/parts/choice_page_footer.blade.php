@@ -12,7 +12,9 @@
                                             <i class="fas fa-map-marked-alt"></i>
                                         </div>
                                         <div class="col text-left address-block">
-                                            {{ setting('footer.about_us_address') }}
+                                            г.Минск
+                                            <br class="info-line-break">
+                                            ул.Шаранговича 19
                                             <br>
                                             {{ setting('footer.about_us_address_index') }}
                                         </div>
