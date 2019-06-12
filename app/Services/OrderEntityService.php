@@ -38,7 +38,7 @@ class OrderEntityService
 
         $multipart = wordwrap($multipart);
 
-        if (mail("vanilka.by@yandex.by", $subject, $multipart, $mailheaders)) {
+        if (mail("zawarnoy@gmail.com", $subject, $multipart, $mailheaders)) {
             $this->result = "<center>" . $subject . "</center>";
         } else {
             $this->result ="<center>Заказ не сформирован, приносим извинения</center>";

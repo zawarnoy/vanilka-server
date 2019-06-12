@@ -128,6 +128,9 @@ function Category(params) {
 
         });
         //console.log( uniqTags.getTagList() );
+
+        // uniqTags.fixUnuniq();
+
         navbar = new NavbarBlock({
             container: $('.navbar__secondary'),
             source: uniqTags.getTagList(),
@@ -1881,6 +1884,17 @@ function Tags() {
         })
     };
 
+    this.fixUnuniq = function () {
+        let obj = {};
+
+        console.log(tagsList);
+
+        for (let i = 0; i < tagsList.length; i++) {
+            obj[tagsList[i]] = true;
+        }
+
+        tagsList = Object.keys(obj);
+    };
 
     /**
      * Возвратить список уникальных тегов

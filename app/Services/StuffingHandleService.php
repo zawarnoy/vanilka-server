@@ -41,7 +41,7 @@ class StuffingHandleService
             return [];
         }
 
-        return explode(',', trim($tagsString));
+        return array_map('trim',explode(',', trim($tagsString)));
     }
 
     private function handleGalleryItems($galleryItems)
