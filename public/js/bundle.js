@@ -117,6 +117,7 @@ function Category(params) {
                     id: src.id,
                     href: src.href,
                     name: src.name,
+                    price: src.price,
                     description: src.description,
                     thumb: App.isFullLink(src.thumb) ? src.thumb : getAssetsPath() + src.thumb,
                     tagList: src.tagList,
@@ -800,6 +801,7 @@ function Product(params) {
         overviewImages = params.overviewImages,
         settingFile = params.settingFile,
         hidden = false,
+        price = params.price,
         body,
         self = this,
         onClickFn = function () {
@@ -808,6 +810,7 @@ function Product(params) {
                 id: idProduct,
                 thumb: thumb,
                 name: name,
+                price: price,
                 description: description,
                 imageList: overviewImages,
                 settingFile: settingFile
@@ -949,6 +952,7 @@ function ProductReview(params) {
         thumbnailsCaption = '',
         note = '',
         minimumOrder = 1,
+        price = params.price,
         cost = 1,
         min = 1,
         max = 7,
@@ -990,7 +994,6 @@ function ProductReview(params) {
             width: 1200,
             onClosed: function () {
                 $(this).iziModal('destroy');
-
                 $body.remove();
             }
         });
@@ -1010,6 +1013,7 @@ function ProductReview(params) {
             name: name,
             description: description,
             minimumOrder: minimumOrder,
+            price: price,
             cost: cost,
             min: min,
             max: max,
@@ -1450,6 +1454,9 @@ function ReviewGallery(params) {
                 $('<h4/>', {text: thumbnailsCaption, class: 'd-block w-100'})
             );
         for (var i = 0; i < 4; i++) {
+            if (i >= imageList.length) {
+                continue;
+            }
             $a.append(
                 image(imageList[i].thumb, 'col-3 p-1')
             )
@@ -1505,6 +1512,7 @@ function ReviewInfo(params) {
         note = params.note,
         step = params.step,
         weight = params.weight,
+        price = params.price,
         min = params.min,
         max = params.max,
         ration = params.ration,
@@ -1571,7 +1579,7 @@ function ReviewInfo(params) {
                 featureRow('name', 'product-review__name', name, true),
                 featureRow('description', 'product-review__description !product-review__min-height pb-5', description),
                 featureRow('minOrder', 'product-review__minimum-order ', 'Минимальный заказ: ' + minimumOrder),
-                featureRow('minCost', 'product-review__cost', 'Цена за 1 ' + (minimumOrder.split(' ')[1] ? minimumOrder.split(' ')[1] : ' кусок') + ' от ' + cost + ' BYN'),
+                featureRow('minCost', 'product-review__cost', 'Цена ' + price)
             );
 
         $(container).empty();
@@ -1827,6 +1835,7 @@ function Showcase(params) {
             list = JSON.parse(list);
 
         list.forEach(function (src, i) {
+            // console.log(src.categoryName);
             uniqTags.add(src.categoryName);
             categories.push(
                 new Category({

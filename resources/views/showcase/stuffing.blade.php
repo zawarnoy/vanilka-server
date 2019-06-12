@@ -86,7 +86,11 @@
 
         $(function () {
             $.get("{{asset("src/stuffing.json")}}", function (data) {
-                showcase.addRange(data);
+                showcase.addRange({!! $categories !!});
+                console.log('file:');
+                console.log(data);
+                console.log('db');
+                console.log({!! $categories !!});
                 $('img.product__thumb').lazyLoadXT();
             });
 

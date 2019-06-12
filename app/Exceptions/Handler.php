@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\Page;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -29,7 +31,7 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param \Exception $exception
      * @return void
      */
     public function report(Exception $exception)
@@ -40,12 +42,26 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param \Illuminate\Http\Request $request
+     * @param \Exception $exception
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $exception)
     {
+//        if ($exception instanceof NotFoundHttpException) {
+//            $path = parse_url(request()->url(), PHP_URL_PATH);
+//            $pathFragments = explode('/', $path);
+//            $end = end($pathFragments);
+//            echo $end;
+//
+//            $page = Page::where('slug', $end)->first();
+//
+//            if ($page) {
+//                redirect()->route('page.show', ['slug' => $page->slug]);
+//                return;
+//            }
+//        }
+
         return parent::render($request, $exception);
     }
 }

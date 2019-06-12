@@ -18,6 +18,16 @@
     }
 }
 
+@media (max-width: 640px) {
+    .footer__contact-us {
+        justify-content: space-evenly;
+    }
+}
+
+@media (mex-width: 370px) {
+    
+}
+
 .icon-link {
     visibility: hidden;
 }
