@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Mail;
 
 class OrderEntityService
 {
@@ -38,7 +37,7 @@ class OrderEntityService
 
         $multipart = wordwrap($multipart);
 
-        if (mail("zawarnoy@gmail.com", $subject, $multipart, $mailheaders)) {
+        if (mail(setting('site.order_email'), $subject, $multipart, $mailheaders)) {
             $this->result = "<center>" . $subject . "</center>";
         } else {
             $this->result ="<center>Заказ не сформирован, приносим извинения</center>";
@@ -145,7 +144,7 @@ class OrderEntityService
 
                 $result .= ' - Вкус: ' . $taste;
                 $result .= ', вес: ' . $componentData[$i]->weight;
-                $result .= ', значение слайдера: ' . $componentData[$i]->value;
+//                $result .= ', значение слайдера: ' . $componentData[$i]->value;
                 $result .= ', количество порций: ' . $componentData[$i]->rationCount;
                 $result .= '<hr/>';
             }

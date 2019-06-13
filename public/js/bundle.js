@@ -724,10 +724,10 @@ function PersonCardModal(params) {
             subtitle: 'Расскажите о себе',
             icon: '.icon .icon__logo',
             zindex: 2000,
-            /*onClosed: function(){
-        $(this).iziModal('destroy');
-        $body.remove();
-      }*/
+            onClosed: function () {
+                $(this).iziModal('destroy');
+                $body.remove();
+            }
         });
     }
 
@@ -1652,7 +1652,7 @@ function ReviewInfo(params) {
         return new ComponentTaste({
             container: body.find(".option__choose-taste"),
             productId: id,
-            name : name,
+            name: name,
             tasteList: tasteList,
             sliderOpt: sliderOpt
         });
@@ -2652,7 +2652,7 @@ function ComponentRecommendedProducts(params) {
             );
         for (var i = 0; i < 4; i++) {
             $body.append(
-                $('<div/>', {class: 'col-3 d-none d-sm-block p-1'})
+                $('<div/>', {class: 'col-3 d-sm-block p-1'})
                     .append(
                         image(recommendedProducts[i].thumb, '', recommendedProducts[i].link)
                     )
@@ -2872,7 +2872,7 @@ function ComponentTaste(params) {
             tastes.push(
                 {
                     taste: taste,
-                    name : name,
+                    name: name,
                     weight: getCalculatedCakeWeight(range),
                     value: getRangeValue(range),
                     rationCount: getCalculatedRationCount(range),
