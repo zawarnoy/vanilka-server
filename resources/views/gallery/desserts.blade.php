@@ -6,8 +6,7 @@
         <nav aria-label="breadcrumb mb-0 rounded-0 bg-light ">
             <ol class="breadcrumb mb-0 bg-light border-bottom">
                 <li class="breadcrumb-item"><a href="{{ route('main') }}">Главная</a></li>
-                <li class="breadcrumb-item"><a href="#">Галлерея</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Десерты</li>
+                <li class="breadcrumb-item active"><a href="#">Галерея Десертов</a></li>
             </ol>
         </nav>
     </div>

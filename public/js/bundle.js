@@ -1652,6 +1652,7 @@ function ReviewInfo(params) {
         return new ComponentTaste({
             container: body.find(".option__choose-taste"),
             productId: id,
+            name : name,
             tasteList: tasteList,
             sliderOpt: sliderOpt
         });
@@ -2773,6 +2774,7 @@ function ComponentTaste(params) {
         mode = params.mode,
         sliderOpt = params.sliderOpt,
         $body,
+        name = params.name,
         $component = '';
 
     function createTasteItem(value, name, isSelected) {
@@ -2870,6 +2872,7 @@ function ComponentTaste(params) {
             tastes.push(
                 {
                     taste: taste,
+                    name : name,
                     weight: getCalculatedCakeWeight(range),
                     value: getRangeValue(range),
                     rationCount: getCalculatedRationCount(range),

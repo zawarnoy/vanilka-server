@@ -140,7 +140,10 @@ class OrderEntityService
 
         if (is_array($componentData)) {
             for ($i = 0; $i < count($componentData); $i++) {
-                $result .= ' - Вкус: ' . $componentData[$i]->taste;
+
+                $taste = trim($componentData[$i]->taste) == 'единственный' ? $componentData[$i]->name : $componentData[$i]->taste;
+
+                $result .= ' - Вкус: ' . $taste;
                 $result .= ', вес: ' . $componentData[$i]->weight;
                 $result .= ', значение слайдера: ' . $componentData[$i]->value;
                 $result .= ', количество порций: ' . $componentData[$i]->rationCount;
