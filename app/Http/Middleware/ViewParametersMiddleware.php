@@ -12,7 +12,8 @@ class ViewParametersMiddleware
     public function handle(Request $request, Closure $next, $guard = null)
     {
         $modalComponents =
-            ModalComponent::where('type', '=', $request->route()->getName() == 'main' ? 'individual' : 'entity')->get();
+            ModalComponent::where('type', '=', $request->route()->getName() != 'entity' ? 'individual' : 'entity')->get();
+
 
 //        print_r($modalComponents); die;
 

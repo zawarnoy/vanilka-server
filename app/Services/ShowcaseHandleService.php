@@ -37,7 +37,6 @@ class ShowcaseHandleService
             unset($category->description);
             unset($category->id);
         }
-
         return $categories->toJson();
     }
 

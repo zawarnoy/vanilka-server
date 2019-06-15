@@ -20,10 +20,11 @@ class OrderEntityService
     {
         $subject = 'Номер заказа: ' . time();
         $this->boundary = "--" . md5(uniqid(time()));
+        $emailForReceive = setting('site.order_email');
         $mailheaders = "MIME-Version: 1.0;\r\n";
         $mailheaders .= "Content-Type: multipart/related; boundary=\"$this->boundary\"\r\n";
         $mailheaders .= "From: <orderbot@vanilka.by>\r\n";
-        $mailheaders .= "To: vanilka.by@yandex.by\r\n";
+        $mailheaders .= "To: $emailForReceive\r\n";
 
         $common = $this->getHandledPersonDataFromRequestData($requestData);
         $taste = $this->getHandledTasteDataFromRequestData($requestData);
@@ -37,7 +38,7 @@ class OrderEntityService
 
         $multipart = wordwrap($multipart);
 
-        if (mail(setting('site.order_email'), $subject, $multipart, $mailheaders)) {
+        if (mail($emailForReceive, $subject, $multipart, $mailheaders)) {
             $this->result = "<center>" . $subject . "</center>";
         } else {
             $this->result ="<center>Заказ не сформирован, приносим извинения</center>";
@@ -135,14 +136,37 @@ class OrderEntityService
      */
     protected function prepareComponentTasteResponse($componentData)
     {
-        $result = 'Вкусы: <br/>';
+        $result = ' - Название: ' . $componentData[0]->name;
+        $result .= '<hr/>';
+
+        if (!empty($componentData[0]->orderType) && $componentData[0]->orderType === 'stuffing') {
+
+            $tier = 1;
+
+            switch (true) {
+                case $componentData[0]->weight < 4500:
+                    $tier = 1;
+                    break;
+                case $componentData[0]->weight < 7000:
+                    $tier = 2;
+                    break;
+                case $componentData[0]->weight < 9000:
+                    $tier = 3;
+                    break;
+                case $componentData[0]->weight >= 9000:
+                    $tier = 4;
+            }
+
+            $result .= ' - Количество ярусов: ' . $tier;
+            $result .= '<hr/>';
+        }
+
+
+        $result .= 'Вкусы: <br/>';
 
         if (is_array($componentData)) {
             for ($i = 0; $i < count($componentData); $i++) {
-
-                $taste = trim($componentData[$i]->taste) == 'единственный' ? $componentData[$i]->name : $componentData[$i]->taste;
-
-                $result .= ' - Вкус: ' . $taste;
+                $result .= ' - Вкус: ' .  $componentData[$i]->taste;
                 $result .= ', вес: ' . $componentData[$i]->weight;
 //                $result .= ', значение слайдера: ' . $componentData[$i]->value;
                 $result .= ', количество порций: ' . $componentData[$i]->rationCount;
