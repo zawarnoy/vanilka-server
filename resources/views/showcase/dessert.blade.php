@@ -359,6 +359,7 @@
             let showcase = new Showcase({
                 showcaseContainer: $('.vnl__showcase'),
                 gridSize: 3,
+                orderType: 'desserts',
             });
 
             $(function () {

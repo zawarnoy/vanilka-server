@@ -81,7 +81,8 @@
 
         var showcase = new Showcase({
             showcaseContainer: $('.vnl__showcase'),
-            gridSize: 3
+            gridSize: 3,
+            orderType: 'stuffing'
         });
 
         $(function () {

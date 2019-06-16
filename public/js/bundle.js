@@ -39,6 +39,7 @@ function Category(params) {
         settingFile = params.settingFile,                     //Данные для настройки карты продукта
         uniqTags = new Tags(),                             //Список уникальных тегов
         products = [],
+        orderType = params.orderType,
         navbarConstructor, childContainer, body, navbar,
         hidden = false;
     self = this;
@@ -116,6 +117,7 @@ function Category(params) {
                     gridSize: list.length < gridSize ? null : gridSize,
                     id: src.id,
                     href: src.href,
+                    orderType: orderType,
                     name: src.name,
                     price: src.price,
                     description: src.description,
@@ -803,6 +805,7 @@ function Product(params) {
         description = params.description || "",
         overviewImages = params.overviewImages,
         settingFile = params.settingFile,
+        orderType = params.orderType,
         hidden = false,
         price = params.price,
         body,
@@ -813,6 +816,7 @@ function Product(params) {
                 id: idProduct,
                 thumb: thumb,
                 name: name,
+                orderType: orderType,
                 price: price,
                 description: description,
                 imageList: overviewImages,
@@ -959,6 +963,7 @@ function ProductReview(params) {
         cost = 1,
         min = 1,
         max = 7,
+        orderType = params.orderType,
         step = 1,
         weight = 0.50,
         ration = 3,
@@ -1019,6 +1024,7 @@ function ProductReview(params) {
             price: price,
             cost: cost,
             min: min,
+            orderType: orderType,
             max: max,
             step: step,
             weight: weight,
@@ -1509,6 +1515,7 @@ function ReviewInfo(params) {
     let container = params.container,
         id = params.id,
         name = params.name,
+        orderType = params.orderType,
         description = params.description,
         minimumOrder = params.minimumOrder,
         cost = params.cost,
@@ -1653,6 +1660,7 @@ function ReviewInfo(params) {
             container: body.find(".option__choose-taste"),
             productId: id,
             name: name,
+            orderType: orderType,
             tasteList: tasteList,
             sliderOpt: sliderOpt
         });
@@ -1831,6 +1839,7 @@ function Showcase(params) {
         uniqTags = new Tags(),
         navbar,
         body,
+        orderType = params.orderType,
         categories = [];
 
 
@@ -1847,6 +1856,7 @@ function Showcase(params) {
                     gridSize: (list.length < gridSize && src.products.length === 1) ? null : gridSize,
                     categoryId: src.categoryId,
                     categoryName: src.categoryName,
+                    orderType: orderType,
                     products: ("products" in src) ? src.products : null,
                     galleryPath: src.galleryPath,
                     settingFile: src.categorySettings
@@ -2774,6 +2784,7 @@ function ComponentTaste(params) {
         mode = params.mode,
         sliderOpt = params.sliderOpt,
         $body,
+        orderType = params.orderType,
         name = params.name,
         $component = '';
 
@@ -2875,6 +2886,7 @@ function ComponentTaste(params) {
                     name: name,
                     weight: getCalculatedCakeWeight(range),
                     value: getRangeValue(range),
+                    orderType: orderType,
                     rationCount: getCalculatedRationCount(range),
                 }
             );
