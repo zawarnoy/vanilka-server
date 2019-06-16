@@ -18,7 +18,8 @@
                         <div class="vnl__banner-caption carousel-caption d-none d-md-block d-flex align-items-center justify-content-center">
                             <div class="vnl__banner-content">
                                 <h3>{{ $post['title'] }}</h3>
-                                <a href="{{ $post['linkHref'] }}" class="btn btn-outline-primary mt-3">{{ $post['linkText'] }}</a>
+                                <a href="{{ $post['linkHref'] }}"
+                                   class="btn btn-outline-primary mt-3">{{ $post['linkText'] }}</a>
                             </div>
                         </div>
                     </div>
@@ -37,108 +38,74 @@
         </div>
     </div>
 
-    <div class="vnl__article container mt-5 pl-2" style="padding-right: 20px!important">
-        <h2 class="w-100 text-center my-3 pt-2">Популярные товары</h2>
-        <div class="vnl__popular-goods row p-2">
-            <div class="popular-goods__most-viewed col-md-6 pt-3 pr-0" style="padding-left: 14px!important;">
+    @if (!empty($popularProducts) && count($popularProducts) > 4)
 
-                <a class="stock__product tetragon-12" href="gallery/cakes?goto=Women13">
-                    <div class="tetragon__wrapper">
-                        <div class="tetragon__content">
-                            <img class="product__thumb d-block w-100 mh-100"
-                                 src="../../public/img/pre-loader.gif"
-                                 data-src="img/Popular/type1.jpg"
-                                 alt="Торт для любимой мамочки"
-                                 data-src-small="small-image.jpg"
-                                 onerror="this.classList.add('invalid-image-src')">
-                            <div class="product__description">
-                                <h2>Торт "Любимой мамочке"</h2>
+        <div class="vnl__article container mt-5 pl-2" style="padding-right: 20px!important">
+            <h2 class="w-100 text-center my-3 pt-2">Популярные товары</h2>
+            <div class="vnl__popular-goods row p-2">
+                <div class="popular-goods__most-viewed col-md-6 pt-3 pr-0" style="padding-left: 14px!important;">
+                    <a class="stock__product tetragon-12 popular-product-link" href="#" data-name="{{ $popularProducts[0]->title }}">
+                        <div class="tetragon__wrapper">
+                            <div class="tetragon__content">
+                                <img class="product__thumb d-block w-100 mh-100"
+                                     src="../../public/img/pre-loader.gif"
+                                     data-src="{{ Voyager::image($popularProducts[0]->image) }}"
+                                     alt="{{ $popularProducts[0]->title }}"
+                                     data-src-small="small-image.jpg"
+                                     onerror="this.classList.add('invalid-image-src')">
+                                <div class="product__description">
+                                    <h2>{{ $popularProducts[0]->title }}</h2>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
 
-            </div>
-            <div class="popular-goods__less-viewed col-md-6 d-flex flex-column">
-                <div class="row h-100">
-                    <div class="col-sm-6 pt-3 pr-0">
-
-                        <a class="stock__product tetragon-12" href="gallery/desserts?goto=Trifley2">
-                            <div class="tetragon__wrapper">
-                                <div class="tetragon__content">
-                                    <img class="product__thumb d-block w-100 h-100"
-                                         src="../../public/img/pre-loader.gif"
-                                         data-src="img/Popular/type4.jpg"
-                                         alt="Трайфлы 'Красный бархат'"
-                                         onerror="this.classList.add('invalid-image-src')">
-                                    <div class="product__description">
-                                        <h2>Трайфлы "Красный бархат"</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-
-                    </div>
-                    <div class="col-sm-6 pt-3 pr-0">
-
-                        <a class="stock__product tetragon-12" href="gallery/desserts?goto=heroBread11">
-                            <div class="tetragon__wrapper">
-                                <div class="tetragon__content">
-                                    <img class="product__thumb d-block w-100 h-100"
-                                         src="../../public/img/pre-loader.gif"
-                                         data-src="img/Popular/type3.jpg"
-                                         alt="Пряник 'Марвел'"
-                                         onerror="this.classList.add('invalid-image-src')">
-                                    <div class="product__description">
-                                        <h2>Пряники 'Марвел'</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-
-                    </div>
                 </div>
-                <div class="row h-100">
-                    <div class="col-sm-6 pt-3 pr-0">
-
-                        <a class="stock__product tetragon-12" href="gallery/cakes?goto=Cheesecakes12">
-                            <div class="tetragon__wrapper">
-                                <div class="tetragon__content">
-                                    <img class="product__thumb d-block w-100 h-100"
-                                         src="../../public/img/pre-loader.gif"
-                                         data-src="img/Popular/type5.jpg"
-                                         alt="Чизкейк"
-                                         onerror="this.classList.add('invalid-image-src')">
-                                    <div class="product__description">
-                                        <h2>Чизкейк</h2>
+                <div class="popular-goods__less-viewed col-md-6 d-flex flex-column">
+                    <div class="row h-100">
+                        @for($i = 1; $i < 3; $i++)
+                            <div class="col-sm-6 pt-3 pr-0">
+                                <a class="stock__product tetragon-12 popular-product-link" href="#" data-name="{{ $popularProducts[$i]->title }}">
+                                    <div class="tetragon__wrapper">
+                                        <div class="tetragon__content">
+                                            <img class="product__thumb d-block w-100 h-100"
+                                                 src="../../public/img/pre-loader.gif"
+                                                 data-src="{{ Voyager::image($popularProducts[$i]->image) }}"
+                                                 alt="{{ $popularProducts[$i]->title }}"
+                                                 onerror="this.classList.add('invalid-image-src')">
+                                            <div class="product__description">
+                                                <h2>{{ $popularProducts[$i]->title }}</h2>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
-                        </a>
-
+                        @endfor
                     </div>
-                    <div class="col-sm-6 pt-3 pr-0">
-
-                        <a class="stock__product tetragon-12" href="showcase/stuffing?goto=type47">
-                            <div class="tetragon__wrapper">
-                                <div class="tetragon__content">
-                                    <img class="product__thumb d-block w-100 h-100"
-                                         src="../../public/img/pre-loader.gif"
-                                         data-src="img/Popular/type2.jpg"
-                                         alt="Маково-ореховый торт"
-                                         onerror="this.classList.add('invalid-image-src')">
-                                    <div class="product__description">
-                                        <h2>Маково-ореховый торт</h2>
+                    <div class="row h-100">
+                        @for($i = 3; $i < 5; $i++)
+                            <div class="col-sm-6 pt-3 pr-0">
+                                <a class="stock__product tetragon-12 popular-product-link" href="#" data-name="{{ $popularProducts[$i]->title }}">
+                                    <div class="tetragon__wrapper">
+                                        <div class="tetragon__content">
+                                            <img class="product__thumb d-block w-100 h-100"
+                                                 src="../../public/img/pre-loader.gif"
+                                                 data-src="{{ Voyager::image($popularProducts[$i]->image) }}"
+                                                 alt="{{ $popularProducts[$i]->title }}"
+                                                 onerror="this.classList.add('invalid-image-src')">
+                                            <div class="product__description">
+                                                <h2>{{ $popularProducts[$i]->title }}</h2>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
-                        </a>
-
+                        @endfor
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 
     <div class="vnl__article container mt-5 pb-3">
         <h2 class="w-100 text-center my-3 pt-2">Ассортимент товаров</h2>

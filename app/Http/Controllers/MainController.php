@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\PersonItem;
+use App\PopularProduct;
 
 class MainController extends Controller
 {
@@ -36,7 +37,8 @@ class MainController extends Controller
 
         $params = [
             'sliderPosts' => $sliderPosts,
-        ];
+            'popularProducts' => PopularProduct::all()->shuffle(),
+            ];
 
         return view('main', $params);
     }
