@@ -266,6 +266,7 @@
     <script type="text/javascript" src="{{asset("js/bundle.js")}}"></script>
 
     @include('parts.modals')
+    @include('parts.fast_order_modal')
 
     <script>
         $(function () {

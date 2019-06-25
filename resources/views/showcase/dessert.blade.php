@@ -353,7 +353,7 @@
             App.setAssetsPath('{{ asset('') }}');
 
 
-            console.log({!! $categories !!});
+            {{--console.log({!! $categories !!});--}}
 
 
             let showcase = new Showcase({
@@ -369,7 +369,7 @@
                 });
 
                 let urlParams = common.getURLParams();
-                console.log(urlParams);
+                // console.log(urlParams);
 
                 if (common.isSortActionRequired(urlParams))
                     common.sortByTag(urlParams.sortByTag);

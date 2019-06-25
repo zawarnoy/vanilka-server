@@ -8,6 +8,10 @@ class ShowcaseHandleService
 {
     protected $counter;
 
+    /**
+     * @param $categories
+     * @return mixed
+     */
     public function transformToJsonForFrontend($categories)
     {
         foreach ($categories as $category) {
@@ -26,21 +30,21 @@ class ShowcaseHandleService
             ]];
 
 
-            unset($category->category_settings);
-            unset($category->created_at);
-            unset($category->related_images);
-            unset($category->updated_at);
-            unset($category->galleryItems);
-            unset($category->image);
-            unset($category->tags);
-            unset($category->type);
-            unset($category->description);
-            unset($category->id);
+            unset(
+                $category->category_settings,
+                $category->created_at,
+                $category->related_images,
+                $category->updated_at, $category->galleryItems,
+                $category->image, $category->tags,
+                $category->type,
+                $category->description,
+                $category->id
+            );
         }
         return $categories->toJson();
     }
 
-    private function handleTags($galleryItems)
+    private function handleTags($galleryItems): array
     {
         $tags = [];
 
@@ -49,8 +53,11 @@ class ShowcaseHandleService
                 continue;
             }
 
-            $tags = array_merge($tags, explode(',', trim($galleryItem->tags)));
+            $tags[] = explode(',', trim($galleryItem->tags));
+
         }
+
+        $tags = array_merge(...$tags);
 
         return $tags;
     }

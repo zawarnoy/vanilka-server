@@ -7,8 +7,9 @@
     @yield('content')
 </div>
 
-<script type="text/javascript" src="{{ asset("js/libs.min.js") }}"></script>
-<script type="text/javascript" src=" {{ asset("js/bundle.js") }}"></script>
+<script type="text/javascript" src="{{ asset('js/libs.min.js') }}"></script>
+<script type="text/javascript" src=" {{ asset('js/bundle.js') }}"></script>
+<script type="text/javascript" src=" {{ asset('js/products.js') }}"></script>
 
 @include('parts.modals')
 

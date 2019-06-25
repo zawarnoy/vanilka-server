@@ -23,9 +23,13 @@
                 <li class="nav-item col p-0">
 
                     <a href="{{ $menuItems[0]->link }}" class="btn btn-primary p-0 w-100">
-                        <h2 class="d-none d-sm-inline-block header__item">
-                            {{ $menuItems[0]->title }}<br>&nbsp;
-                        </h2>
+                        <span class="d-none d-lg-inline-block header__item">
+                            <h2 style="line-height: 15px">
+                                {{ $menuItems[0]->title }}
+                            </h2>
+                            <h4>{{ $menuItems[0]->caption }}</h4>
+                        </span>
+                        <h3 class="d-lg-none">{{ $menuItems[1]->mobileTitle }}</h3>
                     </a>
                 </li>
 
@@ -90,7 +94,9 @@
                 </li>
                 <li class="nav-item col-lg p-0">
                     <a href="{{ $menuItems[3]->link }}" class="btn btn-primary p-0 w-100 text-left text-lg-center">
-                        <h2 class="d-none d-lg-inline-block header__item">{{ $menuItems[3]->title }}<br></h2>
+                        <h2 style="line-height: 15px">{{ $menuItems[3]->title }}</h2>
+                        <h4>{{ $menuItems[3]->caption }}</h4>
+                        </span>
                         <h3 class="d-lg-none">{{ $menuItems[3]->mobileTitle }}</h3>
                     </a>
                 </li>

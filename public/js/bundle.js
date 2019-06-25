@@ -256,7 +256,7 @@ function Category(params) {
     this.sortByTag = function (tagName) {
         if (!tagName) return false;
         var tags = $('.nav-tags__item');
-        console.log(tags);
+        // console.log(tags);
         tags.each(function (i, tag) {
             if ($(tag).attr('data-target').toUpperCase() === tagName.toUpperCase())
                 $(tag).click();
@@ -281,7 +281,7 @@ function Category(params) {
         if (!link) return false;
         setTimeout(function () {
             var cats = $('.category__content');
-            console.log(cats);
+            // console.log(cats);
             cats.each(function (i, cat) {
                 if ($(cat).find('h2').text().toUpperCase() === link.toUpperCase()) {
                     $(cat).find('.stock__product').click();
@@ -337,8 +337,6 @@ function Category(params) {
     return window.common = this;
 })();
 
-;
-
 function Gallery(params) {
     var container = params.galleryContainer,
         gridSize = 4,
@@ -393,7 +391,7 @@ function Gallery(params) {
             source: uniqTags.getTagList(),
             itemList: items
         })
-    };
+    }
 
     (function () {
         render();
@@ -717,6 +715,7 @@ function PersonCardModal(params) {
             $('body').trigger('personModalClosed', self.getData());
             return false;
         });
+        console.log($body);
         $body.iziModal({
             //autoOpen: true,
             autofocus: false,
@@ -822,6 +821,8 @@ function Product(params) {
                 imageList: overviewImages,
                 settingFile: settingFile
             });
+
+            // console.log(container);
         };
 
     /**
@@ -1152,6 +1153,7 @@ function ProductReview(params) {
     (function () {
         readSettings();
         render();
+        location.hash="product__" + id;
         $('body').trigger('productOpen');
     })()
 }
@@ -1599,7 +1601,7 @@ function ReviewInfo(params) {
             container: body
         });
         $('body').off('personModalClosed').on('personModalClosed', function (e, d) {
-            console.log(e, d);
+            // console.log(e, d);
             $('body').trigger('orderClosed', [d, collectAllData()]);
         });
         //Если указаны вкусы :: создать компонент "Выбор вкуса"
@@ -1794,7 +1796,7 @@ function ReviewInfo(params) {
                             class: 'btn btn-outline-primary p-4',
                             text: 'Оформить заявку',
                             click: function () {
-                                console.log(collectAllData());
+                                // console.log(collectAllData());
                                 personModal.show();
                             }
                         })
@@ -1898,7 +1900,7 @@ function Tags() {
     this.fixUnuniq = function () {
         let obj = {};
 
-        console.log(tagsList);
+        // console.log(tagsList);
 
         for (let i = 0; i < tagsList.length; i++) {
             obj[tagsList[i]] = true;
@@ -3177,12 +3179,14 @@ function PopularProductsModal(params) {
 }
 
 $('body').off('popularProductClosed').on('popularProductClosed', function (e, personData, orderData) {
-    console.log('tut');
+    // console.log('tut');
 });
 
 $(document).ready(function () {
 
+
     $('.popular-product-link').off('click').on('click', function(event) {
+        return;
         event.preventDefault();
         new popularProductsResponseModal({ name: $(this).attr('data-name')});
     });

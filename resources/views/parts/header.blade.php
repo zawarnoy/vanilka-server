@@ -11,7 +11,13 @@
     <meta name="description"
           content="Кондитерская Ванилька | Главная страница | Сладости, торты на заказ, корпоративные подарки">
 
-    <title></title>
+    <title>
+        @if(View::hasSection('title'))
+            @yield('title')
+        @else
+            Vanilka
+        @endif
+    </title>
     <!--[if IE]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <!--[if lt IE 9]>
