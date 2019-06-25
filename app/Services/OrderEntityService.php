@@ -27,21 +27,26 @@ class OrderEntityService
         $mailheaders .= "To: $emailForReceive\r\n";
 
         $common = $this->getHandledPersonDataFromRequestData($requestData);
-        $taste = $this->getHandledTasteDataFromRequestData($requestData);
 
         $multipart = "--$this->boundary\r\n";
         $multipart .= "Content-Type: text/html; charset=utf-8\r\n";
         $multipart .= "Content-Transfer-Encoding: 8bit\r\n";
         $multipart .= "\r\n";
-        $multipart .= $common . " " . $taste;
-        $multipart .= $this->getAttachments(json_decode($requestData['orderData'])->{self::IMAGE_COMPONENT});
+
+        $multipart .= $common;
+
+        if (empty($requestData['fastOrder'])) {
+            $taste = $this->getHandledTasteDataFromRequestData($requestData);
+            $multipart .= " " . $taste;
+            $multipart .= $this->getAttachments(json_decode($requestData['orderData'])->{self::IMAGE_COMPONENT});
+        }
 
         $multipart = wordwrap($multipart);
 
         if (mail($emailForReceive, $subject, $multipart, $mailheaders)) {
             $this->result = "<center>" . $subject . "</center>";
         } else {
-            $this->result ="<center>Заказ не сформирован, приносим извинения</center>";
+            $this->result = "<center>Заказ не сформирован, приносим извинения</center>";
         }
     }
 
@@ -85,7 +90,13 @@ class OrderEntityService
         $result = '';
 
         if (isset($requestData['personData'])) {
-            $personInfo = json_decode($requestData['personData']);
+            $personInfo = is_array($requestData['personData']) ?
+                (object)$requestData['personData'] : json_decode($requestData['personData']);
+
+            if (!empty($personInfo->productName)) {
+                $result .= 'Название товара: ' . $personInfo->productName . '<br>';
+            }
+
             $result .= 'Клиент: <br>';
             $result .= 'Фамилия: ' . $personInfo->lastName . '<br/>';
             $result .= 'Имя: ' . $personInfo->firstName . '<br/>';
@@ -166,7 +177,7 @@ class OrderEntityService
 
         if (is_array($componentData)) {
             for ($i = 0; $i < count($componentData); $i++) {
-                $result .= ' - Вкус: ' .  $componentData[$i]->taste;
+                $result .= ' - Вкус: ' . $componentData[$i]->taste;
                 $result .= ', вес: ' . $componentData[$i]->weight;
 //                $result .= ', значение слайдера: ' . $componentData[$i]->value;
                 $result .= ', количество порций: ' . $componentData[$i]->rationCount;

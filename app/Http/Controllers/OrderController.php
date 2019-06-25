@@ -19,10 +19,7 @@ class OrderController extends Controller
 
     public function order(Request $request)
     {
-//        Mail::to('zawarnoy@gmail.com')->send(new OrderMail($request->all()));
-
         $this->orderEntityService->sendMail($request->all());
         return $this->orderEntityService->getResult();
     }
-
 }

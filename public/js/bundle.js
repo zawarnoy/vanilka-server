@@ -3178,20 +3178,6 @@ function PopularProductsModal(params) {
     })()
 }
 
-$('body').off('popularProductClosed').on('popularProductClosed', function (e, personData, orderData) {
-    // console.log('tut');
-});
-
-$(document).ready(function () {
-
-
-    $('.popular-product-link').off('click').on('click', function(event) {
-        return;
-        event.preventDefault();
-        new popularProductsResponseModal({ name: $(this).attr('data-name')});
-    });
-
-});
 
 
 

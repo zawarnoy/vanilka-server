@@ -44,7 +44,7 @@
             <h2 class="w-100 text-center my-3 pt-2">Популярные товары</h2>
             <div class="vnl__popular-goods row p-2">
                 <div class="popular-goods__most-viewed col-md-6 pt-3 pr-0" style="padding-left: 14px!important;">
-                    <a class="stock__product tetragon-12 popular-product-link" href="#" data-name="{{ $popularProducts[0]->title }}">
+                    <a class="stock__product tetragon-12 popular-product-link" href="#" data-price="{{ $popularProducts[0]->price }}" data-name="{{ $popularProducts[0]->title }}">
                         <div class="tetragon__wrapper">
                             <div class="tetragon__content">
                                 <img class="product__thumb d-block w-100 mh-100"
@@ -65,7 +65,7 @@
                     <div class="row h-100">
                         @for($i = 1; $i < 3; $i++)
                             <div class="col-sm-6 pt-3 pr-0">
-                                <a class="stock__product tetragon-12 popular-product-link" href="#" data-name="{{ $popularProducts[$i]->title }}">
+                                <a class="stock__product tetragon-12 popular-product-link" href="#" data-price="{{ $popularProducts[0]->price }}" data-name="{{ $popularProducts[$i]->title }}">
                                     <div class="tetragon__wrapper">
                                         <div class="tetragon__content">
                                             <img class="product__thumb d-block w-100 h-100"
@@ -85,7 +85,7 @@
                     <div class="row h-100">
                         @for($i = 3; $i < 5; $i++)
                             <div class="col-sm-6 pt-3 pr-0">
-                                <a class="stock__product tetragon-12 popular-product-link" href="#" data-name="{{ $popularProducts[$i]->title }}">
+                                <a class="stock__product tetragon-12 popular-product-link" href="#" data-price="{{ $popularProducts[0]->price }}" data-name="{{ $popularProducts[$i]->title }}">
                                     <div class="tetragon__wrapper">
                                         <div class="tetragon__content">
                                             <img class="product__thumb d-block w-100 h-100"
@@ -268,14 +268,14 @@
     @include('parts.modals')
     @include('parts.fast_order_modal')
 
-    <script>
-        $(function () {
-            $("#decorate-modal-open,#delivery-modal-open,#faq-modal-open").iziModal({
-                headerColor: common.primaryColor
-            });
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
+{{--    <script>--}}
+{{--        $(function () {--}}
+{{--            $("#decorate-modal-open,#delivery-modal-open,#faq-modal-open").iziModal({--}}
+{{--                headerColor: common.primaryColor--}}
+{{--            });--}}
+{{--            $('[data-toggle="tooltip"]').tooltip();--}}
+{{--        });--}}
+{{--    </script>--}}
     <script>
         $(function () {
             $('img.product__thumb').lazyLoadXT();
